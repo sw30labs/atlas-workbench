@@ -925,6 +925,11 @@ def test_index_has_batch_review_selection_controls_and_partial_result_wiring():
     assert "checkbox.disabled = busy" in html
     assert "if (reviewState.batchRunning) return;" in html
     assert "!it.report || !it.report.approvable" in html
+    # Batch decisions confirm in-page: a native dialog freezes the page and
+    # any automation driving it. Any edit to the batch must disarm it.
+    assert "window.confirm" not in html
+    assert "reviewState.batchArmed = { action, signature }" in html
+    assert "armed.signature !== rvBatchSignature(armed.action, selected)" in html
     assert 'fetch("/api/review/decide-batch"' in html
     assert "items: selected.map" in html
     assert "action, note, reason: note, reviewer" in html

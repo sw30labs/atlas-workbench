@@ -194,3 +194,53 @@ console.log(JSON.stringify({approve:$('#review-batch-approve').disabled,
     assert result["approve"] is (not may_review) and result["reject"] is (not may_review)
     assert result["single"] == result["batch"] == expected_name
     assert result["singleReadonly"] is (mode == "proxy") and result["batchReadonly"] is (mode == "proxy")
+
+
+def test_batch_decision_confirms_in_page_and_disarms_on_change():
+    node = shutil.which("node")
+    if node is None:
+        pytest.skip("Node is required to execute the dashboard review controls")
+    html = (Path(server.__file__).parent / "static/index.html").read_text()
+    end = '].join("\\n");'
+    signature = "const rvBatchSignature" + html.split("const rvBatchSignature", 1)[1].split(end, 1)[0] + end
+    controls = "function bindVerifiedReviewIdentity() {" + html.split("function bindVerifiedReviewIdentity() {", 1)[1].split("async function renderReview(", 1)[0]
+    submit = "function setReviewBatchStatus(" + html.split("function setReviewBatchStatus(", 1)[1].split("function reviewJobLine(", 1)[0]
+    script = """
+const elements={};
+const $=id=>elements[id]||(elements[id]={value:'',checked:true,disabled:false,className:'',
+  textContent:'',classList:{toggle(){}},setAttribute(){},removeAttribute(){},querySelectorAll(){return [];}});
+const $$=()=>[];
+const window={atlasMayReview:true};
+const selected=[{kind:'event',record_id:'EV-SYN',report:{approvable:true}}];
+const selectedReviewItems=()=>selected,reviewItems=()=>selected,rvKey=it=>it.kind+':'+it.record_id;
+const rvNeedsReviewer=()=>false,rvNeedsAttestation=()=>false,updateReviewButtons=()=>{};
+const reviewState={batchRunning:false,checked:new Set(['event:EV-SYN']),batchArmed:null};
+let posts=0;
+const fetch=async()=>{posts++;return {ok:true,status:200,json:async()=>({results:[]})};};
+$('#review-batch-note').value='Synthetic rejection reason';
+$('#review-batch-reviewer').value='Synthetic Reviewer';
+SIGNATURE
+CONTROLS
+SUBMIT
+(async()=>{
+  updateReviewBatchControls();
+  await submitReviewBatch('reject');
+  const armed={posts,label:$('#review-batch-reject').textContent,status:$('#review-batch-status').textContent};
+  $('#review-batch-note').value='Edited reason';
+  updateReviewBatchControls();
+  const disarmed={armed:reviewState.batchArmed,label:$('#review-batch-reject').textContent};
+  await submitReviewBatch('reject');
+  await submitReviewBatch('reject').catch(()=>{});
+  console.log(JSON.stringify({armed,disarmed,posts}));
+})();
+""".replace("SIGNATURE", signature).replace("CONTROLS", controls).replace("SUBMIT", submit)
+    completed = subprocess.run([node, "-"], input=script, capture_output=True, text=True, timeout=10, check=True)
+    result = json.loads(completed.stdout)
+    # First click only arms and explains; nothing is sent.
+    assert result["armed"]["posts"] == 0
+    assert result["armed"]["label"] == "CONFIRM REJECT 1"
+    assert "again to confirm" in result["armed"]["status"]
+    # Editing the shared note disarms, so the next click re-arms rather than sends.
+    assert result["disarmed"] == {"armed": None, "label": "REJECT 1 SELECTED"}
+    # Re-arm, then the confirming click sends exactly one batch request.
+    assert result["posts"] == 1

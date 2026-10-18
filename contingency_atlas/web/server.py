@@ -393,8 +393,12 @@ def build_payload() -> dict[str, Any]:
             "generated_at": datetime.now(timezone.utc).isoformat(),
             "scenario_count": len(scenarios),
             "active_count": len(active),
-            "evidence_event_count": len(evidence_events),
-            "risk_count": len(risks),
+            # Rejected records stay in the payload for audit views but are
+            # not part of the research corpus, so they are not counted.
+            "evidence_event_count": sum(
+                1 for e in evidence_events if e.get("review_status") != "rejected"
+            ),
+            "risk_count": sum(1 for r in risks if r.get("review_status") != "rejected"),
             "pending_review": _pending_review_count(
                 settings,
                 evidence_events,

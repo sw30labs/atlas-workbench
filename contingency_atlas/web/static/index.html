@@ -834,6 +834,7 @@ input.rf-num {
 .rv-batch-status:empty { display: none; }
 .rv-batch-status.error { color: var(--red); }
 .rv-batch-status.ok { color: var(--green); }
+.rv-batch-status.warn { color: var(--amber); }
 .rv-batch-locked { opacity: .35 !important; pointer-events: none !important; }
 .rv-item-top { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
 .rv-kind { font: 8.5px var(--mono); letter-spacing: .14em; padding: 2px 7px; border-radius: 3px; border: 1px solid var(--line-strong); color: var(--teal); text-transform: uppercase; }
@@ -4394,7 +4395,17 @@ let reviewDeb;
 const reviewState = {
   selected: null, fetchPromise: null,
   checked: new Set(), batchRunning: false, segment: "all",
+  // In-page two-step confirmation for batch decisions. A native confirm()
+  // blocks the page and any automation driving it, so the first click arms
+  // the button and the second applies; any change to the batch disarms it.
+  batchArmed: null,
 };
+const rvBatchSignature = (action, selected) => [
+  action,
+  ...selected.map(rvKey).sort(),
+  (($("#review-batch-note") || {}).value || "").trim(),
+  (($("#review-batch-reviewer") || {}).value || "").trim(),
+].join("\n");
 const rvKey = it => it.kind + ":" + it.record_id;
 const rvNeedsAttestation = it => it.kind === "event" || it.kind === "risk";
 const rvNeedsReviewer = it => ["merge", "channel", "analogue", "mitre_atlas"].includes(it.kind);
@@ -4549,10 +4560,18 @@ function updateReviewBatchControls() {
   const sharedReady = window.atlasMayReview !== false && !!reviewer && (!needsReason || !!note);
   const approveReady = !blocked.length && sharedReady && (!needsAttestation || attested);
   const rejectReady = window.atlasMayReview !== false && !!note && (!needsReviewer || !!reviewer);
+  const armed = reviewState.batchArmed;
+  if (armed && armed.signature !== rvBatchSignature(armed.action, selected)) {
+    reviewState.batchArmed = null;
+    setReviewBatchStatus("");
+  }
+  const armedAction = reviewState.batchArmed && reviewState.batchArmed.action;
   approve.disabled = busy || !approveReady;
   reject.disabled = busy || !rejectReady;
-  approve.textContent = busy ? "APPLYING…" : `APPROVE ${count} SELECTED`;
-  reject.textContent = busy ? "APPLYING…" : `REJECT ${count} SELECTED`;
+  approve.textContent = busy ? "APPLYING…"
+    : armedAction === "approve" ? `CONFIRM APPROVE ${count}` : `APPROVE ${count} SELECTED`;
+  reject.textContent = busy ? "APPLYING…"
+    : armedAction === "reject" ? `CONFIRM REJECT ${count}` : `REJECT ${count} SELECTED`;
   if (blocked.length) {
     approve.title = `${blocked.length} selected record${blocked.length === 1 ? " is" : "s are"} blocked by validation; remove or reject ${blocked.length === 1 ? "it" : "them"}`;
   } else if (needsReviewer && !(reviewer && note)) {
@@ -5201,9 +5220,19 @@ async function submitReviewBatch(action) {
   const visibleKeys = new Set(reviewItems().map(rvKey));
   const hiddenCount = selected.filter(item => !visibleKeys.has(rvKey(item))).length;
   const hiddenWarning = hiddenCount
-    ? ` ${hiddenCount} selected record${hiddenCount === 1 ? " is" : "s are"} hidden by the current filter.\n\n`
+    ? `${hiddenCount} selected record${hiddenCount === 1 ? " is" : "s are"} hidden by the current filter. `
     : "";
-  if (!window.confirm(`${verb} ${selected.length} selected record${selected.length === 1 ? "" : "s"}?\n\n${hiddenWarning}This applies the same reviewer note to every record. Successful decisions cannot be rolled back if a later record fails.`)) return;
+  const signature = rvBatchSignature(action, selected);
+  const armed = reviewState.batchArmed;
+  if (!armed || armed.signature !== signature) {
+    reviewState.batchArmed = { action, signature };
+    setReviewBatchStatus(`${verb} ${selected.length} selected record${selected.length === 1 ? "" : "s"}? ${hiddenWarning}` +
+      "This applies the same reviewer note to every record. Successful decisions cannot be rolled back " +
+      `if a later record fails. Click ${verb.toUpperCase()} again to confirm.`, "warn");
+    updateReviewBatchControls();
+    return;
+  }
+  reviewState.batchArmed = null;
 
   reviewState.batchRunning = true;
   setReviewBatchStatus(`${verb.toUpperCase()} IN PROGRESS · ${selected.length} RECORD${selected.length === 1 ? "" : "S"}`, "");

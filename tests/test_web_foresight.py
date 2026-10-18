@@ -165,6 +165,10 @@ def test_build_payload_passes_enriched_and_legacy_records(monkeypatch, tmp_path)
                 "https://example.org/event/1",
             ),
         )
+        conn.execute(
+            "INSERT INTO evidence_events (event_id, headline, source_url, review_status) "
+            "VALUES ('EV-REJ', 'Rejected event', 'https://example.org/event/2', 'rejected')"
+        )
 
     risks = [
         {
@@ -186,6 +190,12 @@ def test_build_payload_passes_enriched_and_legacy_records(monkeypatch, tmp_path)
             "trend": "rising",
             "evidence_refs": [],
         },
+        {
+            "issue": "Rejected signal",
+            "description": "A human rejected this signal; it is not corpus.",
+            "review_status": "rejected",
+            "evidence_refs": [],
+        },
     ]
     risks_path.write_text(json.dumps(risks))
 
@@ -202,8 +212,11 @@ def test_build_payload_passes_enriched_and_legacy_records(monkeypatch, tmp_path)
 
     payload = server.build_payload()
 
+    # Rejected records are not corpus: excluded from counts, kept in payload.
     assert payload["meta"]["risk_count"] == 2
     assert payload["meta"]["evidence_event_count"] == 1
+    assert len(payload["risks"]) == 3
+    assert len(payload["evidence_events"]) == 2
     assert payload["evidence_events"][0]["ref"] == "EV-1"
     assert (
         payload["evidence_events"][0]["event_driver_class"]

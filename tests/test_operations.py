@@ -269,3 +269,34 @@ def test_readiness_is_read_only_and_reports_corrupt_journal(operational_settings
     result = readiness(operational_settings)
     assert result["ready_for_local_use"] is False
     assert any(check["name"] == "job_journal" and check["status"] == "unavailable" for check in result["checks"])
+
+
+def test_dashboard_analysis_phases_are_recorded_in_run_history(operational_settings, monkeypatch):
+    from contingency_atlas.schema import migrate
+
+    operational_settings.scenario_db_path.unlink()
+    migrate(str(operational_settings.scenario_db_path))
+    results = {"phase3": {"generated": 1, "inserted": 1, "rejected": 0, "errors": []},
+               "phase4": {"scored": 2, "errors": ["Synthetic scoring warning"]},
+               "review_analyze": {"analyzed": 1}}
+    monkeypatch.setattr(runner, "execute_phase", lambda phase, params: results[phase])
+    jobs = [runner.start_job(phase, {})[0] for phase in ("phase3", "phase4", "review_analyze")]
+    runner.wait_for_jobs(timeout=5)
+    with sqlite3.connect(operational_settings.scenario_db_path) as connection:
+        rows = connection.execute(
+            "SELECT run_id, phase, status, items_processed, errors FROM pipeline_runs ORDER BY id"
+        ).fetchall()
+    # Review jobs are not pipeline runs; analysis phases keep their job id.
+    assert rows == [
+        (jobs[0], "phase3", "completed", 1, None),
+        (jobs[1], "phase4", "completed_with_errors", 2, "Synthetic scoring warning"),
+    ]
+
+
+def test_run_history_failure_never_fails_the_job(operational_settings, monkeypatch):
+    # The fixture store has no pipeline_runs table, so logging must fail quietly.
+    monkeypatch.setattr(runner, "execute_phase", lambda phase, params: {"scored": 1})
+    job, error = runner.start_job("phase4", {})
+    assert error is None
+    runner.wait_for_jobs(timeout=5)
+    assert runner.get_job(job)["state"] == "completed"

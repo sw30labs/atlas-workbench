@@ -69,6 +69,39 @@ def _now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
+# Analysis phases recorded in the pipeline_runs history, mapped to the result
+# key that counts their items. Phase 6 and the full pipeline log their own
+# rows; review, research and eval jobs are not pipeline runs.
+_RUN_HISTORY_ITEMS = {
+    "phase1": "ingested", "phase2": "new_risks", "phase3": "inserted",
+    "phase4": "scored", "phase5": "persisted",
+    "compound_join": "n_written", "compound_graduate": "n_graduated",
+}
+
+
+def _log_run_history(settings: Settings, job: dict[str, Any], started: str,
+                     status: str, result: dict[str, Any], error: str | None) -> None:
+    if job["phase"] not in _RUN_HISTORY_ITEMS:
+        return
+    from contingency_atlas.db import log_pipeline_run
+
+    items = result.get(_RUN_HISTORY_ITEMS[job["phase"]])
+    errors = "; ".join(str(e) for e in result.get("errors") or []) or error
+    try:
+        log_pipeline_run(
+            str(settings.scenario_db_path),
+            run_id=job["id"],
+            phase=job["phase"],
+            status=status,
+            started_at=started,
+            completed_at=_now(),
+            items_processed=items if isinstance(items, int) and not isinstance(items, bool) else 0,
+            errors=errors,
+        )
+    except Exception as exc:  # history is a view; never fail the job over it
+        logger.warning("Could not log pipeline run for job %s: %s", job["id"], exc)
+
+
 def omlx_reachable(settings: Settings | None = None, timeout: float = 2.0) -> bool:
     """TCP-level reachability check for the active LLM endpoint (OMLX or DGX)."""
     settings = settings or get_settings()
@@ -190,14 +223,18 @@ def _dispatch(settings: Settings, journal: JobJournal) -> None:
                     ))
                     continue
                 _EXECUTION_SETTINGS.job = {"id": job["id"], "actor": job.get("actor")}
+                started = _now()
                 try:
                     result = execute_phase(job["phase"], job["params"])
                     errors = result.get("errors") or []
                     failed = bool(errors) or result.get("status") in {"error", "failed", "completed_with_errors"}
                     error = "Phase reported errors; some outputs may have been saved." if failed else None
                     journal.finish(job["id"], "failed" if failed else "completed", result=result, error=error)
+                    _log_run_history(settings, job, started,
+                                     "completed_with_errors" if failed else "completed", result, error)
                 except Exception as exc:
                     journal.finish(job["id"], "failed", error=str(exc))
+                    _log_run_history(settings, job, started, "failed", {}, str(exc))
                 finally:
                     _EXECUTION_SETTINGS.job = None
                     with _LIVE_LOCK:
