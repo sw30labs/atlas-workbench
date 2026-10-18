@@ -115,6 +115,11 @@ source "$VENV/bin/activate"
 # rdflib/pyshacl/owlrl every machine-producer write seam raises GuardError
 # and the pipeline cannot ingest, save the register, or file a proposal.
 echo "==> Installing package with dev and ontology dependencies"
+# A venv created by `uv venv` (without --seed) ships no pip; bootstrap it.
+if ! python -m pip --version >/dev/null 2>&1; then
+    echo "    no pip in $VENV (uv-created venv?) — bootstrapping with ensurepip"
+    python -m ensurepip --upgrade
+fi
 python -m pip install --upgrade pip
 python -m pip install -e '.[dev,ontology]'
 

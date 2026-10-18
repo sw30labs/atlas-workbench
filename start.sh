@@ -37,6 +37,10 @@ if [ "${ATLAS_SKIP_INSTALL:-0}" != "1" ]; then
   if command -v uv >/dev/null 2>&1; then
     uv pip install --python "$VENV/bin/python" -q -e . || die "dependency install failed"
   else
+    # A venv created by `uv venv` (without --seed) ships no pip; bootstrap it.
+    "$VENV/bin/python" -m pip --version >/dev/null 2>&1 \
+      || "$VENV/bin/python" -m ensurepip --upgrade >/dev/null \
+      || die "no pip in $VENV and ensurepip failed"
     "$VENV/bin/python" -m pip install -q --upgrade pip
     "$VENV/bin/python" -m pip install -q -e . || die "dependency install failed"
   fi
