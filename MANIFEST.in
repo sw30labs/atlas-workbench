@@ -1,0 +1,32 @@
+include ACKNOWLEDGMENTS.md
+include CITATION.cff
+include CONTRIBUTING.md
+include DATA_LICENSE.md
+include DATA_PROVENANCE.md
+include DISCLAIMER.md
+include LICENSE
+include PUBLIC_RELEASE_CHECKLIST.md
+include README.md
+include README_ONTOLOGY.md
+include ROADMAP.md
+include SECURITY.md
+include TAXONOMY.md
+include THIRD_PARTY_NOTICES.md
+include contingency-atlas.yaml
+include start.sh
+include Makefile
+include .env.example
+include contingency_atlas/source_registry.yaml
+recursive-include LICENSES *.txt
+recursive-include docs *.md *.pdf *.png *.svg *.tex *.yaml
+include docs/whitepaper/Makefile
+recursive-include docs/whitepaper/scripts *.py
+# Operator-only commercial material is outside the public package boundary.
+prune docs/business
+recursive-include examples *.json *.md
+recursive-include ontology *.json *.md *.py *.ttl
+exclude ontology/existing.ttl
+prune ontology/out
+recursive-include scripts *.py
+exclude scripts/*autoresearch*.py
+recursive-include tests *.py

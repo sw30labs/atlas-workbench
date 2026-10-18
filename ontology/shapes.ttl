@@ -1,0 +1,267 @@
+# shapes.ttl — Contingency Atlas ledger shapes (v0.1)
+# One shape per ratified constraint C-01..C-10 (proposal: ontology-proposals/contingency-atlas.md).
+# Severity is routing: sh:Violation -> REJECT, sh:Warning -> FLAG.
+# Footgun #2: severity goes ON THE PROPERTY SHAPE (SPARQL constraints inherit the node shape's).
+
+@prefix atlas:   <https://contingency-atlas.local/ontology#> .
+@prefix cat:     <https://contingency-atlas.local/ontology/cat/> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix sh:      <http://www.w3.org/ns/shacl#> .
+
+<https://contingency-atlas.local/ontology/shapes> a owl:Ontology ;
+    sh:declare [ sh:prefix "atlas" ; sh:namespace "https://contingency-atlas.local/ontology#"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "cat"   ; sh:namespace "https://contingency-atlas.local/ontology/cat/"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "skos"  ; sh:namespace "http://www.w3.org/2004/02/skos/core#"^^xsd:anyURI ] ;
+    sh:declare [ sh:prefix "owl"   ; sh:namespace "http://www.w3.org/2002/07/owl#"^^xsd:anyURI ] .
+
+# ===========================================================================
+# C-01 (door mirror): scenario enum fields are closed vocabularies, never
+# prose or serialized statistics. Synthetic fixtures exercise malformed
+# likelihood, controllability, and category values.
+# ===========================================================================
+atlas:ScenarioEnumShape a sh:NodeShape ;
+    sh:targetClass atlas:Scenario ;
+    sh:property [
+        sh:path atlas:origin ;
+        sh:in ( "operator_authored" "pipeline_generated" "compound_graduation" "synthetic_fixture" "legacy_unknown" ) ;
+        sh:minCount 1 ;
+        sh:message "C-01: scenario origin must use the explicit provenance vocabulary; never infer it from an identifier prefix." ;
+    ] ;
+    sh:property [
+        sh:path atlas:likelihood ;
+        sh:in ( "Very Low" "Low" "Moderate" "High" "Very High" ) ;
+        sh:message "C-01: likelihood must use the closed scale; prose or serialized statistics break phase-4 scoring." ;
+    ] ;
+    sh:property [
+        sh:path atlas:impactBand ;
+        sh:in ( "Critical" "High" "Medium" "Low" ) ;
+        sh:message "C-01: impact_band must be one of Critical/High/Medium/Low." ;
+    ] ;
+    sh:property [
+        sh:path atlas:financialImpactBand ;
+        sh:in ( "Extreme" "Major" "Significant" "Moderate" "Limited" ) ;
+        sh:message "C-01: financial_impact_band must be one of Extreme/Major/Significant/Moderate/Limited." ;
+    ] ;
+    sh:property [
+        sh:path atlas:controllability ;
+        sh:in ( "internal" "mixed" "external" ) ;
+        sh:message "C-01: controllability uses the kind-of-control scale (internal/mixed/external), not a magnitude scale." ;
+    ] ;
+    sh:property [
+        sh:path atlas:scenarioStatus ;
+        sh:in ( "draft" "active" "retired" ) ;
+        sh:message "C-01: scenario status must be draft/active/retired." ;
+    ] ;
+    sh:property [
+        sh:path atlas:signpostStatus ;
+        sh:in ( "not_evaluated" "strengthened" "unchanged" "weakened" "materialized" "superseded" ) ;
+        sh:message "C-01: signpost_status must be a member of the signpost vocabulary." ;
+    ] ;
+    sh:property [
+        sh:path atlas:eventDriverClass ;
+        sh:in ( "Technology disruption" "Third-party failure" "Process failure" "Human action" "External disruption" "Physical disruption" "Model failure" "Data integrity" "Cross-domain convergence" ) ;
+        sh:message "C-01: event_driver_class must be one of the 9 atlas classes." ;
+    ] ;
+    sh:property [
+        sh:path atlas:riskCategory ;
+        sh:in ( "Financial crime controls" "Third-party dependency" "Digital resilience" "Model risk" "Data governance" "Processing integrity" "Workforce and conduct" "Physical resilience" "Legal and regulatory" "Market infrastructure" "Geopolitical disruption" "Multi-risk convergence" ) ;
+        sh:message "C-01: scenario risk_category must be one of the 12 atlas categories, verbatim." ;
+    ] .
+
+# ===========================================================================
+# C-02: every candidate compound's riskRef resolves to a current register risk
+# (by slug IRI). Scoped to candidates: superseded rows are history — their
+# references may legitimately point at risks since dropped from the register.
+# Synthetic fixtures include a dangling slug and a current resolvable slug.
+# ===========================================================================
+atlas:CompoundRiskRefShape a sh:NodeShape ;
+    sh:targetClass atlas:CompoundScenario ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "C-02: candidate compound references a risk slug that no register risk declares — dangling or truncated-slug reference." ;
+        sh:prefixes <https://contingency-atlas.local/ontology/shapes> ;
+        sh:select """
+            SELECT $this ?ref
+            WHERE {
+                $this atlas:compoundStatus "candidate" ; atlas:riskRef ?ref .
+                FILTER NOT EXISTS { ?risk a atlas:EmergingRisk ; atlas:slugId ?ref }
+            }
+        """ ;
+    ] .
+
+# ===========================================================================
+# C-03: same slug, unproven identity => human review, never auto-merge.
+# Synthetic fixtures give two records the same slug while retaining distinct
+# identifiers. Title similarity is flag-only.
+# ===========================================================================
+atlas:RiskSlugCollisionFlag a sh:NodeShape ;
+    sh:targetClass atlas:EmergingRisk ;
+    sh:severity sh:Warning ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "C-03: another EmergingRisk shares this title slug but identity is unproven — possible duplicate, human review (never auto-merge on titles)." ;
+        sh:prefixes <https://contingency-atlas.local/ontology/shapes> ;
+        sh:select """
+            SELECT $this ?other
+            WHERE {
+                $this atlas:slugId ?s .
+                ?other a atlas:EmergingRisk ; atlas:slugId ?s .
+                FILTER (?other != $this)
+                FILTER NOT EXISTS { $this owl:sameAs ?other }
+            }
+        """ ;
+    ] .
+
+# ===========================================================================
+# C-04: an evidence-event risk_category must normalize onto the 12-category
+# SKOS scheme. Synthetic fixtures cover canonical and unknown labels.
+# ===========================================================================
+atlas:EvidenceCategoryMappingFlag a sh:NodeShape ;
+    sh:targetClass atlas:EvidenceEvent ;
+    sh:severity sh:Warning ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "C-04: risk_category does not map to any atlas risk-category concept (after normalization) — map it via skos:altLabel or correct it." ;
+        sh:prefixes <https://contingency-atlas.local/ontology/shapes> ;
+        sh:select """
+            SELECT $this ?cat
+            WHERE {
+                $this atlas:normalizedCategory ?cat .
+                FILTER NOT EXISTS { ?c a skos:Concept ; atlas:normalizedLabel ?cat }
+            }
+        """ ;
+    ] .
+
+# ===========================================================================
+# C-05: one datetime syntax per field. The door normalizes parseable dates and
+# records the field name under atlas:formatDrift when the stored form was not
+# canonical; unparseable dates die at the door.
+# Synthetic fixtures exercise bare dates and canonical offset timestamps.
+# ===========================================================================
+atlas:FormatDriftFlag a sh:NodeShape ;
+    sh:targetClass atlas:EmergingRisk ;
+    sh:targetClass atlas:EvidenceEvent ;
+    sh:property [
+        sh:path atlas:formatDrift ;
+        sh:maxCount 0 ;
+        sh:severity sh:Warning ;
+        sh:message "C-05: a date field was stored in a non-canonical syntax for that field — rewrite it in the field's canonical form." ;
+    ] .
+
+# ===========================================================================
+# C-06: status=active AND review_status=rejected is a contradiction.
+# A synthetic fixture exercises this contradictory state and routes it to
+# human review.
+# ===========================================================================
+atlas:ActiveRejectedFlag a sh:NodeShape ;
+    sh:targetClass atlas:EmergingRisk ;
+    sh:severity sh:Warning ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "C-06: risk is status=active and review_status=rejected — a rejected risk should not stay active; retire, fade, or re-review." ;
+        sh:prefixes <https://contingency-atlas.local/ontology/shapes> ;
+        sh:select """
+            SELECT $this
+            WHERE {
+                $this atlas:riskStatus "active" ; atlas:reviewStatus "rejected" .
+            }
+        """ ;
+    ] .
+
+# ===========================================================================
+# C-07: at most one join run may hold candidate compounds at rest. Synthetic
+# fixtures create two candidate-holding runs to exercise the warning.
+# ===========================================================================
+atlas:SingleCandidateRunFlag a sh:NodeShape ;
+    sh:targetClass atlas:CompoundJoinRun ;
+    sh:severity sh:Warning ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "C-07: more than one join run holds candidate compounds — 'current' is ambiguous; supersede the stale run." ;
+        sh:prefixes <https://contingency-atlas.local/ontology/shapes> ;
+        sh:select """
+            SELECT $this ?other
+            WHERE {
+                $this atlas:runId ?r1 .
+                ?other a atlas:CompoundJoinRun ; atlas:runId ?r2 .
+                ?c1 a atlas:CompoundScenario ; atlas:runId ?r1 ; atlas:compoundStatus "candidate" .
+                ?c2 a atlas:CompoundScenario ; atlas:runId ?r2 ; atlas:compoundStatus "candidate" .
+                FILTER (?other != $this)
+            }
+        """ ;
+    ] .
+
+# ===========================================================================
+# C-08 (door mirror): compound enum fields are closed vocabularies. Synthetic
+# fixtures include one non-canonical loss-unit spelling.
+# ===========================================================================
+atlas:CompoundEnumShape a sh:NodeShape ;
+    sh:targetClass atlas:CompoundScenario ;
+    sh:property [
+        sh:path atlas:uncertaintyClass ;
+        sh:in ( "statistical" "mixed" "judgment_dominant" ) ;
+        sh:message "C-08: uncertainty_class must be statistical/mixed/judgment_dominant." ;
+    ] ;
+    sh:property [
+        sh:path atlas:lossUnits ;
+        sh:in ( "activation" "dollars" ) ;
+        sh:message "C-08: loss_units uses the export vocabulary (activation/dollars) — 'activation_units' and '' are drift spellings." ;
+    ] ;
+    sh:property [
+        sh:path atlas:compoundStatus ;
+        sh:in ( "candidate" "superseded" ) ;
+        sh:message "C-08: compound status must be candidate/superseded." ;
+    ] .
+
+# ===========================================================================
+# C-09: proposal queues never self-apply. Synthetic fixtures cover both an
+# illicit applied version and an accountable human decision.
+# ===========================================================================
+atlas:ProposalNoSelfApplyShape a sh:NodeShape ;
+    sh:targetClass atlas:ChannelProposal, atlas:FrameworkMappingProposal ;
+    sh:property [
+        sh:path atlas:graphVersionApplied ;
+        sh:maxCount 0 ;
+        sh:message "C-09: graph_version_applied must never be set — proposals never self-apply; a value here means an auto-apply path exists." ;
+    ] .
+
+atlas:ProposalDecidedNeedsReviewShape a sh:NodeShape ;
+    sh:targetClass atlas:ChannelProposal, atlas:FrameworkMappingProposal ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "C-09: a decided (approved/rejected) proposal must carry reviewer and reason — decisions without accountability are not decisions." ;
+        sh:prefixes <https://contingency-atlas.local/ontology/shapes> ;
+        sh:select """
+            SELECT $this ?s
+            WHERE {
+                $this atlas:proposalStatus ?s .
+                FILTER (?s IN ("approved", "rejected"))
+                FILTER NOT EXISTS { $this atlas:reviewer ?rev ; atlas:reason ?rea }
+            }
+        """ ;
+    ] .
+
+# ===========================================================================
+# C-10: on approved risks, every evidenceRef resolves to an approved
+# EvidenceEvent. A synthetic fixture supplies a bare URL to prove that a URL
+# alone is insufficient for approval.
+# ===========================================================================
+atlas:ApprovedRiskEvidenceShape a sh:NodeShape ;
+    sh:targetClass atlas:EmergingRisk ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "C-10: an approved risk's evidence ref must resolve to an approved EvidenceEvent — bare URLs or dangling ids are not sufficient for approval." ;
+        sh:prefixes <https://contingency-atlas.local/ontology/shapes> ;
+        sh:select """
+            SELECT $this ?ref
+            WHERE {
+                $this atlas:reviewStatus "approved" ; atlas:evidenceRef ?ref .
+                FILTER NOT EXISTS {
+                    ?ref a atlas:EvidenceEvent ; atlas:reviewStatus ?rs .
+                    FILTER (?rs IN ("approved", "approved_synthetic"))
+                }
+            }
+        """ ;
+    ] .

@@ -1,0 +1,16 @@
+{
+  "_comment": "Project-maintained spelling and typography aliases for the public risk-category vocabulary. Add an alias only with a synthetic test and a reviewer-approved semantic rationale; never derive this file from a runtime store.",
+  "unmapped": [
+    "Operational risk"
+  ],
+  "map": {
+    "Cyber security": "Digital resilience",
+    "Cybersecurity": "Digital resilience",
+    "Data-governance": "Data governance",
+    "Financial-crime controls": "Financial crime controls",
+    "Geo-political disruption": "Geopolitical disruption",
+    "Legal & regulatory": "Legal and regulatory",
+    "Third party dependency": "Third-party dependency",
+    "Third-party risk": "Third-party dependency"
+  }
+}

@@ -1,0 +1,63 @@
+# Contingency Atlas configuration.
+#
+# Precedence (highest wins):
+#   1. explicit arguments in code (e.g. Settings(omlx_model="..."))
+#   2. environment variables (ATLAS_LLM_PROVIDER, OMLX_MODEL, DGX_MODEL, …)
+#   3. this file
+#   4. built-in defaults
+#
+# Point ATLAS_CONFIG at another path to use a different file.
+# Unknown sections/keys and wrong types are rejected loudly (typo protection).
+
+# Active LLM backend: "omlx" (Mac MLX server) or "dgx" (NVIDIA DGX vLLM).
+# Aliases "mlx" / "vllm" are accepted. Env: ATLAS_LLM_PROVIDER.
+provider: omlx
+
+omlx:
+  # OpenAI-compatible endpoint served by OMLX
+  base_url: http://127.0.0.1:8000/v1
+
+  # Generation / default model
+  model: DeepSeek-V4-Flash-0731-MXFP4-MLX
+
+  # Ralph-loop judge model
+  model_judge: DeepSeek-V4-Flash-0731-MXFP4-MLX
+
+  # Optional independent model for the final pass/fail verdict.
+  # Empty string = disabled (the judge model also does the final pass).
+  # Set to a different model id for independent judging, e.g.:
+  # model_final_judge: Qwen3-32B-MLX-Q8
+  model_final_judge: ""
+
+  # HTTP timeout in seconds (OMLX can be slow) and generation token cap.
+  # DeepSeek-V4-Flash MXFP4 long jobs often exceed 3 minutes.
+  timeout: 600
+  max_tokens: 16384
+
+  # Use POST /v1/responses instead of /v1/chat/completions. Off by default.
+  # Settings greys the checkbox when the running OMLX build has no route.
+  # Env: OMLX_USE_RESPONSES_API. Restart the dashboard after changing this.
+  use_responses_api: false
+
+# DGX vLLM backend — used when provider: dgx. Start an OpenAI-compatible
+# endpoint separately, or set ATLAS_DGX_SERVE_SCRIPT when using
+# setup_and_run.sh. DGX_* variables take precedence over their VLLM_* aliases.
+dgx:
+  base_url: http://127.0.0.1:8000/v1
+
+  # Must match the id from GET /v1/models (recipe-served model)
+  model: Qwen/Qwen3.6-27B-FP8
+  model_judge: Qwen/Qwen3.6-27B-FP8
+  model_final_judge: ""
+
+  # DGX Spark bandwidth makes big models slow — budget generously
+  timeout: 600
+  max_tokens: 16384
+
+  # Qwen3.x thinking mode. Off by default: reasoning can eat the whole
+  # token budget and return empty content. enable_thinking: true to opt in.
+  enable_thinking: false
+
+# API keys are intentionally NOT in this file — secrets stay in the
+# OMLX_API_KEY / DGX_API_KEY (or VLLM_API_KEY) environment variables
+# (default: "test"; vLLM ignores the value but requires it non-empty).

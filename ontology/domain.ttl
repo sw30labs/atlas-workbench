@@ -1,0 +1,145 @@
+# domain.ttl — Contingency Atlas ontology (v0.1)
+# Ratified constraints C-01..C-10: see ontology-proposals/contingency-atlas.md.
+# OWL lives here and only INFERS (identity via IFP, property-chain shortcut).
+# All enforcement is in shapes.ttl (SHACL is the only layer that says no).
+
+@prefix atlas:   <https://contingency-atlas.local/ontology#> .
+@prefix cat:     <https://contingency-atlas.local/ontology/cat/> .
+@prefix schema:  <https://schema.org/> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+<https://contingency-atlas.local/ontology> a owl:Ontology ;
+    rdfs:label "Contingency Atlas ontology v0.1" ;
+    rdfs:comment "Guardrail ontology for the Atlas write path. Inference: IFP identity + one property chain. Enforcement: shapes.ttl." .
+
+# ===========================================================================
+# Classes (reuse before minting — vocab-map.md)
+# ===========================================================================
+
+atlas:EmergingRisk a owl:Class ;
+    rdfs:subClassOf schema:CreativeWork ;
+    rdfs:label "Emerging risk" ;
+    rdfs:comment "Phase-2 register entry. Identity = the persisted risk_id slug (C-03), minted from the title only when absent; the title itself is never identity." .
+
+atlas:Scenario a owl:Class ;
+    rdfs:subClassOf schema:CreativeWork ;
+    rdfs:label "Contingency scenario" ;
+    rdfs:comment "Phase-3 generated + judged scenario (atlas.db.scenarios)." .
+
+atlas:EvidenceEvent a owl:Class ;
+    rdfs:subClassOf schema:Event, prov:Entity ;
+    rdfs:label "Evidence event" ;
+    rdfs:comment "event_evidence.db.evidence_events row. Same canonical source URL => same event (IFP, mirrors intake dedup at db.py)." .
+
+atlas:CompoundScenario a owl:Class ;
+    rdfs:subClassOf prov:Entity ;
+    rdfs:label "Compound scenario" ;
+    rdfs:comment "Scored k>=2 risk combination; prov:wasGeneratedBy a CompoundJoinRun." .
+
+atlas:CompoundJoinRun a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Compound join run" ;
+    rdfs:comment "One execution of run_compound_join. At most one run may hold candidate compounds at rest (C-07)." .
+
+atlas:ChannelProposal a owl:Class ;
+    rdfs:subClassOf schema:Action ;
+    rdfs:label "Channel proposal" ;
+    rdfs:comment "Review-queue row. Never self-applies: graphVersionApplied must stay unset (C-09)." .
+
+atlas:FrameworkMappingProposal a owl:Class ;
+    rdfs:subClassOf schema:Action ;
+    rdfs:label "External-framework mapping proposal" ;
+    rdfs:comment "I represent a staged scenario-to-framework claim that never self-applies and requires an accountable human decision (C-09)." .
+
+# ===========================================================================
+# Identity properties
+# ===========================================================================
+
+atlas:sourceUrl a owl:ObjectProperty, owl:InverseFunctionalProperty ;
+    rdfs:domain atlas:EvidenceEvent ;
+    rdfs:comment "IRI-valued so IFP stays in OWL DL (footgun #3). Same source URL => owl:sameAs => AUTO_MERGE." .
+
+atlas:slugId a owl:ObjectProperty ;
+    rdfs:domain atlas:EmergingRisk ;
+    rdfs:comment "Lossless slug IRI derived from the title. NOT inverse-functional: slug equality is a review flag (C-03), never a merge." .
+
+atlas:riskRef a owl:ObjectProperty ;
+    rdfs:domain atlas:CompoundScenario ;
+    rdfs:comment "Reference from a compound to a risk BY SLUG IRI. Must be some EmergingRisk's atlas:slugId (C-02)." .
+
+atlas:slugFor a owl:ObjectProperty ;
+    owl:inverseOf atlas:slugId ;
+    rdfs:comment "Asserted mechanically by the projection so the resolvesToRisk chain stays forward-only (owlrl-friendly)." .
+
+atlas:resolvesToRisk a owl:ObjectProperty ;
+    owl:propertyChainAxiom ( atlas:riskRef atlas:slugFor ) ;
+    rdfs:comment "Derived: compound -> risk it references. Display-only (DERIVED_DISPLAY_PROPS); never asserted." .
+
+atlas:evidenceRef a owl:ObjectProperty ;
+    rdfs:domain atlas:EmergingRisk ;
+    rdfs:comment "Typed evidence reference: an event-id IRI (resolvable) or a source-URL IRI (pending canonicalization). On approved risks every ref must resolve to an approved EvidenceEvent (C-10)." .
+
+# ===========================================================================
+# Datatype properties (enforced in shapes.ttl)
+# ===========================================================================
+
+atlas:normalizedTitle a owl:DatatypeProperty ; rdfs:comment "Door-computed (footgun #7): lowercase, whitespace-collapsed title." .
+atlas:riskStatus a owl:DatatypeProperty ; rdfs:comment "active | monitoring | faded." .
+atlas:reviewStatus a owl:DatatypeProperty ; rdfs:comment "pending | approved | rejected | needs_update | superseded | approved_synthetic." .
+atlas:formatDrift a owl:DatatypeProperty ; rdfs:comment "Names a date field whose stored form was not the field's canonical syntax (C-05). Presence is a Warning." .
+
+atlas:likelihood a owl:DatatypeProperty ; rdfs:comment "Very Low | Low | Moderate | High | Very High — never prose or serialized stats (C-01)." .
+atlas:impactBand a owl:DatatypeProperty .
+atlas:financialImpactBand a owl:DatatypeProperty .
+atlas:controllability a owl:DatatypeProperty ; rdfs:comment "internal | mixed | external (kind-of-control scale from phase4_prioritize.py:61-66)." .
+atlas:scenarioStatus a owl:DatatypeProperty ; rdfs:comment "draft | active | retired." .
+atlas:origin a owl:DatatypeProperty ; rdfs:comment "Explicit scenario provenance; identifier prefixes carry no behavioral meaning." .
+atlas:signpostStatus a owl:DatatypeProperty .
+atlas:eventDriverClass a owl:DatatypeProperty .
+atlas:riskCategory a owl:DatatypeProperty ; rdfs:comment "Scenario field: one of the 12 atlas categories, verbatim (C-01)." .
+
+atlas:riskCategoryLabel a owl:DatatypeProperty ; rdfs:comment "Evidence-event field: free-form label as stored." .
+atlas:normalizedCategory a owl:DatatypeProperty ; rdfs:comment "Door-computed: alnum-only lowercase of riskCategoryLabel; must match some concept's atlas:normalizedLabel (C-04)." .
+atlas:normalizedLabel a owl:DatatypeProperty ; rdfs:comment "Precomputed normalized form of a category concept's prefLabel." .
+
+atlas:uncertaintyClass a owl:DatatypeProperty ; rdfs:comment "statistical | mixed | judgment_dominant (C-08)." .
+atlas:lossUnits a owl:DatatypeProperty ; rdfs:comment "activation | dollars — export vocabulary (compound_join.py:488-490,508-509); 'activation_units' is the db-side drift spelling (C-08)." .
+atlas:compoundStatus a owl:DatatypeProperty ; rdfs:comment "candidate | superseded (C-08)." .
+atlas:runId a owl:DatatypeProperty .
+atlas:pairId a owl:DatatypeProperty .
+
+atlas:proposalStatus a owl:DatatypeProperty ; rdfs:comment "pending | approved | rejected | auto_rejected." .
+atlas:proposalKind a owl:DatatypeProperty ; rdfs:comment "tag_add | edge_add | new_channel." .
+atlas:citationStatus a owl:DatatypeProperty ; rdfs:comment "unverified | resolved | unresolvable." .
+atlas:channel a owl:DatatypeProperty .
+atlas:reviewer a owl:DatatypeProperty .
+atlas:reason a owl:DatatypeProperty .
+atlas:graphVersionApplied a owl:DatatypeProperty ; rdfs:comment "Must never be set — proposals never self-apply (C-09; erd.md:200)." .
+
+atlas:firstSeen a owl:DatatypeProperty .
+atlas:lastReviewed a owl:DatatypeProperty .
+atlas:sourceDate a owl:DatatypeProperty .
+atlas:retrievedAt a owl:DatatypeProperty .
+atlas:headline a owl:DatatypeProperty .
+atlas:provenanceClass a owl:DatatypeProperty ; rdfs:comment "public_primary | public_secondary | synthetic." .
+atlas:pHat a owl:DatatypeProperty .
+
+# ===========================================================================
+# Risk-category concept scheme (C-04) — DATA-SIDE, not TBox.
+# The 12 skos:Concept individuals (prefLabel + atlas:normalizedLabel) are
+# stable reference data seeded into every validation data graph by guard.py.
+# export_existing.py also includes them in snapshots for inspection. pySHACL
+# inoculates only class/property hierarchy triples from ont_graph, so these
+# individuals must live on the data side for the C-04 SPARQL join to see them.
+# altLabels are reviewed synonyms; typography variants are normalized at the
+# door.
+# ===========================================================================
+
+cat:risk-categories a skos:ConceptScheme ;
+    rdfs:label "Atlas risk categories (atlas-1.0)" ;
+    rdfs:comment "Members are seeded into each validation data graph from the canonical risk-category vocabulary." .

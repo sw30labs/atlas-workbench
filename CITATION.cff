@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: >-
+  If you use Contingency Atlas in research, please cite the software using this
+  metadata and the specific release or commit you used.
+title: Contingency Atlas
+abstract: >-
+  An evidence-grounded banking operational-risk foresight and scenario engine
+  for organizing public-source signals into challengeable scenario hypotheses.
+type: software
+authors:
+  - name: Contingency Atlas contributors
+version: 0.1.0
+license: Apache-2.0
+repository-code: https://github.com/sw30labs/contingency-atlas
+url: https://github.com/sw30labs/contingency-atlas
+keywords:
+  - banking
+  - operational risk
+  - scenario analysis
+  - foresight
+  - LangGraph
+  - local language models

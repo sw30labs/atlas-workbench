@@ -1,0 +1,230 @@
+[
+  {
+    "kind": "risk",
+    "id": "fixture-risk-alpha",
+    "issue": "Fixture risk alpha",
+    "status": "monitoring",
+    "review_status": "pending",
+    "first_seen": "2026-08-05T00:00:00+00:00"
+  },
+  {
+    "kind": "risk",
+    "id": "fixture-risk-beta",
+    "issue": "Fixture risk beta",
+    "first_seen": "2026-01-15"
+  },
+  {
+    "kind": "risk",
+    "id": "fixture-risk-alpha-copy",
+    "issue": "Fixture risk alpha",
+    "status": "active",
+    "review_status": "rejected"
+  },
+  {
+    "kind": "risk",
+    "id": "fixture-risk-bad-reference",
+    "issue": "Fixture risk with a malformed evidence reference",
+    "evidence_refs": ["not a ref at all"]
+  },
+  {
+    "kind": "risk",
+    "id": "fixture-risk-bare-url",
+    "issue": "Fixture approved risk with a bare URL",
+    "status": "active",
+    "review_status": "approved",
+    "evidence_refs": ["https://evidence.example.test/unregistered"],
+    "first_seen": "2026-08-05T00:00:00+00:00"
+  },
+  {
+    "kind": "risk",
+    "id": "fixture-risk-approved",
+    "issue": "Fixture approved risk with registered evidence",
+    "status": "active",
+    "review_status": "approved",
+    "evidence_refs": ["DEMO-EVT-GUARD-0002"],
+    "first_seen": "2026-08-05T00:00:00+00:00",
+    "last_reviewed": "2026-08-05T01:00:00+00:00",
+    "signal_maturity": "emerging",
+    "momentum": "stable",
+    "trend": "rising",
+    "evidence_strength": "limited",
+    "external_drivers": ["Technology"]
+  },
+  {
+    "kind": "scenario",
+    "id": "ATLAS-DEMO-GUARD-900",
+    "origin": "synthetic_fixture",
+    "title": "Fixture scenario with a non-enum likelihood",
+    "likelihood": "serialized probability interval"
+  },
+  {
+    "kind": "scenario",
+    "id": "ATLAS-DEMO-GUARD-901",
+    "origin": "synthetic_fixture",
+    "title": "Fixture scenario with canonical fields",
+    "status": "draft",
+    "risk_category": "Digital resilience",
+    "likelihood": "Moderate",
+    "impact_band": "Medium",
+    "financial_impact_band": "Significant",
+    "controllability": "mixed",
+    "signpost_status": "not_evaluated",
+    "event_driver_class": "Technology disruption"
+  },
+  {
+    "kind": "compound_run",
+    "id": "fixture-run-alpha",
+    "status": "ok"
+  },
+  {
+    "kind": "compound_run",
+    "id": "fixture-run-beta",
+    "status": "ok"
+  },
+  {
+    "kind": "compound",
+    "id": "fixture-compound-dangling",
+    "pair_id": "fixture-pair-dangling",
+    "run_id": "fixture-run-alpha",
+    "risk_ids": ["fixture-risk-alpha", "fixture-risk-missing"],
+    "p_hat": 0.5,
+    "uncertainty_class": "mixed",
+    "loss_units": "activation",
+    "status": "candidate"
+  },
+  {
+    "kind": "compound",
+    "id": "fixture-compound-bad-enum",
+    "pair_id": "fixture-pair-bad-enum",
+    "run_id": "fixture-run-alpha",
+    "risk_ids": ["fixture-risk-alpha", "fixture-risk-beta"],
+    "p_hat": 0.5,
+    "uncertainty_class": "mixed",
+    "loss_units": "noncanonical_units",
+    "status": "candidate"
+  },
+  {
+    "kind": "compound",
+    "id": "fixture-compound-alpha",
+    "pair_id": "fixture-pair-alpha",
+    "run_id": "fixture-run-alpha",
+    "risk_ids": ["fixture-risk-alpha", "fixture-risk-beta"],
+    "p_hat": 0.42,
+    "uncertainty_class": "mixed",
+    "loss_units": "activation",
+    "status": "candidate"
+  },
+  {
+    "kind": "compound",
+    "id": "fixture-compound-beta",
+    "pair_id": "fixture-pair-beta",
+    "run_id": "fixture-run-beta",
+    "risk_ids": ["fixture-risk-alpha", "fixture-risk-beta"],
+    "p_hat": 0.3,
+    "uncertainty_class": "statistical",
+    "loss_units": "activation",
+    "status": "candidate"
+  },
+  {
+    "kind": "channel_proposal",
+    "id": "fixture-channel-applied",
+    "proposal_kind": "edge_add",
+    "status": "pending",
+    "citation_status": "resolved",
+    "channel": "cloud",
+    "graph_version_applied": 3
+  },
+  {
+    "kind": "channel_proposal",
+    "id": "fixture-channel-unreviewed",
+    "proposal_kind": "tag_add",
+    "status": "approved",
+    "citation_status": "resolved",
+    "channel": "data"
+  },
+  {
+    "kind": "channel_proposal",
+    "id": "fixture-channel-pending",
+    "proposal_kind": "edge_add",
+    "status": "pending",
+    "citation_status": "unverified",
+    "channel": "identity"
+  },
+  {
+    "kind": "mapping_proposal",
+    "id": "fixture-mapping-applied",
+    "framework": "mitre-atlas",
+    "scenario_id": "ATLAS-DEMO-GUARD-901",
+    "content_version": "fixture-1",
+    "technique_id": "AML.T0043",
+    "applicability": "hypothesized",
+    "origin": "manual",
+    "status": "pending",
+    "graph_version_applied": 3
+  },
+  {
+    "kind": "mapping_proposal",
+    "id": "fixture-mapping-unreviewed",
+    "framework": "mitre-atlas",
+    "scenario_id": "ATLAS-DEMO-GUARD-901",
+    "content_version": "fixture-1",
+    "technique_id": "AML.T0043",
+    "applicability": "hypothesized",
+    "origin": "manual",
+    "status": "approved"
+  },
+  {
+    "kind": "mapping_proposal",
+    "id": "fixture-mapping-pending",
+    "framework": "mitre-atlas",
+    "scenario_id": "ATLAS-DEMO-GUARD-901",
+    "content_version": "fixture-1",
+    "technique_id": "AML.T0043",
+    "applicability": "hypothesized",
+    "origin": "manual",
+    "status": "pending"
+  },
+  {
+    "kind": "evidence_event",
+    "id": "DEMO-EVT-GUARD-0001",
+    "headline": "Fixture evidence with an unknown category",
+    "risk_category": "Fixture category outside the taxonomy",
+    "source_url": "https://evidence.example.test/unknown-category",
+    "source_date": "2026-07-01",
+    "retrieved_at": "2026-07-02T00:00:00+00:00",
+    "provenance_class": "synthetic",
+    "review_status": "pending"
+  },
+  {
+    "kind": "evidence_event",
+    "id": "DEMO-EVT-GUARD-0002",
+    "headline": "Fixture evidence with canonical fields",
+    "risk_category": "Legal and regulatory",
+    "source_date": "2026-07-01",
+    "retrieved_at": "2026-07-02T00:00:00+00:00",
+    "provenance_class": "synthetic",
+    "review_status": "approved_synthetic"
+  },
+  {
+    "kind": "evidence_event",
+    "id": "DEMO-EVT-GUARD-0003",
+    "headline": "First duplicate-identity fixture",
+    "risk_category": "Legal and regulatory",
+    "source_url": "https://evidence.example.test/duplicate",
+    "source_date": "2026-07-01",
+    "retrieved_at": "2026-07-02T00:00:00+00:00",
+    "provenance_class": "synthetic",
+    "review_status": "pending"
+  },
+  {
+    "kind": "evidence_event",
+    "id": "DEMO-EVT-GUARD-0004",
+    "headline": "Second duplicate-identity fixture",
+    "risk_category": "Legal and regulatory",
+    "source_url": "https://evidence.example.test/duplicate",
+    "source_date": "2026-07-01",
+    "retrieved_at": "2026-07-02T00:00:00+00:00",
+    "provenance_class": "synthetic",
+    "review_status": "pending"
+  }
+]

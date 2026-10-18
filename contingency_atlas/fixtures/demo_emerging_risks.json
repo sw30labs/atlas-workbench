@@ -1,0 +1,163 @@
+[
+  {
+    "issue": "Coordinated identity-service concentration",
+    "description": "A fictional exercise risk in which several critical banking services depend on one shared identity control plane. A routine certificate or policy change could synchronize otherwise independent outages.",
+    "status": "monitoring",
+    "first_seen": "2026-01-15",
+    "last_reviewed": "2026-07-28",
+    "trend": "rising",
+    "external_drivers": [
+      "Technology",
+      "Institutional change"
+    ],
+    "signal_maturity": "accelerating",
+    "momentum": "accelerating",
+    "evidence_strength": "moderate",
+    "first_observed": "2026-01-15",
+    "last_confirmed": "2026-07-28",
+    "related_scenarios": [
+      "ATLAS-DEMO-001"
+    ],
+    "evidence_refs": [
+      "DEMO-EVT-001",
+      "DEMO-EVT-002"
+    ],
+    "source_type": "synthetic",
+    "review_status": "approved_synthetic",
+    "provenance_note": "Fictional demonstration signal created for software testing; it is not a claim about any real organization or event."
+  },
+  {
+    "issue": "Settlement dependencies across cloud regions",
+    "description": "A fictional exercise risk exploring how separately resilient market participants can share the same regional infrastructure dependency. Recovery sequencing may amplify liquidity and reconciliation pressure.",
+    "status": "monitoring",
+    "first_seen": "2026-02-02",
+    "last_reviewed": "2026-07-28",
+    "trend": "stable",
+    "external_drivers": [
+      "Technology",
+      "Institutional change"
+    ],
+    "signal_maturity": "established",
+    "momentum": "stable",
+    "evidence_strength": "moderate",
+    "first_observed": "2026-02-02",
+    "last_confirmed": "2026-07-28",
+    "related_scenarios": [
+      "ATLAS-DEMO-002"
+    ],
+    "evidence_refs": [
+      "DEMO-EVT-002",
+      "DEMO-EVT-004"
+    ],
+    "source_type": "synthetic",
+    "review_status": "approved_synthetic",
+    "provenance_note": "Fictional demonstration signal created for software testing; it is not a claim about any real organization or event."
+  },
+  {
+    "issue": "Control-model drift during transaction surges",
+    "description": "A fictional exercise risk in which rapid changes in transaction mix degrade fraud and sanctions controls while alert volumes rise. Manual review capacity becomes a correlated operational constraint.",
+    "status": "monitoring",
+    "first_seen": "2026-02-21",
+    "last_reviewed": "2026-07-28",
+    "trend": "rising",
+    "external_drivers": [
+      "Technology",
+      "Societal values"
+    ],
+    "signal_maturity": "accelerating",
+    "momentum": "accelerating",
+    "evidence_strength": "moderate",
+    "first_observed": "2026-02-21",
+    "last_confirmed": "2026-07-28",
+    "related_scenarios": [
+      "ATLAS-DEMO-003"
+    ],
+    "evidence_refs": [
+      "DEMO-EVT-003",
+      "DEMO-EVT-008"
+    ],
+    "source_type": "synthetic",
+    "review_status": "approved_synthetic",
+    "provenance_note": "Fictional demonstration signal created for software testing; it is not a claim about any real organization or event."
+  },
+  {
+    "issue": "Reference-data divergence across automated controls",
+    "description": "A fictional exercise risk in which multiple automated controls consume inconsistent versions of the same reference data. The divergence can remain hidden until volatile conditions trigger conflicting decisions.",
+    "status": "monitoring",
+    "first_seen": "2026-03-10",
+    "last_reviewed": "2026-07-28",
+    "trend": "stable",
+    "external_drivers": [
+      "Technology"
+    ],
+    "signal_maturity": "emerging",
+    "momentum": "stable",
+    "evidence_strength": "moderate",
+    "first_observed": "2026-03-10",
+    "last_confirmed": "2026-07-28",
+    "related_scenarios": [
+      "ATLAS-DEMO-004"
+    ],
+    "evidence_refs": [
+      "DEMO-EVT-004",
+      "DEMO-EVT-005"
+    ],
+    "source_type": "synthetic",
+    "review_status": "approved_synthetic",
+    "provenance_note": "Fictional demonstration signal created for software testing; it is not a claim about any real organization or event."
+  },
+  {
+    "issue": "Recovery-site access under regional disruption",
+    "description": "A fictional exercise risk combining physical access constraints, telecommunications disruption, and concentrated specialist knowledge. A recovery site may be technically available while essential operators cannot use it.",
+    "status": "monitoring",
+    "first_seen": "2026-04-07",
+    "last_reviewed": "2026-07-28",
+    "trend": "stable",
+    "external_drivers": [
+      "Environment",
+      "Demographic change"
+    ],
+    "signal_maturity": "emerging",
+    "momentum": "stable",
+    "evidence_strength": "moderate",
+    "first_observed": "2026-04-07",
+    "last_confirmed": "2026-07-28",
+    "related_scenarios": [
+      "ATLAS-DEMO-005"
+    ],
+    "evidence_refs": [
+      "DEMO-EVT-006",
+      "DEMO-EVT-007"
+    ],
+    "source_type": "synthetic",
+    "review_status": "approved_synthetic",
+    "provenance_note": "Fictional demonstration signal created for software testing; it is not a claim about any real organization or event."
+  },
+  {
+    "issue": "Automated remediation with excessive privilege",
+    "description": "A fictional exercise risk in which an automated recovery tool has broad credentials across several environments. A flawed remediation instruction could turn a localized fault into a cross-service disruption.",
+    "status": "monitoring",
+    "first_seen": "2026-05-18",
+    "last_reviewed": "2026-07-28",
+    "trend": "rising",
+    "external_drivers": [
+      "Technology",
+      "Institutional change"
+    ],
+    "signal_maturity": "accelerating",
+    "momentum": "accelerating",
+    "evidence_strength": "moderate",
+    "first_observed": "2026-05-18",
+    "last_confirmed": "2026-07-28",
+    "related_scenarios": [
+      "ATLAS-DEMO-006"
+    ],
+    "evidence_refs": [
+      "DEMO-EVT-001",
+      "DEMO-EVT-006"
+    ],
+    "source_type": "synthetic",
+    "review_status": "approved_synthetic",
+    "provenance_note": "Fictional demonstration signal created for software testing; it is not a claim about any real organization or event."
+  }
+]

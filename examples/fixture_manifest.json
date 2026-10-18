@@ -1,0 +1,52 @@
+{
+  "schema_version": "atlas-fixture-manifest-1.1",
+  "provenance_class": "synthetic",
+  "license": "CC0-1.0",
+  "license_file": "LICENSES/CC0-1.0.txt",
+  "generator": "human-authored",
+  "generator_version": "contingency-atlas-demo-1.1",
+  "seed": null,
+  "created_at": "2026-07-28",
+  "review_status": "approved_synthetic",
+  "synthetic_notice": "Every referenced record is fictional and exists only for software demonstration and testing. No record describes a real organization, event, loss, source, or prediction.",
+  "files": [
+    {
+      "path": "examples/demo_evidence.json",
+      "record_type": "event_evidence",
+      "record_ids": [
+        "DEMO-EVT-001",
+        "DEMO-EVT-002",
+        "DEMO-EVT-003",
+        "DEMO-EVT-004",
+        "DEMO-EVT-005",
+        "DEMO-EVT-006",
+        "DEMO-EVT-007",
+        "DEMO-EVT-008"
+      ]
+    },
+    {
+      "path": "examples/demo_emerging_risks.json",
+      "record_type": "emerging_risk",
+      "record_ids": [
+        "Coordinated identity-service concentration",
+        "Settlement dependencies across cloud regions",
+        "Control-model drift during transaction surges",
+        "Reference-data divergence across automated controls",
+        "Recovery-site access under regional disruption",
+        "Automated remediation with excessive privilege"
+      ]
+    },
+    {
+      "path": "examples/demo_scenarios.json",
+      "record_type": "scenario",
+      "record_ids": [
+        "ATLAS-DEMO-001",
+        "ATLAS-DEMO-002",
+        "ATLAS-DEMO-003",
+        "ATLAS-DEMO-004",
+        "ATLAS-DEMO-005",
+        "ATLAS-DEMO-006"
+      ]
+    }
+  ]
+}

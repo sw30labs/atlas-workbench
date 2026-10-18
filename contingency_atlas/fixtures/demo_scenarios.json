@@ -1,0 +1,661 @@
+[
+  {
+    "scenario_id": "ATLAS-DEMO-001",
+    "origin": "synthetic_fixture",
+    "risk_category": "Digital resilience",
+    "title": "Shared identity control plane stalls critical services",
+    "description": "In this fictional exercise, a certificate-policy rollout disrupts authentication across payment, treasury, and staff-access services. Independent recovery plans compete for the same identity specialists and extend the outage.",
+    "created_year": 2026,
+    "financial_impact_band": "Moderate",
+    "event_driver_class": "Technology disruption",
+    "primary_cause_class": "Architecture concentration",
+    "impact_band": "Medium",
+    "core_risks": [
+      "Identity-service concentration",
+      "Specialist dependency",
+      "Recovery sequencing"
+    ],
+    "scenario_event_name": "Synchronized identity-service interruption",
+    "scenario_horizon": "Illustrative 12-24 month horizon",
+    "likelihood": "Moderate",
+    "financial_impact_detail": "Illustrative exercise range: USD 25-75 million; not a forecast.",
+    "operational_impact": "Payment release, privileged administration, and customer servicing are delayed.",
+    "reputational_impact": "Customers experience inconsistent service restoration across channels.",
+    "regulatory_impact": "Supervisors request evidence of dependency mapping and tested recovery sequencing.",
+    "element_of_surprise": "Each application passes its own recovery test, but the common control plane and staffing dependency are not exercised together.",
+    "external_drivers": [
+      "Technology",
+      "Institutional change"
+    ],
+    "signal_maturity": "accelerating",
+    "momentum": "accelerating",
+    "evidence_strength": "moderate",
+    "affected_capabilities": [
+      "Identity and access management",
+      "Payment authorization",
+      "Treasury operations",
+      "Service recovery"
+    ],
+    "transmission_mechanism": "A common certificate-policy change propagates through the shared identity control plane, blocks human and service authentication, and concentrates recovery work on the same specialists.",
+    "second_order_effects": [
+      "Application recovery priorities conflict because every service needs identity restoration first",
+      "Break-glass access becomes harder to coordinate while customer-service queues grow"
+    ],
+    "cross_industry_analogues": [
+      "A shared airport screening system delaying otherwise independent airlines",
+      "A common trust service interrupting unrelated digital platforms"
+    ],
+    "strengthening_signposts": [
+      "More critical services adopt the same identity control plane",
+      "Recovery exercises continue to test applications without shared identity and staffing constraints"
+    ],
+    "weakening_signposts": [
+      "Independent degraded-authentication modes are tested across critical services",
+      "Recovery privileges and specialist knowledge are distributed across teams"
+    ],
+    "defensive_options": [
+      "Limit certificate-policy blast radius through staged deployment",
+      "Maintain independently controlled emergency credentials"
+    ],
+    "resilience_opportunities": [
+      "Exercise identity restoration as a shared enterprise dependency",
+      "Measure recovery contention across services rather than application by application"
+    ],
+    "strategic_options": [
+      "Preserve a second identity path for the most critical payment and treasury functions"
+    ],
+    "option_expiry_signals": [
+      "Legacy fallback paths are decommissioned before shared recovery tests succeed"
+    ],
+    "challenged_assumptions": [
+      "Application-level recovery tests prove end-to-end recoverability",
+      "A shared identity failure remains a localized technical incident"
+    ],
+    "discussion_prompts": [
+      "Which critical service receives identity restoration first, and who can make that decision during an outage?",
+      "What recovery action still works if normal privileged access is unavailable?"
+    ],
+    "signpost_status": "not_evaluated",
+    "signpost_review_status": "not_reviewed",
+    "signpost_assessment": "",
+    "signpost_checked_evidence_refs": [],
+    "signpost_evidence_refs": [],
+    "signposts_last_evaluated": null,
+    "preparation_strategy": [
+      "Test degraded authentication modes",
+      "Map shared specialists and credentials",
+      "Exercise cross-service restoration priorities"
+    ],
+    "detailed_rationale": [
+      "Synthesizes DEMO-EVT-001 and DEMO-EVT-002",
+      "Explores correlated recovery dependencies"
+    ],
+    "additional_information": "Entirely fictional demonstration scenario for software evaluation. It is not a prediction or statement about a real organization.",
+    "theme_tags": [
+      "identity",
+      "concentration",
+      "resilience"
+    ],
+    "evidence_refs": [
+      "DEMO-EVT-001",
+      "DEMO-EVT-002"
+    ],
+    "judge_score": 0.88,
+    "judge_feedback": "Synthetic fixture accepted for completeness and internal consistency.",
+    "judge_iterations": 1,
+    "urgency_score": 74,
+    "time_horizon": "12-24 months",
+    "controllability": "mixed",
+    "last_scored": "2026-07-28T00:00:00+00:00",
+    "status": "active"
+  },
+  {
+    "scenario_id": "ATLAS-DEMO-002",
+    "origin": "synthetic_fixture",
+    "risk_category": "Third-party dependency",
+    "title": "Regional infrastructure outage compresses settlement windows",
+    "description": "In this fictional exercise, a regional infrastructure failure delays settlement messages at several demo participants. Catch-up processing collides with end-of-day controls and produces a liquidity-management bottleneck.",
+    "created_year": 2026,
+    "financial_impact_band": "Moderate",
+    "event_driver_class": "Third-party failure",
+    "primary_cause_class": "Supplier concentration",
+    "impact_band": "Medium",
+    "core_risks": [
+      "Cloud-region dependency",
+      "Settlement timing",
+      "Batch recovery pressure"
+    ],
+    "scenario_event_name": "Compressed settlement recovery window",
+    "scenario_horizon": "Illustrative 12-36 month horizon",
+    "likelihood": "Moderate",
+    "financial_impact_detail": "Illustrative exercise range: USD 10-50 million; not a forecast.",
+    "operational_impact": "Settlement, reconciliation, and liquidity-monitoring queues grow simultaneously.",
+    "reputational_impact": "Institutional clients receive late or conflicting status messages.",
+    "regulatory_impact": "Authorities examine third-party concentration and market-wide recovery coordination.",
+    "element_of_surprise": "The primary outage is short, but synchronized catch-up workloads create the larger disruption.",
+    "external_drivers": [
+      "Technology",
+      "Institutional change"
+    ],
+    "signal_maturity": "established",
+    "momentum": "stable",
+    "evidence_strength": "moderate",
+    "affected_capabilities": [
+      "Settlement processing",
+      "Liquidity monitoring",
+      "Reconciliation",
+      "Third-party service management"
+    ],
+    "transmission_mechanism": "A shared regional infrastructure interruption delays several participants at once; synchronized recovery traffic then collides with fixed settlement and control deadlines.",
+    "second_order_effects": [
+      "Catch-up queues create intraday liquidity uncertainty after infrastructure service returns",
+      "Conflicting participant status messages increase manual reconciliation and client enquiries"
+    ],
+    "cross_industry_analogues": [
+      "A reopened port receiving a simultaneous surge of delayed cargo",
+      "A power restoration wave overloading equipment after the initial outage ends"
+    ],
+    "strengthening_signposts": [
+      "More settlement participants concentrate workloads in the same infrastructure regions",
+      "Recovery objectives exclude coordinated catch-up volume and market deadlines"
+    ],
+    "weakening_signposts": [
+      "Participants demonstrate staggered recovery and throttled message replay",
+      "Alternate regions support operationally tested settlement processing"
+    ],
+    "defensive_options": [
+      "Predefine message throttles and liquidity buffers for recovery periods",
+      "Validate alternate participant communication channels"
+    ],
+    "resilience_opportunities": [
+      "Run cross-participant exercises focused on the post-outage catch-up period",
+      "Expose shared regional dependencies in service maps"
+    ],
+    "strategic_options": [
+      "Preserve portable settlement workloads and tested regional diversity"
+    ],
+    "option_expiry_signals": [
+      "Contract renewals deepen single-region concentration without tested exit paths"
+    ],
+    "challenged_assumptions": [
+      "A short infrastructure outage necessarily produces a short business disruption",
+      "Participant recovery plans can be assessed independently"
+    ],
+    "discussion_prompts": [
+      "What is the maximum safe catch-up rate before reconciliation and liquidity controls degrade?",
+      "Which recovery decisions require coordination outside the institution?"
+    ],
+    "signpost_status": "not_evaluated",
+    "signpost_review_status": "not_reviewed",
+    "signpost_assessment": "",
+    "signpost_checked_evidence_refs": [],
+    "signpost_evidence_refs": [],
+    "signposts_last_evaluated": null,
+    "preparation_strategy": [
+      "Exercise throttled catch-up processing",
+      "Coordinate settlement recovery playbooks",
+      "Validate alternate status channels"
+    ],
+    "detailed_rationale": [
+      "Synthesizes DEMO-EVT-002 and DEMO-EVT-004",
+      "Explores time-window compression after recovery"
+    ],
+    "additional_information": "Entirely fictional demonstration scenario for software evaluation. It is not a prediction or statement about a real organization.",
+    "theme_tags": [
+      "third-party",
+      "settlement",
+      "liquidity"
+    ],
+    "evidence_refs": [
+      "DEMO-EVT-002",
+      "DEMO-EVT-004"
+    ],
+    "judge_score": 0.85,
+    "judge_feedback": "Synthetic fixture accepted for completeness and internal consistency.",
+    "judge_iterations": 1,
+    "urgency_score": 69,
+    "time_horizon": "12-36 months",
+    "controllability": "external",
+    "last_scored": "2026-07-28T00:00:00+00:00",
+    "status": "active"
+  },
+  {
+    "scenario_id": "ATLAS-DEMO-003",
+    "origin": "synthetic_fixture",
+    "risk_category": "Financial crime controls",
+    "title": "Transaction surge overwhelms drifting control models",
+    "description": "In this fictional exercise, a new payment pattern coincides with model drift and a rules deployment that raises false positives. Alert queues expand while genuine high-risk transactions become harder to distinguish.",
+    "created_year": 2026,
+    "financial_impact_band": "Significant",
+    "event_driver_class": "Process failure",
+    "primary_cause_class": "Monitoring gap",
+    "impact_band": "Medium",
+    "core_risks": [
+      "Model drift",
+      "Alert-volume surge",
+      "Manual review capacity"
+    ],
+    "scenario_event_name": "Correlated financial-crime control degradation",
+    "scenario_horizon": "Illustrative 6-18 month horizon",
+    "likelihood": "Moderate",
+    "financial_impact_detail": "Illustrative exercise range: USD 30-100 million; not a forecast.",
+    "operational_impact": "Review teams triage a growing backlog while payment holds disrupt customers.",
+    "reputational_impact": "Customers and correspondents question inconsistent transaction decisions.",
+    "regulatory_impact": "Supervisors request model-monitoring, backlog-governance, and remediation evidence.",
+    "element_of_surprise": "Each control remains nominally available while their combined decision quality deteriorates.",
+    "external_drivers": [
+      "Technology",
+      "Societal values"
+    ],
+    "signal_maturity": "accelerating",
+    "momentum": "accelerating",
+    "evidence_strength": "moderate",
+    "affected_capabilities": [
+      "Transaction monitoring",
+      "Sanctions screening",
+      "Fraud operations",
+      "Customer payment servicing"
+    ],
+    "transmission_mechanism": "A rapid change in transaction behavior reduces model and rule precision, expands alert queues, and consumes the same manual capacity needed to identify genuinely high-risk activity.",
+    "second_order_effects": [
+      "Broad payment holds create customer harm while reviewers focus on queue reduction",
+      "Emergency threshold changes obscure whether control quality is recovering"
+    ],
+    "cross_industry_analogues": [
+      "A medical triage system overwhelmed by a sudden change in patient mix",
+      "A spam filter whose false positives consume the team needed to investigate real abuse"
+    ],
+    "strengthening_signposts": [
+      "Alert volumes rise faster than verified high-risk detections",
+      "Material transaction-mix changes occur without corresponding model recalibration"
+    ],
+    "weakening_signposts": [
+      "Control-quality metrics remain stable during representative surge exercises",
+      "Independent review capacity can be activated before backlog thresholds are breached"
+    ],
+    "defensive_options": [
+      "Define quality-based circuit breakers rather than volume-only thresholds",
+      "Separate surge triage from investigation of genuinely high-risk activity"
+    ],
+    "resilience_opportunities": [
+      "Jointly monitor model precision, queue age, customer impact, and reviewer capacity",
+      "Pre-authorize bounded fallback strategies with documented exit criteria"
+    ],
+    "strategic_options": [
+      "Maintain multiple independent detection approaches for high-consequence typologies"
+    ],
+    "option_expiry_signals": [
+      "Backlog age exceeds the point at which independent reconstruction remains practical"
+    ],
+    "challenged_assumptions": [
+      "An available control is an effective control",
+      "Additional alerts always increase detection quality"
+    ],
+    "discussion_prompts": [
+      "Which metric would reveal declining decision quality before the backlog becomes visible?",
+      "How would the team protect genuine investigations while reducing false-positive volume?"
+    ],
+    "signpost_status": "not_evaluated",
+    "signpost_review_status": "not_reviewed",
+    "signpost_assessment": "",
+    "signpost_checked_evidence_refs": [],
+    "signpost_evidence_refs": [],
+    "signposts_last_evaluated": null,
+    "preparation_strategy": [
+      "Define model-drift circuit breakers",
+      "Pre-plan review-capacity escalation",
+      "Monitor alert quality and volume jointly"
+    ],
+    "detailed_rationale": [
+      "Synthesizes DEMO-EVT-003 and DEMO-EVT-008",
+      "Explores coupled model and human-capacity controls"
+    ],
+    "additional_information": "Entirely fictional demonstration scenario for software evaluation. It is not a prediction or statement about a real organization.",
+    "theme_tags": [
+      "financial-crime",
+      "model-risk",
+      "capacity"
+    ],
+    "evidence_refs": [
+      "DEMO-EVT-003",
+      "DEMO-EVT-008"
+    ],
+    "judge_score": 0.91,
+    "judge_feedback": "Synthetic fixture accepted for completeness and internal consistency.",
+    "judge_iterations": 1,
+    "urgency_score": 82,
+    "time_horizon": "6-18 months",
+    "controllability": "internal",
+    "last_scored": "2026-07-28T00:00:00+00:00",
+    "status": "active"
+  },
+  {
+    "scenario_id": "ATLAS-DEMO-004",
+    "origin": "synthetic_fixture",
+    "risk_category": "Data governance",
+    "title": "Reference-data divergence creates conflicting automated decisions",
+    "description": "In this fictional exercise, collateral, limits, and transaction controls consume different versions of a reference dataset. Volatile market conditions expose inconsistent valuations and trigger contradictory automated actions.",
+    "created_year": 2026,
+    "financial_impact_band": "Moderate",
+    "event_driver_class": "Data integrity",
+    "primary_cause_class": "Data quality",
+    "impact_band": "Medium",
+    "core_risks": [
+      "Reference-data drift",
+      "Automated decision conflict",
+      "Volatility"
+    ],
+    "scenario_event_name": "Cross-control reference-data divergence",
+    "scenario_horizon": "Illustrative 12-24 month horizon",
+    "likelihood": "Moderate",
+    "financial_impact_detail": "Illustrative exercise range: USD 20-80 million; not a forecast.",
+    "operational_impact": "Collateral calls, limits, and reconciliation results disagree across platforms.",
+    "reputational_impact": "Clients challenge inconsistent valuations and correction cycles.",
+    "regulatory_impact": "Supervisors examine lineage, control ownership, and end-to-end data quality.",
+    "element_of_surprise": "All source feeds report green status because the failure is semantic version divergence, not availability.",
+    "external_drivers": [
+      "Technology"
+    ],
+    "signal_maturity": "emerging",
+    "momentum": "stable",
+    "evidence_strength": "moderate",
+    "affected_capabilities": [
+      "Reference-data management",
+      "Collateral management",
+      "Limit monitoring",
+      "Automated decision controls"
+    ],
+    "transmission_mechanism": "Different automated controls consume valid but inconsistent versions of a shared dataset, causing decisions to diverge when volatile conditions amplify small semantic differences.",
+    "second_order_effects": [
+      "Contradictory controls generate manual overrides that further complicate lineage",
+      "Client corrections and collateral disputes persist after the original data version is identified"
+    ],
+    "cross_industry_analogues": [
+      "Navigation systems using different map editions during the same coordinated journey",
+      "Manufacturing controls applying inconsistent versions of a product specification"
+    ],
+    "strengthening_signposts": [
+      "Reference datasets are replicated across more independently deployed control platforms",
+      "Version lineage cannot be reconstructed across end-to-end decisions"
+    ],
+    "weakening_signposts": [
+      "Cross-control reconciliation continuously verifies semantic dataset equivalence",
+      "A controlled rollback can restore one attested version across all critical consumers"
+    ],
+    "defensive_options": [
+      "Require version attestation at every critical decision boundary",
+      "Block incompatible reference-data releases before consumption"
+    ],
+    "resilience_opportunities": [
+      "Detect conflicting automated outcomes as an early data-integrity signal",
+      "Exercise semantic rollback separately from technical feed recovery"
+    ],
+    "strategic_options": [
+      "Preserve a minimal authoritative reference service for high-consequence decisions"
+    ],
+    "option_expiry_signals": [
+      "Control platforms lose the ability to identify or replay the dataset version used for a decision"
+    ],
+    "challenged_assumptions": [
+      "Green source-feed status means every consumer is using equivalent data",
+      "Data availability is a sufficient proxy for data integrity"
+    ],
+    "discussion_prompts": [
+      "Can a reviewer reconstruct the exact reference version behind a disputed automated decision?",
+      "Which conflicting control outcomes should stop processing automatically?"
+    ],
+    "signpost_status": "not_evaluated",
+    "signpost_review_status": "not_reviewed",
+    "signpost_assessment": "",
+    "signpost_checked_evidence_refs": [],
+    "signpost_evidence_refs": [],
+    "signposts_last_evaluated": null,
+    "preparation_strategy": [
+      "Attest reference-data versions end to end",
+      "Detect cross-control decision conflicts",
+      "Exercise a controlled rollback"
+    ],
+    "detailed_rationale": [
+      "Synthesizes DEMO-EVT-004 and DEMO-EVT-005",
+      "Explores semantic rather than technical availability"
+    ],
+    "additional_information": "Entirely fictional demonstration scenario for software evaluation. It is not a prediction or statement about a real organization.",
+    "theme_tags": [
+      "data",
+      "automation",
+      "markets"
+    ],
+    "evidence_refs": [
+      "DEMO-EVT-004",
+      "DEMO-EVT-005"
+    ],
+    "judge_score": 0.87,
+    "judge_feedback": "Synthetic fixture accepted for completeness and internal consistency.",
+    "judge_iterations": 1,
+    "urgency_score": 77,
+    "time_horizon": "12-24 months",
+    "controllability": "internal",
+    "last_scored": "2026-07-28T00:00:00+00:00",
+    "status": "active"
+  },
+  {
+    "scenario_id": "ATLAS-DEMO-005",
+    "origin": "synthetic_fixture",
+    "risk_category": "Physical resilience",
+    "title": "Available recovery site cannot be staffed",
+    "description": "In this fictional exercise, regional flooding interrupts transport and telecommunications while a small group of specialists retains essential recovery privileges. The alternate site is operational but cannot execute the full recovery plan.",
+    "created_year": 2026,
+    "financial_impact_band": "Moderate",
+    "event_driver_class": "Physical disruption",
+    "primary_cause_class": "Site dependency",
+    "impact_band": "Medium",
+    "core_risks": [
+      "Regional disruption",
+      "Specialist concentration",
+      "Privileged access"
+    ],
+    "scenario_event_name": "Unstaffable recovery capability",
+    "scenario_horizon": "Illustrative 12-36 month horizon",
+    "likelihood": "Low",
+    "financial_impact_detail": "Illustrative exercise range: USD 10-60 million; not a forecast.",
+    "operational_impact": "Recovery steps queue behind unavailable specialists and constrained communications.",
+    "reputational_impact": "Service restoration misses previously communicated objectives.",
+    "regulatory_impact": "Authorities assess whether recovery testing covered people, access, and regional correlation.",
+    "element_of_surprise": "Infrastructure availability masks an untested human-access constraint.",
+    "external_drivers": [
+      "Environment",
+      "Demographic change"
+    ],
+    "signal_maturity": "emerging",
+    "momentum": "stable",
+    "evidence_strength": "moderate",
+    "affected_capabilities": [
+      "Business continuity",
+      "Privileged operations",
+      "Telecommunications",
+      "Specialist workforce availability"
+    ],
+    "transmission_mechanism": "Regional flooding simultaneously restricts travel and communications while recovery privileges remain concentrated among specialists who cannot reach or remotely operate the alternate site.",
+    "second_order_effects": [
+      "Technically restored infrastructure waits for human authorization and sequencing",
+      "Extended manual workarounds create fatigue and additional control exceptions"
+    ],
+    "cross_industry_analogues": [
+      "An equipped hospital unable to operate without specialist clinical staff",
+      "A relief depot that remains stocked but inaccessible after transport routes fail"
+    ],
+    "strengthening_signposts": [
+      "Critical recovery roles remain concentrated in the same geographic area",
+      "Continuity exercises assume normal telecommunications or physical travel"
+    ],
+    "weakening_signposts": [
+      "Remote recovery is demonstrated under regional telecom constraints",
+      "Critical privileges and skills are distributed across independent locations"
+    ],
+    "defensive_options": [
+      "Pre-position bounded emergency access outside the affected region",
+      "Maintain alternate communications for recovery command"
+    ],
+    "resilience_opportunities": [
+      "Test people, access, travel, power, and telecommunications as one recovery system",
+      "Cross-train rare operational roles before geographic concentration increases"
+    ],
+    "strategic_options": [
+      "Retain multiple operating models for critical recovery work"
+    ],
+    "option_expiry_signals": [
+      "Aging specialists leave before recovery knowledge is transferred and exercised"
+    ],
+    "challenged_assumptions": [
+      "An available recovery site is an executable recovery capability",
+      "Remote work automatically removes geographic concentration"
+    ],
+    "discussion_prompts": [
+      "Which recovery step requires a person, credential, or network path concentrated in one region?",
+      "How long can critical services operate if the alternate site is available but understaffed?"
+    ],
+    "signpost_status": "not_evaluated",
+    "signpost_review_status": "not_reviewed",
+    "signpost_assessment": "",
+    "signpost_checked_evidence_refs": [],
+    "signpost_evidence_refs": [],
+    "signposts_last_evaluated": null,
+    "preparation_strategy": [
+      "Cross-train recovery roles",
+      "Pre-position break-glass access",
+      "Exercise regional travel and telecom loss"
+    ],
+    "detailed_rationale": [
+      "Synthesizes DEMO-EVT-006 and DEMO-EVT-007",
+      "Explores human and physical recovery coupling"
+    ],
+    "additional_information": "Entirely fictional demonstration scenario for software evaluation. It is not a prediction or statement about a real organization.",
+    "theme_tags": [
+      "physical",
+      "workforce",
+      "recovery"
+    ],
+    "evidence_refs": [
+      "DEMO-EVT-006",
+      "DEMO-EVT-007"
+    ],
+    "judge_score": 0.83,
+    "judge_feedback": "Synthetic fixture accepted for completeness and internal consistency.",
+    "judge_iterations": 1,
+    "urgency_score": 63,
+    "time_horizon": "12-36 months",
+    "controllability": "mixed",
+    "last_scored": "2026-07-28T00:00:00+00:00",
+    "status": "active"
+  },
+  {
+    "scenario_id": "ATLAS-DEMO-006",
+    "origin": "synthetic_fixture",
+    "risk_category": "Processing integrity",
+    "title": "Automated remediation propagates a localized configuration fault",
+    "description": "In this fictional exercise, an automated recovery service uses broad privileges to correct a small configuration error. The flawed remediation instruction propagates across environments and disrupts otherwise healthy services.",
+    "created_year": 2026,
+    "financial_impact_band": "Significant",
+    "event_driver_class": "Process failure",
+    "primary_cause_class": "Change failure",
+    "impact_band": "Medium",
+    "core_risks": [
+      "Automated remediation",
+      "Excessive privilege",
+      "Configuration propagation"
+    ],
+    "scenario_event_name": "Cross-environment remediation cascade",
+    "scenario_horizon": "Illustrative 6-24 month horizon",
+    "likelihood": "Low",
+    "financial_impact_detail": "Illustrative exercise range: USD 40-120 million; not a forecast.",
+    "operational_impact": "Multiple services enter conflicting recovery states and require manual isolation.",
+    "reputational_impact": "A preventable recovery action becomes the dominant cause of customer disruption.",
+    "regulatory_impact": "Supervisors request evidence of automation governance, privilege boundaries, and kill switches.",
+    "element_of_surprise": "The tool designed to limit outage duration becomes the mechanism that broadens its scope.",
+    "external_drivers": [
+      "Technology",
+      "Institutional change"
+    ],
+    "signal_maturity": "accelerating",
+    "momentum": "accelerating",
+    "evidence_strength": "moderate",
+    "affected_capabilities": [
+      "Automated operations",
+      "Privileged-access management",
+      "Change control",
+      "Service recovery"
+    ],
+    "transmission_mechanism": "An automated remediation service interprets a flawed instruction while holding broad cross-environment privileges, allowing a local configuration error to propagate faster than operators can isolate it.",
+    "second_order_effects": [
+      "Healthy services enter inconsistent recovery states and lose trusted configuration baselines",
+      "Operators disable useful automation broadly because safe boundaries cannot be identified quickly"
+    ],
+    "cross_industry_analogues": [
+      "An automated fire-suppression system spreading damage beyond the original room",
+      "A fleet-management command applying one faulty correction to every vehicle"
+    ],
+    "strengthening_signposts": [
+      "Remediation tools receive broader privileges across previously separate environments",
+      "Automated actions bypass staged deployment or independent kill switches"
+    ],
+    "weakening_signposts": [
+      "Every high-impact automated action is canaried within a bounded fault domain",
+      "Independent shutdown paths are tested without relying on the automation control plane"
+    ],
+    "defensive_options": [
+      "Constrain privileges by environment, service, and remediation class",
+      "Require staged execution for changes with cross-service reach"
+    ],
+    "resilience_opportunities": [
+      "Treat automation blast radius as a measurable recovery dependency",
+      "Preserve independently operated kill switches and known-good configurations"
+    ],
+    "strategic_options": [
+      "Retain a human-controlled minimal recovery path outside the automation platform"
+    ],
+    "option_expiry_signals": [
+      "Manual recovery knowledge or tooling is retired before independent automation controls are proven"
+    ],
+    "challenged_assumptions": [
+      "Faster automated remediation always reduces outage impact",
+      "A tool with broad access is easier to govern than several bounded tools"
+    ],
+    "discussion_prompts": [
+      "What is the maximum permitted blast radius for one automated remediation action?",
+      "Can operators stop the tool if its own control plane is part of the incident?"
+    ],
+    "signpost_status": "not_evaluated",
+    "signpost_review_status": "not_reviewed",
+    "signpost_assessment": "",
+    "signpost_checked_evidence_refs": [],
+    "signpost_evidence_refs": [],
+    "signposts_last_evaluated": null,
+    "preparation_strategy": [
+      "Constrain automation privileges",
+      "Require staged remediation rollout",
+      "Test independent kill switches"
+    ],
+    "detailed_rationale": [
+      "Synthesizes DEMO-EVT-001 and DEMO-EVT-006",
+      "Explores control-plane blast radius"
+    ],
+    "additional_information": "Entirely fictional demonstration scenario for software evaluation. It is not a prediction or statement about a real organization.",
+    "theme_tags": [
+      "automation",
+      "privilege",
+      "change"
+    ],
+    "evidence_refs": [
+      "DEMO-EVT-001",
+      "DEMO-EVT-006"
+    ],
+    "judge_score": 0.89,
+    "judge_feedback": "Synthetic fixture accepted for completeness and internal consistency.",
+    "judge_iterations": 1,
+    "urgency_score": 79,
+    "time_horizon": "6-24 months",
+    "controllability": "internal",
+    "last_scored": "2026-07-28T00:00:00+00:00",
+    "status": "active"
+  }
+]

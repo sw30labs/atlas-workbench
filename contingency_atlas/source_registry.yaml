@@ -1,0 +1,82 @@
+schema_version: atlas-scouting-registry-v1
+network_collection_default: false
+last_reviewed_on: "2026-07-29"
+sources:
+  - id: occ_news
+    name: Office of the Comptroller of the Currency
+    category: regulator
+    feed_url: https://www.occ.treas.gov/rss/occ_news.xml
+    homepage_url: https://www.occ.treas.gov/rss/index-rss.html
+    allowed_hosts:
+      - www.occ.treas.gov
+      - www.occ.gov
+    enabled: true
+    jurisdiction: United States
+    notes: Official public news-release feed; applicability and reuse require review.
+
+  - id: federal_reserve_banking
+    name: Board of Governors of the Federal Reserve System
+    category: central_bank
+    feed_url: https://www.federalreserve.gov/feeds/press_bcreg.xml
+    homepage_url: https://www.federalreserve.gov/feeds/feeds.htm
+    allowed_hosts:
+      - www.federalreserve.gov
+    enabled: true
+    jurisdiction: United States
+    notes: Official banking and consumer regulatory policy press-release feed.
+
+  - id: cisa_advisories
+    name: Cybersecurity and Infrastructure Security Agency
+    category: cyber_agency
+    feed_url: https://www.cisa.gov/news.xml
+    homepage_url: https://www.cisa.gov/subscribe-updates-cisa
+    allowed_hosts:
+      - www.cisa.gov
+    enabled: true
+    jurisdiction: United States
+    notes: Official public agency-news feed; cybersecurity relevance requires review.
+
+  - id: nist_standards
+    name: National Institute of Standards and Technology
+    category: standards_body
+    feed_url: https://www.nist.gov/news-events/standards/rss.xml
+    homepage_url: https://www.nist.gov/coo/nist-rss-feeds
+    allowed_hosts:
+      - www.nist.gov
+    enabled: true
+    jurisdiction: United States
+    notes: Official standards-topic feed; proposals are not claims of applicability.
+
+  - id: cloudflare_incidents
+    name: Cloudflare System Status
+    category: infrastructure_incidents
+    feed_url: https://new.cloudflarestatus.com/api/v3/incidents.rss
+    homepage_url: https://new.cloudflarestatus.com/
+    allowed_hosts:
+      - new.cloudflarestatus.com
+      - www.cloudflarestatus.com
+    enabled: true
+    jurisdiction: Global
+    notes: Public provider incident feed; no customer exposure is inferred.
+
+  - id: noaa_hurricane_outlook
+    name: NOAA National Hurricane Center
+    category: science_climate_agency
+    feed_url: https://www.nhc.noaa.gov/xml/TWOAT.xml
+    homepage_url: https://www.nhc.noaa.gov/aboutrss.shtml
+    allowed_hosts:
+      - www.nhc.noaa.gov
+    enabled: true
+    jurisdiction: United States
+    notes: Official Atlantic tropical-weather outlook feed; operational and banking relevance require review.
+
+  - id: govinfo_congressional_bills
+    name: U.S. Government Publishing Office GovInfo
+    category: legislative_policy_tracker
+    feed_url: https://www.govinfo.gov/rss/bills.xml
+    homepage_url: https://www.govinfo.gov/feeds
+    allowed_hosts:
+      - www.govinfo.gov
+    enabled: true
+    jurisdiction: United States
+    notes: Official congressional-bills feed; legal status and banking relevance require review.

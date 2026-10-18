@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="760" viewBox="0 0 1120 760" font-family="Menlo, monospace" font-size="12">
+  <defs>
+    <style>
+      .box { fill: #0f172a; stroke: #2dd4bf; stroke-width: 1.2; rx: 8; }
+      .ext { fill: #111827; stroke: #6b7280; stroke-width: 1.2; stroke-dasharray: 5 3; }
+      .store { fill: #082f2b; stroke: #2dd4bf; stroke-width: 1.2; }
+      .gate { fill: #2a1020; stroke: #ef4444; stroke-width: 1.6; }
+      .lbl { fill: #e5e7eb; font-size: 12px; }
+      .sub { fill: #94a3b8; font-size: 10px; }
+      .ttl { fill: #2dd4bf; font-size: 15px; font-weight: bold; }
+      .flow { stroke: #64748b; stroke-width: 1.4; fill: none; marker-end: url(#a); }
+      .flowg { stroke: #ef4444; stroke-width: 1.4; fill: none; marker-end: url(#r); stroke-dasharray: 4 2; }
+      .zone { fill: none; stroke: #334155; stroke-width: 1; stroke-dasharray: 2 3; }
+      .zl { fill: #64748b; font-size: 10px; letter-spacing: 2px; }
+    </style>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#64748b"/></marker>
+    <marker id="r" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#ef4444"/></marker>
+  </defs>
+
+  <text class="ttl" x="30" y="34">Contingency Atlas — current architecture</text>
+  <text class="sub" x="30" y="52">solid border = component · dashed = external · green = store · red = enforcement point</text>
+
+  <!-- external -->
+  <rect class="ext" x="30" y="90" width="220" height="110" rx="8"/>
+  <text class="lbl" x="46" y="118">Public sources</text>
+  <text class="sub" x="46" y="136">reporting · registers · advisories</text>
+
+  <rect class="ext" x="30" y="230" width="220" height="110" rx="8"/>
+  <text class="lbl" x="46" y="258">User artifacts</text>
+  <text class="sub" x="46" y="276">PDF · Office · text · transcripts</text>
+  <text class="sub" x="46" y="292">(upload → convert → rubric)</text>
+
+  <rect class="ext" x="30" y="480" width="220" height="130" rx="8"/>
+  <text class="lbl" x="46" y="508">OMLX local inference</text>
+  <text class="sub" x="46" y="526">OpenAI-compatible endpoint</text>
+  <text class="sub" x="46" y="542">chat · judge · extraction</text>
+  <text class="sub" x="46" y="558">usage tokens → telemetry</text>
+
+  <!-- atlas zone -->
+  <rect class="zone" x="300" y="70" width="790" height="620" rx="10"/>
+  <text class="zl" x="320" y="94">CONTINGENCY ATLAS · LOCALHOST</text>
+
+  <!-- pipeline -->
+  <rect class="box" x="330" y="110" width="340" height="250" rx="8"/>
+  <text class="lbl" x="350" y="138">Pipeline (LangGraph, 8 phases)</text>
+  <text class="sub" x="350" y="160">1 ingest evidence · 2 risk monitor</text>
+  <text class="sub" x="350" y="178">3 generate scenarios · 4 prioritize</text>
+  <text class="sub" x="350" y="196">5 loss patterns · 6 maintain</text>
+  <text class="sub" x="350" y="214">7 compound join (batch, det.)</text>
+  <text class="sub" x="350" y="232">8 graduate (LLM doc + judge)</text>
+  <text class="sub" x="350" y="262">provenance gate: review before ingest</text>
+  <text class="sub" x="350" y="280">monthly due gates on 7</text>
+
+  <!-- engine -->
+  <rect class="box" x="330" y="400" width="340" height="250" rx="8"/>
+  <text class="lbl" x="350" y="428">Scoring engine (deterministic)</text>
+  <text class="sub" x="350" y="450">marginals (EB-shrunk) · lognormal sev</text>
+  <text class="sub" x="350" y="468">shrunk empirical joints (dependence)</text>
+  <text class="sub" x="350" y="486">Monte Carlo all-must-fire</text>
+  <text class="sub" x="350" y="504">EVT GPD overlay + threshold check</text>
+  <text class="sub" x="350" y="522">state hash (structure, never scores)</text>
+  <text class="sub" x="350" y="552">eval harness · ablations · calibration</text>
+  <text class="sub" x="350" y="570">external feature screen (FDR)</text>
+
+  <!-- dashboard -->
+  <rect class="box" x="720" y="110" width="340" height="170" rx="8"/>
+  <text class="lbl" x="740" y="138">Dashboard (stdlib HTTP, :8080)</text>
+  <text class="sub" x="740" y="160">command deck · Compounds · Costs</text>
+  <text class="sub" x="740" y="178">token usage chart · job runner</text>
+  <text class="sub" x="740" y="196">loopback-only · no framework</text>
+
+  <!-- egress -->
+  <rect class="gate" x="720" y="330" width="340" height="90" rx="8"/>
+  <text class="lbl" x="740" y="358">Egress gateway</text>
+  <text class="sub" x="740" y="376">allow-list schemas · deny scans</text>
+  <text class="sub" x="740" y="392">hash-chained audit log</text>
+
+  <!-- stores -->
+  <rect class="store" x="720" y="460" width="160" height="90" rx="8"/>
+  <text class="lbl" x="740" y="488">atlas.db</text>
+  <text class="sub" x="740" y="506">scenarios · compounds</text>
+  <text class="sub" x="740" y="522">ledgers · findings</text>
+
+  <rect class="store" x="900" y="460" width="160" height="90" rx="8"/>
+  <text class="lbl" x="920" y="488">event_evidence.db</text>
+  <text class="sub" x="920" y="506">public evidence</text>
+
+  <rect class="store" x="720" y="570" width="160" height="90" rx="8"/>
+  <text class="lbl" x="740" y="598">emerging_risks.json</text>
+  <text class="sub" x="740" y="616">risk catalog (runtime)</text>
+
+  <rect class="store" x="900" y="570" width="160" height="90" rx="8"/>
+  <text class="lbl" x="920" y="598">telemetry/*.jsonl</text>
+  <text class="sub" x="920" y="616">LLM + run events</text>
+
+  <!-- flows -->
+  <path class="flow" d="M250 145 C290 145 300 165 330 175"/>
+  <path class="flow" d="M250 285 C290 285 300 255 330 245"/>
+  <path class="flow" d="M250 545 L330 545"/>
+  <path class="flow" d="M500 360 L500 400"/>
+  <path class="flow" d="M670 195 L720 195"/>
+  <path class="flow" d="M670 525 L720 525"/>
+  <path class="flow" d="M670 615 L720 615"/>
+  <path class="flow" d="M805 460 L805 420"/>
+  <path class="flow" d="M585 400 C620 340 680 375 720 375"/>
+  <path class="flowg" d="M250 470 C 400 430, 620 375, 715 375"/>
+</svg>

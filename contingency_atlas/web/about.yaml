@@ -1,0 +1,168 @@
+# Content for the dashboard About page.
+# Keep this file public-safe: no secrets, private hosts, usernames, or local paths.
+
+name: Contingency Atlas
+subtitle: An evidence-grounded banking operational-risk foresight and scenario engine
+version: 0.1.0
+tagline: Map tomorrow’s failure modes before they become today’s losses.
+
+definition: >-
+  A research system for turning independently sourced public signals into
+  structured, challengeable banking operational-risk scenarios. A scenario is
+  a hypothesis for preparedness, not a prediction or statement of fact.
+
+facts:
+  - label: Orchestration
+    value: LangGraph eight-phase workflow
+  - label: Inference
+    value: OpenAI-compatible endpoint, with local oMLX supported
+  - label: Quality
+    value: Judge-and-revise acceptance gate
+  - label: Review
+    value: Human-attested decisions; machine assistance is advisory only
+  - label: Governance
+    value: Optional DriftLab trace and baseline checks
+  - label: Storage
+    value: Local SQLite and JSON runtime artifacts
+  - label: Domain
+    value: Banking operational risk
+  - label: Foresight
+    value: External-driver radar and governed signposts
+
+sections:
+  - heading: What It Does
+    paragraphs:
+      - >-
+        Contingency Atlas combines cited public-source research and explicitly
+        synthetic fixtures to generate, challenge, prioritize, and maintain a
+        library of banking operational-risk scenarios.
+      - >-
+        Scores organize hypotheses for review. They are not calibrated
+        forecasts, and generated text is never treated as evidence.
+    bullets:
+      - Capture structured provenance for human source and rights verification
+      - Generate scenarios from event patterns and emerging signals
+      - Gate candidates through judge-and-revise quality checks
+      - Rank scenarios by transparent operational-risk dimensions
+      - Join emerging risks into compound scenarios and graduate the holdout-proven
+      - Test temporal and thematic patterns
+      - Track signal maturity, momentum, and scenario signposts over time
+      - Keep merges and retirements behind an operator-controlled safety switch
+
+  - heading: Foresight Radar and Briefs
+    paragraphs:
+      - >-
+        The innovation radar adds a second lens to the banking risk taxonomy.
+        External drivers—technology, institutional change, demographic change,
+        environment, societal values, and cross-driver convergence—show where
+        change originates; the risk category shows how it can affect a bank.
+      - >-
+        Signals move through a reviewable lifecycle from weak to emerging,
+        accelerating, established, or materialized, with fading tracked
+        separately. Momentum and dates record movement without presenting a
+        scenario as a prediction.
+      - >-
+        Each scenario can carry strengthening and weakening signposts. The
+        Atlas Brief turns those fields into a short discussion guide covering
+        banking relevance, challenged assumptions, controls, dependencies,
+        second-order effects, and resilience or strategic options.
+    bullets:
+      - Radar placement is descriptive; legacy placements are marked as inferred
+      - Signpost assessments can strengthen, weaken, materialize, or supersede a hypothesis
+      - Public-source scouts may propose packets, but cannot approve evidence
+      - The governed pipeline starts only after human source and rights review
+
+  - heading: The Eight Phases
+    items:
+      - label: 1 · Ingest
+        text: Normalize user-supplied public research into cited event records.
+      - label: 2 · Monitor
+        text: Identify and assess forward-looking risk signals.
+      - label: 3 · Generate
+        text: Turn signals and event patterns into challengeable scenarios.
+      - label: 4 · Prioritize
+        text: Score scenarios for review across impact, control, and horizon.
+      - label: 5 · Detect
+        text: Test temporal and thematic patterns and record findings.
+      - label: 6 · Maintain
+        text: Flag and refresh aging material; merge and retire actions remain explicitly gated.
+      - label: 7 · Join
+        text: Join emerging risks into scored compound scenarios on a governed cadence.
+      - label: 8 · Graduate
+        text: Promote holdout-proven compounds into full library scenarios behind the same quality gate.
+
+  - heading: The Review Boundary
+    paragraphs:
+      - >-
+        Nothing enters the register unreviewed. Pending evidence, risks, merge
+        proposals, channel proposals, analogue dossiers, and MITRE ATLAS
+        mappings wait in the Review inbox with deterministic checks shown
+        before any decision.
+        Machine assistance is advisory by construction: pre-analysis explains
+        and recommends, bounded deep research proposes candidate evidence, and
+        only a named human can attest, approve, or reject.
+    bullets:
+      - Advisory pre-analysis per record or in batch; stale suggestions are flagged
+      - Bounded deep research writes proposals only — never approvals
+      - Refs attach and detach under the register lock with provenance stamps
+      - Machine–human agreement is tracked so rubber-stamping stays visible
+
+  - heading: Validation and Telemetry
+    paragraphs:
+      - >-
+        Analyze → Validation runs the falsification and elicitation machinery
+        on demand — crash tests, multiverse seed distributions, ablations, the
+        judgment ledger, channel audits, and analogue hunts — all advisory,
+        nothing self-applies. Analyze → Telemetry aggregates the run log into
+        measured economics, latency, and usage, with client-side what-if
+        pricing over the metered token stream.
+
+  - heading: Evidence and Data
+    paragraphs:
+      - >-
+        Public-source records require publisher, title, URL, publication date,
+        retrieval date, and review status. Ingestion captures those fields;
+        source, rights, and factual verification remain human review steps.
+        Generation and evidence analysis use only approved records. Synthetic
+        examples must be labeled.
+    bullets:
+      - No employer, client, subscription, or confidential material
+      - No ORX member, news, loss-event, scenario, taxonomy, or proprietary data
+      - No generated claim promoted to evidence without an independent source
+      - Runtime databases and generated artifacts remain local by default
+
+  - heading: Independence
+    paragraphs:
+      - >-
+        This is an independent personal research project. It is not affiliated
+        with, sponsored, supplied, approved, or endorsed by the author’s
+        employer or any other organization, and it contains no employer
+        material.
+      - >-
+        Nassim Nicholas Taleb’s books The Black Swan and Antifragile influenced
+        the project’s thinking about uncertainty, fragility, and resilience.
+        The software does not simulate Taleb’s persona, voice, or views.
+      - >-
+        Banking is the main domain so the project can use a bounded, coherent
+        public taxonomy and evaluation surface.
+
+  - heading: Important Limitations
+    bullets:
+      - Hypothetical research only; not financial, legal, regulatory, or risk advice
+      - LLM output may be inaccurate, biased, incomplete, or fabricated
+      - Human review and source verification are required
+      - Not a production system of record or a substitute for controlled governance
+
+links:
+  - label: LangGraph
+    url: https://docs.langchain.com/oss/python/langgraph/overview
+  - label: oMLX
+    url: https://github.com/jundot/omlx
+  - label: DriftLab
+    url: https://github.com/sw30labs/driftlab-dgx
+  - label: ORX industry resource
+    url: https://orx.org/
+
+footer: >-
+  Independent, hypothetical research. No affiliation with or endorsement by
+  ORX, Nassim Nicholas Taleb, or any other cited organization.

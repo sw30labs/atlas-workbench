@@ -1,0 +1,112 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+*.so
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+build/
+dist/
+site/
+
+# Virtual environments and local tooling
+.venv/
+.venv-dgx/
+venv/
+env/
+.python-version
+.tox/
+.nox/
+.idea/
+.vscode/
+.DS_Store
+
+# Secrets and private configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.local.yaml
+*.local.yml
+contingency-atlas.local.yaml
+
+# Runtime databases and SQLite sidecars
+*.db
+*.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
+*.db-journal
+*.sqlite-shm
+*.sqlite-wal
+*.sqlite-journal
+*.db.bak
+*.sqlite.bak
+
+# Default local data directory (`atlas` CLI)
+/.atlas/
+
+# Operator-only research experiments — never part of the public release
+/scripts/*autoresearch*.py
+
+# Cowork session scratch (backups, staged deletions)
+/_to_delete/
+
+# Generated research catalogs and runtime state
+/emerging_risks.json
+/emerging_risks.json.lock
+/compound_scenarios.json
+/compound_join_llm.json
+/events.json
+/scenario_export.json
+/.driftlab/
+/artifacts/
+/exports/
+/generated/
+/reports/
+/runs/
+/tmp/
+/docs/generated/
+
+# Ontology guard runtime outputs (regenerate via ontology/export_existing.py)
+/ontology/existing.ttl
+/ontology/out/
+
+# Logs, model outputs, and transient files
+*.log
+*.trace
+*.jsonl
+*.tmp
+*.swp
+*.swo
+*~
+
+# Operator-only commercial material — pitches, competitor reviews, and pricing.
+# It is outside the public software and data boundary.
+/docs/business/
+
+# Agent session exports. These land in the working tree by default and carry
+# local paths, addresses and raw source material, so the release gate counts
+# them as release candidates. Keep them outside the repository entirely.
+/kimi-*session*
+/claude-*session*
+/*-session_*.md
+/*-session_*.zip
+
+# LaTeX build artifacts (keep .tex and the built .pdf)
+*.aux
+*.fdb_latexmk
+*.fls
+*.out
+*.toc

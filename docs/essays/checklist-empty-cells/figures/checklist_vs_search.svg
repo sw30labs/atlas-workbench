@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="820" viewBox="0 0 1400 820" role="img" aria-labelledby="title desc">
+  <title id="title">Checklists remember. Axes search.</title>
+  <desc id="desc">Two-panel diagram: a filled operational-risk checklist versus an axis matrix with empty cells and one highlighted joint risk.</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0f1419"/>
+      <stop offset="100%" stop-color="#1a222c"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#243040"/>
+      <stop offset="100%" stop-color="#1c2633"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e8a54b"/>
+      <stop offset="100%" stop-color="#d4783a"/>
+    </linearGradient>
+    <filter id="soft" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#8b9bb0"/>
+    </marker>
+  </defs>
+
+  <!-- Canvas -->
+  <rect width="1400" height="820" fill="url(#bg)"/>
+
+  <!-- Title -->
+  <text x="700" y="52" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="28" fill="#f2f4f7" font-weight="600">Checklists remember. Axes search.</text>
+  <text x="700" y="84" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="15" fill="#8b9bb0">Operational risk: filled rows vs empty cells — where the next loss often sits</text>
+
+  <!-- LEFT PANEL -->
+  <g filter="url(#soft)">
+    <rect x="48" y="120" width="520" height="560" rx="16" fill="url(#panel)" stroke="#3a4a5c" stroke-width="1.5"/>
+  </g>
+  <text x="308" y="158" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" fill="#e8a54b" letter-spacing="2" font-weight="700">MEMORY</text>
+  <text x="308" y="188" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="22" fill="#f2f4f7">The checklist</text>
+  <text x="308" y="214" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" fill="#8b9bb0">Only risks someone already named</text>
+
+  <!-- checklist rows -->
+  <g font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14">
+    <!-- row template: y = 250 + i*48 -->
+    <rect x="88" y="240" width="440" height="40" rx="8" fill="#2a3848" stroke="#4a5d72"/>
+    <circle cx="112" cy="260" r="9" fill="none" stroke="#5dca8a" stroke-width="2"/>
+    <path d="M107,260 L110,263 L118,255" fill="none" stroke="#5dca8a" stroke-width="2"/>
+    <text x="136" y="265" fill="#c5d0dc">Internal / external fraud</text>
+    <text x="500" y="265" text-anchor="end" fill="#5dca8a" font-size="11">REVIEWED</text>
+
+    <rect x="88" y="288" width="440" height="40" rx="8" fill="#2a3848" stroke="#4a5d72"/>
+    <circle cx="112" cy="308" r="9" fill="none" stroke="#5dca8a" stroke-width="2"/>
+    <path d="M107,308 L110,311 L118,303" fill="none" stroke="#5dca8a" stroke-width="2"/>
+    <text x="136" y="313" fill="#c5d0dc">Business disruption &amp; systems</text>
+    <text x="500" y="313" text-anchor="end" fill="#5dca8a" font-size="11">REVIEWED</text>
+
+    <rect x="88" y="336" width="440" height="40" rx="8" fill="#2a3848" stroke="#4a5d72"/>
+    <circle cx="112" cy="356" r="9" fill="none" stroke="#5dca8a" stroke-width="2"/>
+    <path d="M107,356 L110,359 L118,351" fill="none" stroke="#5dca8a" stroke-width="2"/>
+    <text x="136" y="361" fill="#c5d0dc">Third-party / execution failure</text>
+    <text x="500" y="361" text-anchor="end" fill="#5dca8a" font-size="11">REVIEWED</text>
+
+    <rect x="88" y="384" width="440" height="40" rx="8" fill="#2a3848" stroke="#4a5d72"/>
+    <circle cx="112" cy="404" r="9" fill="none" stroke="#5dca8a" stroke-width="2"/>
+    <path d="M107,404 L110,407 L118,399" fill="none" stroke="#5dca8a" stroke-width="2"/>
+    <text x="136" y="409" fill="#c5d0dc">Model risk (drift / failure)</text>
+    <text x="500" y="409" text-anchor="end" fill="#5dca8a" font-size="11">REVIEWED</text>
+
+    <rect x="88" y="432" width="440" height="40" rx="8" fill="#2a3848" stroke="#4a5d72"/>
+    <circle cx="112" cy="452" r="9" fill="none" stroke="#5dca8a" stroke-width="2"/>
+    <path d="M107,452 L110,455 L118,447" fill="none" stroke="#5dca8a" stroke-width="2"/>
+    <text x="136" y="457" fill="#c5d0dc">Clients, products &amp; conduct</text>
+    <text x="500" y="457" text-anchor="end" fill="#5dca8a" font-size="11">REVIEWED</text>
+
+    <!-- empty slot ghost -->
+    <rect x="88" y="496" width="440" height="40" rx="8" fill="#1a222c" stroke="#3a4a5c" stroke-dasharray="6 5"/>
+    <text x="308" y="521" text-anchor="middle" fill="#5a6a7c" font-size="13" font-style="italic">No row for a joint risk</text>
+  </g>
+
+  <text x="308" y="580" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" fill="#6b7c90">Feels complete when the filled rows are green</text>
+  <text x="308" y="602" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" fill="#6b7c90">— including when the dangerous cell was never listed</text>
+
+  <!-- ARROW -->
+  <line x1="590" y1="400" x2="660" y2="400" stroke="#8b9bb0" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="625" y="385" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" fill="#8b9bb0">add axes</text>
+
+  <!-- RIGHT PANEL -->
+  <g filter="url(#soft)">
+    <rect x="680" y="120" width="672" height="560" rx="16" fill="url(#panel)" stroke="#3a4a5c" stroke-width="1.5"/>
+  </g>
+  <text x="1016" y="158" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" fill="#e8a54b" letter-spacing="2" font-weight="700">SEARCH</text>
+  <text x="1016" y="188" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="22" fill="#f2f4f7">The axis matrix</text>
+  <text x="1016" y="214" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" fill="#8b9bb0">Cells exist whether or not anyone filled them</text>
+
+  <!-- axis labels -->
+  <text x="1016" y="248" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" fill="#8b9bb0" letter-spacing="1">TRANSMISSION CHANNEL →</text>
+  <text x="712" y="420" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" fill="#8b9bb0" transform="rotate(-90 712 420)">RISK THEME →</text>
+
+  <!-- column headers -->
+  <g font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" fill="#a8b6c6" text-anchor="middle">
+    <text x="820" y="275">Cloud / ID stack</text>
+    <text x="960" y="275">Payment chain</text>
+    <text x="1100" y="275">Model API</text>
+    <text x="1240" y="275">Funding / SPV</text>
+  </g>
+
+  <!-- row labels + cells: 4 rows x 4 cols, cell 100x52, origin 770, 290 -->
+  <g font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+    <!-- helper: empty cell style -->
+    <!-- Row 0 Fraud -->
+    <text x="760" y="322" text-anchor="end" font-size="12" fill="#a8b6c6">Fraud</text>
+    <rect x="770" y="290" width="100" height="52" rx="6" fill="#1a222c" stroke="#3d4f63" stroke-dasharray="4 3"/>
+    <rect x="910" y="290" width="100" height="52" rx="6" fill="#1a222c" stroke="#3d4f63" stroke-dasharray="4 3"/>
+    <rect x="1050" y="290" width="100" height="52" rx="6" fill="#1a222c" stroke="#3d4f63" stroke-dasharray="4 3"/>
+    <rect x="1190" y="290" width="100" height="52" rx="6" fill="#1a222c" stroke="#3d4f63" stroke-dasharray="4 3"/>
+
+    <!-- Row 1 3P -->
+    <text x="760" y="386" text-anchor="end" font-size="12" fill="#a8b6c6">Third-party</text>
+    <rect x="770" y="354" width="100" height="52" rx="6" fill="#243140" stroke="#4a5d72"/>
+    <text x="820" y="384" text-anchor="middle" font-size="10" fill="#6b8f7a">named</text>
+    <rect x="910" y="354" width="100" height="52" rx="6" fill="#1a222c" stroke="#3d4f63" stroke-dasharray="4 3"/>
+    <rect x="1050" y="354" width="100" height="52" rx="6" fill="#243140" stroke="#4a5d72"/>
+    <text x="1100" y="384" text-anchor="middle" font-size="10" fill="#6b8f7a">named</text>
+    <rect x="1190" y="354" width="100" height="52" rx="6" fill="#1a222c" stroke="#3d4f63" stroke-dasharray="4 3"/>
+
+    <!-- Row 2 Model -->
+    <text x="760" y="450" text-anchor="end" font-size="12" fill="#a8b6c6">Model risk</text>
+    <rect x="770" y="418" width="100" height="52" rx="6" fill="#1a222c" stroke="#3d4f63" stroke-dasharray="4 3"/>
+    <rect x="910" y="418" width="100" height="52" rx="6" fill="#1a222c" stroke="#3d4f63" stroke-dasharray="4 3"/>
+    <rect x="1050" y="418" width="100" height="52" rx="6" fill="#243140" stroke="#4a5d72"/>
+    <text x="1100" y="442" text-anchor="middle" font-size="10" fill="#6b8f7a">drift / fail</text>
+    <text x="1100" y="456" text-anchor="middle" font-size="9" fill="#5a6a7c">checklist</text>
+    <!-- HIGHLIGHT cell: distillation x funding -->
+    <rect x="1190" y="418" width="100" height="52" rx="6" fill="#3d2a14" stroke="#e8a54b" stroke-width="2.5"/>
+    <text x="1240" y="442" text-anchor="middle" font-size="10" fill="#f0c27a" font-weight="700">EMPTY →</text>
+    <text x="1240" y="456" text-anchor="middle" font-size="9" fill="#e8a54b">file this</text>
+
+    <!-- Row 3 Geopolitics -->
+    <text x="760" y="514" text-anchor="end" font-size="12" fill="#a8b6c6">Geopolitics</text>
+    <rect x="770" y="482" width="100" height="52" rx="6" fill="#1a222c" stroke="#3d4f63" stroke-dasharray="4 3"/>
+    <rect x="910" y="482" width="100" height="52" rx="6" fill="#1a222c" stroke="#3d4f63" stroke-dasharray="4 3"/>
+    <rect x="1050" y="482" width="100" height="52" rx="6" fill="#1a222c" stroke="#3d4f63" stroke-dasharray="4 3"/>
+    <rect x="1190" y="482" width="100" height="52" rx="6" fill="#1a222c" stroke="#3d4f63" stroke-dasharray="4 3"/>
+  </g>
+
+  <!-- callout for highlighted cell -->
+  <path d="M1290,444 L1340,444 L1340,560 L1016,560" fill="none" stroke="#e8a54b" stroke-width="1.2" stroke-dasharray="3 3" opacity="0.7"/>
+  <rect x="780" y="548" width="472" height="88" rx="10" fill="#2a2010" stroke="#e8a54b" stroke-width="1.5"/>
+  <text x="1016" y="578" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="14" fill="#f0c27a">Joint that no singleton list can hold</text>
+  <text x="1016" y="602" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" fill="#d4b896">API distillation  ×  AI buildout financing (private credit / SPV)</text>
+  <text x="1016" y="622" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" fill="#8b9bb0">Axes generate the cell. Enumeration forces you to look. Filing makes it real.</text>
+
+  <!-- Footer takeaway -->
+  <rect x="48" y="710" width="1304" height="72" rx="12" fill="#182028" stroke="#3a4a5c"/>
+  <text x="700" y="742" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="16" fill="#f2f4f7">Takeaway: review the empty cells — and the joints — not only the green ticks.</text>
+  <text x="700" y="766" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" fill="#8b9bb0">Survivorship bias in reverse: the records that came home are not the full map of what can kill you.</text>
+</svg>
