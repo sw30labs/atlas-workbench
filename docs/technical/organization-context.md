@@ -56,6 +56,34 @@ unknown fields.
 | impact_assessments | title, service_id, observed_on, time_since_onset_minutes, tolerance_reference, at least one impact quantity | scenario_id, downtime_minutes, backlog, customers, capacity_loss, basis, evidence_refs, units, service_revision |
 | evidence_assessments | evidence_id, owner, claim, rationale, relation, evidence_refs | scenario_ids, directness, source_family, incident_family, independence_status, independently_verified, verified_on, evidence_revision |
 | saved_views | name, view_kind | filters, columns |
+| org_scenarios | title | org_ref, narrative, owner, org_taxonomy_code, basel_event_type, frequency_text, annual_frequency, severity_p50/p90/p99 with severity_currency, last_workshop, status, service_ids, atlas_scenario_ids |
+| internal_loss_events | org_ref | title, basel_event_type, org_event_type_code, business_line, legal_entity, occurrence/discovery/accounting dates, currency, gross_loss, recoveries, net_loss, potential_impact, reporting block, status, near_miss, boundary, description, root_cause, incident_ref, service_ids, scenario_ids |
+| taxonomy_crosswalk | org_code, org_label | level, parent_code, atlas_category, driver_class, mapping_type, rationale, status: proposed/approved/rejected, reviewer, reviewed_on |
+
+### Organization registers, losses and taxonomy
+
+These three kinds hold what an organization already has before it adopts
+Atlas, typically loaded by [bulk ingest](bulk-ingest.md).
+
+- `org_scenarios` is the organization's own scenario register. Its ids can be
+  used anywhere an Atlas scenario id is accepted (exposures, exercises,
+  actions, assumptions, observations, losses, coverage and scoped exports).
+  `atlas_scenario_ids` crosswalks an entry to Atlas scenarios. The records are
+  never merged, and every crosswalk target must exist. Severity percentiles
+  must be non-decreasing and need a currency. Archiving an entry makes it
+  unreferenceable, and existing references are then reported as missing.
+- `internal_loss_events` keeps amounts in their original currency. An
+  optional reporting-currency amount is all-or-nothing:
+  `reporting_currency`, `reporting_net_loss`, `fx_rate`, `fx_rate_date` and
+  `fx_source` together. Totals across currencies are only meaningful when the
+  conversion basis is declared. A near miss carries no booked loss; its
+  estimate goes in `potential_impact`. Event dates cannot be in the future,
+  and discovery cannot precede occurrence.
+- `taxonomy_crosswalk` maps an organization taxonomy node to an Atlas risk
+  category or event-driver class with a mapping type. A mapping starts as
+  `proposed`. Approving or rejecting one needs a named reviewer and a review
+  date. Only approved mappings should be relied on, and automated ingestion
+  never approves them.
 
 Returned records add stable `id`, `kind`, `schema_version`, integer `revision`,
 `archived`, `created_at` and `updated_at`. Optional identifiers are generated on
@@ -64,8 +92,8 @@ fields can be round-tripped when editing, but cannot set revision, timestamps or
 archive state. Saved views use `view_kind` to avoid colliding with envelope kind.
 
 Context references must resolve to active records of the right kind. Scenario
-references are checked against the scenario database using a read-only
-connection. Scenario and context reads are separate transactions: public
+references are checked against the scenario database, using a read-only
+connection, and against active `org_scenarios` records. Scenario and context reads are separate transactions: public
 scenario removal can happen after a save. The payload reports missing scenario
 references and downgrades affected coverage instead of retaining a false badge.
 

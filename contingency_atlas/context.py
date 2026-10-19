@@ -272,6 +272,138 @@ class EvidenceAssessment(ContextRecord):
         return self
 
 
+Amount = Annotated[float, Field(ge=0, allow_inf_nan=False, strict=True)]
+Currency = Annotated[str, Field(pattern=r"^[A-Z]{3}$")]
+BASEL_EVENT_TYPES = ("ET1", "ET2", "ET3", "ET4", "ET5", "ET6", "ET7")
+
+
+class OrgScenario(ContextRecord):
+    """An entry from the organization's own scenario register.
+
+    Exposures, exercises, actions and assumptions may reference it like an
+    Atlas scenario. It is crosswalked to Atlas scenarios, never merged.
+    """
+    org_ref: str = ""
+    title: Text
+    narrative: str = ""
+    owner: str = ""
+    org_taxonomy_code: str = ""
+    basel_event_type: Literal[BASEL_EVENT_TYPES] | None = None  # type: ignore[valid-type]
+    frequency_text: str = ""
+    annual_frequency: Annotated[float, Field(ge=0, allow_inf_nan=False)] | None = None
+    severity_p50: Amount | None = None
+    severity_p90: Amount | None = None
+    severity_p99: Amount | None = None
+    severity_currency: Currency | None = None
+    last_workshop: date | None = None
+    status: str = ""
+    service_ids: list[Identifier] = Field(default_factory=list)
+    atlas_scenario_ids: list[Identifier] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def ordered_severity(self):
+        values = [v for v in (self.severity_p50, self.severity_p90, self.severity_p99) if v is not None]
+        if values != sorted(values):
+            raise ValueError("severity percentiles must be non-decreasing (p50 <= p90 <= p99)")
+        if values and not self.severity_currency:
+            raise ValueError("severity estimates require a currency")
+        if self.last_workshop and self.last_workshop > date.today():
+            raise ValueError("a scenario workshop cannot be dated in the future")
+        return self
+
+
+_REPORTING_FIELDS = ("reporting_currency", "reporting_net_loss", "fx_rate", "fx_rate_date", "fx_source")
+
+
+class InternalLossEvent(ContextRecord):
+    """The organization's own loss or near-miss record, kept in its original currency.
+
+    A reporting-currency amount is optional and all-or-nothing, so totals across
+    currencies are only possible when the conversion basis is declared.
+    """
+    org_ref: Text
+    title: str = ""
+    basel_event_type: Literal[BASEL_EVENT_TYPES] | None = None  # type: ignore[valid-type]
+    org_event_type_code: str = ""
+    business_line: str = ""
+    legal_entity: str = ""
+    occurrence_date: date | None = None
+    discovery_date: date | None = None
+    accounting_date: date | None = None
+    currency: Currency | None = None
+    gross_loss: Amount | None = None
+    recoveries: Amount | None = None
+    net_loss: Annotated[float, Field(allow_inf_nan=False, strict=True)] | None = None
+    potential_impact: Amount | None = None  # near misses: estimated, never booked
+    reporting_currency: Currency | None = None
+    reporting_net_loss: Annotated[float, Field(allow_inf_nan=False, strict=True)] | None = None
+    fx_rate: Annotated[float, Field(gt=0, allow_inf_nan=False, strict=True)] | None = None
+    fx_rate_date: date | None = None
+    fx_source: str = ""
+    status: Literal["open", "closed"] | None = None
+    near_miss: StrictBool = False
+    boundary: Literal["none", "credit", "market", "other"] | None = None
+    description: str = ""
+    root_cause: str = ""
+    incident_ref: str = ""
+    service_ids: list[Identifier] = Field(default_factory=list)
+    scenario_ids: list[Identifier] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def coherent(self):
+        if self.occurrence_date and self.discovery_date and self.discovery_date < self.occurrence_date:
+            raise ValueError("discovery cannot precede occurrence")
+        if any(d and d > date.today() for d in (self.occurrence_date, self.discovery_date, self.accounting_date)):
+            raise ValueError("loss event dates cannot be in the future")
+        amounts = (self.gross_loss, self.recoveries, self.net_loss, self.potential_impact)
+        if any(v is not None for v in amounts) and not self.currency:
+            raise ValueError("loss amounts require a currency")
+        if self.near_miss and any(v for v in (self.gross_loss, self.net_loss)):
+            raise ValueError("a near miss has no booked loss; record its estimate as potential_impact")
+        declared = [bool(getattr(self, f)) or getattr(self, f) == 0 for f in _REPORTING_FIELDS]
+        if any(declared) and not all(declared):
+            raise ValueError("a reporting-currency amount requires its currency, rate, rate date and source")
+        return self
+
+
+class TaxonomyCrosswalk(ContextRecord):
+    """Organization taxonomy node → Atlas category or driver class.
+
+    Only an approved mapping, signed off by a named reviewer, may be used.
+    """
+    org_code: Text
+    org_label: Text
+    level: Annotated[int, Field(ge=0, le=20)] | None = None
+    parent_code: str = ""
+    atlas_category: str = ""
+    driver_class: str = ""
+    mapping_type: Literal["exact", "broader", "narrower", "related"] | None = None
+    rationale: str = ""
+    status: Literal["proposed", "approved", "rejected"] = "proposed"
+    reviewer: str = ""
+    reviewed_on: date | None = None
+
+    @model_validator(mode="after")
+    def mapped_consistently(self):
+        from .categories import EVENT_DRIVER_CLASSES, RISK_CATEGORIES
+
+        if self.atlas_category and self.atlas_category not in RISK_CATEGORIES:
+            raise ValueError("unknown Atlas risk category")
+        if self.driver_class and self.driver_class not in EVENT_DRIVER_CLASSES:
+            raise ValueError("unknown Atlas event-driver class")
+        if (self.atlas_category or self.driver_class) and not self.mapping_type:
+            raise ValueError("a mapped node requires a mapping type")
+        if self.mapping_type and not (self.atlas_category or self.driver_class):
+            raise ValueError("a mapping type requires an Atlas category or driver class")
+        if self.status != "proposed" and (not self.reviewer.strip() or not self.reviewed_on):
+            raise ValueError("approving or rejecting a mapping requires a named reviewer and review date")
+        if self.status == "approved" and not self.mapping_type:
+            raise ValueError("only a mapped node can be approved")
+        if self.reviewed_on and self.reviewed_on > date.today():
+            raise ValueError("a mapping review cannot be dated in the future")
+        return self
+
+
 RECORD_MODELS: dict[str, type[ContextRecord]] = {
     "services": Service, "mechanisms": Mechanism, "dependencies": Dependency,
     "controls": Control, "assumptions": Assumption, "exposures": Exposure,
@@ -279,6 +411,9 @@ RECORD_MODELS: dict[str, type[ContextRecord]] = {
     "observations": Observation, "saved_views": SavedView,
     "impact_assessments": ImpactAssessment,
     "evidence_assessments": EvidenceAssessment,
+    "org_scenarios": OrgScenario,
+    "internal_loss_events": InternalLossEvent,
+    "taxonomy_crosswalk": TaxonomyCrosswalk,
 }
 
 _LINKS = {
@@ -428,7 +563,17 @@ def _find(conn: sqlite3.Connection, kind: str, record_id: str) -> dict | None:
     return _record(row) if row else None
 
 
-def _scenario_ids(settings: Settings) -> set[str]:
+def _org_scenario_ids(conn: sqlite3.Connection) -> set[str]:
+    return {row[0] for row in conn.execute(
+        "SELECT id FROM context_records WHERE kind = 'org_scenarios' AND archived = 0")}
+
+
+def _scenario_ids(settings: Settings, conn: sqlite3.Connection | None = None) -> set[str]:
+    """Referenceable scenarios: Atlas scenarios plus, with a store connection, active org scenarios."""
+    return _public_scenario_ids(settings) | (_org_scenario_ids(conn) if conn is not None else set())
+
+
+def _public_scenario_ids(settings: Settings) -> set[str]:
     path = settings.scenario_db_path.resolve()
     if not path.is_file():
         return set()
@@ -507,10 +652,13 @@ def _validate_links(conn: sqlite3.Connection, settings: Settings, kind: str, dat
         target = _find(conn, target_kind, target_id)
         if target is None or target["archived"]:
             raise ContextError(f"missing or archived {target_kind} reference: {target_id}")
-    scenarios = _scenario_ids(settings) if _scenario_refs(data) or kind == "assessments" else set()
+    scenarios = _scenario_ids(settings, conn) if _scenario_refs(data) or kind == "assessments" else set()
     missing = _scenario_refs(data) - scenarios
     if missing:
         raise ContextError(f"unknown scenario reference(s): {', '.join(sorted(missing))}")
+    if kind == "org_scenarios":
+        if missing := set(data["atlas_scenario_ids"]) - _public_scenario_ids(settings):
+            raise ContextError(f"unknown Atlas scenario reference(s): {', '.join(sorted(missing))}")
     if kind == "evidence_assessments":
         from .decisions import record_revision
 
@@ -658,8 +806,9 @@ def import_records(settings: Settings, records: list[dict], *, actor: str) -> li
     if not isinstance(records, list) or not records or len(records) > 500:
         raise ContextError("import requires 1 to 500 typed records")
     order = {kind: i for i, kind in enumerate([
-        "services", "mechanisms", "dependencies", "controls", "assumptions", "exposures",
-        "exercises", "actions", "assessments", "observations", "impact_assessments", "saved_views",
+        "services", "mechanisms", "org_scenarios", "taxonomy_crosswalk", "dependencies", "controls",
+        "assumptions", "exposures", "exercises", "actions", "assessments", "observations",
+        "impact_assessments", "internal_loss_events", "saved_views",
     ])}
     if any(not isinstance(item, dict) or item.get("kind") not in order or "data" not in item for item in records):
         raise ContextError("import entries require a supported kind and data object")
@@ -792,8 +941,8 @@ def context_payload(settings: Settings) -> dict:
         return payload
     if not _path(settings).is_file():
         return payload
-    scenarios = _scenario_ids(settings)
     with _store(settings) as conn:
+        scenarios = _scenario_ids(settings, conn)
         records = _records(conn)
         for record in records["controls"]:
             effective, stale_on = _control_state(record, date.today())
@@ -1062,9 +1211,9 @@ def export_context(settings: Settings, *, scenario_ids: list[str]) -> dict[str, 
     if not scenario_ids:
         raise ContextError("private context export requires explicit scenario selections")
     roots = set(scenario_ids)
-    if not roots <= _scenario_ids(settings):
-        raise ContextError("private context export references unknown scenarios")
     with _store(settings) as conn:
+        if not roots <= _scenario_ids(settings, conn):
+            raise ContextError("private context export references unknown scenarios")
         records = _records(conn)
     by_id = {r["id"]: r for rows in records.values() for r in rows}
     selected = {r["id"] for r in by_id.values()
