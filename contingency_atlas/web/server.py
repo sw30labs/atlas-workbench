@@ -1154,6 +1154,8 @@ class DashboardHandler(EnterpriseHandlerMixin, PortfolioHandlerMixin, BaseHTTPRe
             })
         elif path == "/api/intake/sources":
             self._handle_intake_sources()
+        elif path in ("/api/bulk-ingest/folders", "/api/bulk-ingest/batch"):
+            self._handle_bulk_ingest_get(path)
         elif path.startswith("/api/jobs/"):
             job = runner.get_job(path.rsplit("/", 1)[-1])
             if job:
@@ -1175,7 +1177,8 @@ class DashboardHandler(EnterpriseHandlerMixin, PortfolioHandlerMixin, BaseHTTPRe
                         "/api/frameworks/mitre-atlas/proposals",
                         "/api/settings/frameworks/mitre-atlas/import",
                         "/api/settings/frameworks/mitre-atlas/activate",
-                        "/api/settings/models") and path not in POST_PATHS:
+                        "/api/settings/models",
+                        "/api/bulk-ingest/plan", "/api/bulk-ingest/submit") and path not in POST_PATHS:
             self.send_error(404, "Not found")
             return
 
@@ -1287,11 +1290,70 @@ class DashboardHandler(EnterpriseHandlerMixin, PortfolioHandlerMixin, BaseHTTPRe
             self._handle_scan_duplicates(body)
             return
 
+        if path in ("/api/bulk-ingest/plan", "/api/bulk-ingest/submit"):
+            self._handle_bulk_ingest_post(path, body)
+            return
+
+        if body.get("phase") == "bulk_ingest":
+            # Validate the folder against the allow-list before queueing, so a
+            # refused path never reaches the durable journal.
+            from contingency_atlas.web.bulk_ingest_web import FolderError, resolve_ingest_folder
+            try:
+                body = {**body, "folder": str(resolve_ingest_folder(get_settings(), body.get("folder")))}
+            except FolderError as exc:
+                self._send_json({"error": str(exc)}, status=400)
+                return
+            if body.get("classification") not in (None, "organization", "synthetic"):
+                self._send_json({"error": "classification must be 'organization' or 'synthetic'"}, status=400)
+                return
+            if body.get("use_llm") not in (None, True, False):
+                self._send_json({"error": "use_llm must be true or false"}, status=400)
+                return
+
         job_id, error = runner.start_job(str(body.get("phase") or ""), body)
         if error:
             self._send_json({"error": error}, status=409 if "running" in error else 400)
         else:
             self._send_json({"job_id": job_id}, status=202)
+
+    def _handle_bulk_ingest_get(self, path: str) -> None:
+        """Allowed folders (with recent batches), or one staged batch for review."""
+        from contingency_atlas.web import bulk_ingest_web as bulk
+
+        settings = get_settings()
+        try:
+            if path == "/api/bulk-ingest/folders":
+                self._send_json(bulk.list_ingest_folders(settings))
+                return
+            query = parse_qs(urlparse(self.path).query)
+            batch_id = str(query.get("id", [""])[0])
+            self._send_json(bulk.load_batch_for_review(settings, batch_id))
+        except bulk.BatchError as exc:
+            self._send_json({"error": str(exc)}, status=404)
+        except (OSError, ValueError):
+            logger.exception("bulk ingest read failed")
+            self._send_json({"error": "Bulk ingest data is unavailable"}, status=503)
+
+    def _handle_bulk_ingest_post(self, path: str, body: dict[str, Any]) -> None:
+        """Plan a selection, or submit the reviewed plan through the import gate."""
+        from contingency_atlas.web import bulk_ingest_web as bulk
+
+        settings = get_settings()
+        try:
+            if path == "/api/bulk-ingest/plan":
+                payload = bulk.plan(settings, body.get("batch_id"), body.get("selection"))
+            else:
+                payload = bulk.submit(settings, body.get("batch_id"), body.get("selection"),
+                                      actor=body.get("actor"), plan_digest=body.get("plan_digest"))
+        except bulk.BatchError as exc:
+            # Typed codes from the engine and the adapter; never inferred from message text.
+            self._send_json({"error": str(exc), "code": exc.code}, status=bulk.http_status(exc))
+            return
+        except (OSError, ValueError, sqlite3.Error) as exc:
+            # Import-gate refusals (disabled workspace, revision conflicts) are ValueErrors.
+            self._send_json({"error": str(exc)}, status=400)
+            return
+        self._send_json(payload)
 
     def _handle_mitre_atlas_technique_search(self) -> None:
         """I expose a bounded search over the active, locally pinned catalog."""

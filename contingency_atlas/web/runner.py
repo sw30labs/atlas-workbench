@@ -44,6 +44,9 @@ VALID_PHASES = (
     # phases are deterministic; the three elicitation phases are OMLX-gated
     "eval_r0_suite", "eval_r0_multiseed", "eval_ablations", "judgment_ledger",
     "channel_audit", "analogue_elicitation", "compound_join_llm",
+    # organization onboarding: stage one reviewable batch from an allowed folder
+    # (staging only; writes happen later through the import gate)
+    "bulk_ingest",
 )
 
 logger = logging.getLogger(__name__)
@@ -54,7 +57,12 @@ _PARAMETER_NAMES = frozenset({
     "evidence_texts", "source_urls", "source_text", "risk_source_urls", "num_scenarios",
     "force", "kind", "record_id", "seed_domains", "steer", "canary", "with_refutations",
     "k", "max_joins", "mc_draws", "seeds", "top_n",
+    "folder", "use_llm", "classification",
 })
+# Live state of in-process jobs that report progress and accept a cooperative
+# cancel (bulk_ingest). Not durable: the journal stays the source of truth.
+_LIVE: dict[str, dict[str, Any]] = {}
+_LIVE_LOCK = threading.Lock()
 
 
 def _now() -> str:
@@ -82,7 +90,14 @@ def busy() -> bool:
 
 def get_job(job_id: str) -> dict[str, Any] | None:
     path = job_journal_path(get_settings())
-    return JobJournal(path).get(job_id) if path.is_file() else None
+    job = JobJournal(path).get(job_id) if path.is_file() else None
+    if job is not None:
+        with _LIVE_LOCK:
+            live = _LIVE.get(job_id)
+            if live is not None:
+                job["progress"] = dict(live["progress"])
+                job["cancel_requested"] = live["cancel"].is_set()
+    return job
 
 
 def list_jobs(limit: int = 100) -> list[dict[str, Any]]:
@@ -174,6 +189,7 @@ def _dispatch(settings: Settings, journal: JobJournal) -> None:
                         "Configuration changed after submission; explicitly retry to use the current settings."
                     ))
                     continue
+                _EXECUTION_SETTINGS.job = {"id": job["id"], "actor": job.get("actor")}
                 try:
                     result = execute_phase(job["phase"], job["params"])
                     errors = result.get("errors") or []
@@ -182,6 +198,10 @@ def _dispatch(settings: Settings, journal: JobJournal) -> None:
                     journal.finish(job["id"], "failed" if failed else "completed", result=result, error=error)
                 except Exception as exc:
                     journal.finish(job["id"], "failed", error=str(exc))
+                finally:
+                    _EXECUTION_SETTINGS.job = None
+                    with _LIVE_LOCK:
+                        _LIVE.pop(job["id"], None)
     except Exception:
         logger.exception("durable job worker stopped; recovery will reconcile its journal")
     finally:
@@ -210,7 +230,21 @@ def recover_jobs(*, resume_queued: bool = True) -> dict[str, Any]:
 
 
 def cancel_job(job_id: str, *, actor: str) -> dict[str, Any]:
-    """Cancel a queued job; running phases cannot be safely preempted."""
+    """Cancel a queued job, or ask a running cooperative job (bulk_ingest) to stop.
+
+    Other running phases cannot be safely preempted. A cancelled bulk ingest
+    stages nothing; it finishes with ``result.status == "cancelled"``.
+    """
+    with _LIVE_LOCK:
+        live = _LIVE.get(job_id)
+        if live is not None:
+            if not isinstance(actor, str) or not actor.strip():
+                raise OperationsError("A named operator is required")
+            live["cancel"].set()
+            live["progress"]["cancel_requested_by"] = actor.strip()[:160]
+    if live is not None:
+        job = get_job(job_id) or {"id": job_id}
+        return {**job, "cancel_requested": True}
     path = job_journal_path(get_settings())
     if not path.is_file():
         raise OperationsError("Job was not found")
@@ -282,6 +316,53 @@ def _int(params: dict[str, Any], key: str, default: int, lo: int, hi: int) -> in
     return max(lo, min(n, hi))
 
 
+def _bulk_ingest(settings: Settings, params: dict[str, Any], *, reachable) -> dict[str, Any]:
+    """Run the bulk-ingest pods over an allowed folder with live progress and cancel."""
+    from contingency_atlas.bulk_ingest import run_bulk_ingest_job
+    from contingency_atlas.web.bulk_ingest_web import resolve_ingest_folder
+
+    folder = resolve_ingest_folder(settings, params.get("folder"))
+    classification = str(params.get("classification") or "organization")
+    if classification not in ("organization", "synthetic"):
+        raise ValueError("classification must be 'organization' or 'synthetic'")
+    use_llm = params.get("use_llm") is True
+    if use_llm and not reachable(settings):
+        raise RuntimeError(
+            f"LLM backend ({settings.llm_provider}) unreachable at {settings.llm_base_url}; "
+            "start it or run without the local LLM"
+        )
+    job = getattr(_EXECUTION_SETTINGS, "job", None) or {}
+    job_id = job.get("id") or f"inline-{uuid.uuid4().hex[:8]}"
+    actor = str(job.get("actor") or "local operator")
+    cancel = threading.Event()
+    live = {"progress": {"stage": "queued", "status": "running", "done": 0, "total": 0, "file": ""},
+            "cancel": cancel}
+    with _LIVE_LOCK:
+        _LIVE[job_id] = live
+
+    def progress(event: dict[str, Any]) -> None:
+        keep = {k: event[k] for k in ("stage", "status", "file", "done", "total") if k in event}
+        with _LIVE_LOCK:
+            state = live["progress"]
+            if keep.get("stage") != state.get("stage"):
+                state.update(file="", done=0, total=0)
+            state.update({k: (str(v)[:300] if isinstance(v, str) else v) for k, v in keep.items()})
+            state["events"] = int(state.get("events") or 0) + 1
+
+    client = None
+    if use_llm:
+        from contingency_atlas.llm import OMLXClient
+
+        client = OMLXClient(settings, node="bulk_ingest")
+    try:
+        return run_bulk_ingest_job(
+            {"folder": str(folder), "actor": actor, "use_llm": use_llm, "classification": classification},
+            settings, progress=progress, client=client, cancel=cancel)
+    finally:
+        if client is not None:
+            client.close()
+
+
 # ── phase dispatch ──
 
 def execute_phase(phase: str, params: dict[str, Any]) -> dict[str, Any]:
@@ -301,6 +382,9 @@ def execute_phase(phase: str, params: dict[str, Any]) -> dict[str, Any]:
         from contingency_atlas.scoring.telemetry import production_telemetry
 
         return OMLXClient(settings, telemetry=production_telemetry(), node=phase)
+
+    if phase == "bulk_ingest":
+        return _bulk_ingest(settings, params, reachable=omlx_reachable)
 
     if phase == "phase1":
         from contingency_atlas.phases.phase1_ingest import ingest_batch

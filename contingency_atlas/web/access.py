@@ -45,7 +45,9 @@ READ_PATHS = frozenset({
     "/api/context", "/api/context/compare", "/api/jobs", "/api/access",
     "/api/diagnostics", "/api/integrations",
 })
-ANALYST_READ_PATHS = frozenset({"/api/intake/sources", "/api/omlx"})
+ANALYST_READ_PATHS = frozenset({
+    "/api/intake/sources", "/api/omlx", "/api/bulk-ingest/folders", "/api/bulk-ingest/batch",
+})
 ADMIN_READ_PATHS = frozenset({"/api/settings", "/api/readiness"})
 ANALYST_POST_PATHS = frozenset({
     "/api/run", "/api/ingest/convert", "/api/intake/prepare", "/api/intake/submit",
@@ -53,6 +55,7 @@ ANALYST_POST_PATHS = frozenset({
     "/api/frameworks/mitre-atlas/proposals", "/api/context/save", "/api/context/archive",
     "/api/context/baseline", "/api/imports/preview", "/api/imports/submit",
     "/api/jobs/cancel", "/api/jobs/retry",
+    "/api/bulk-ingest/plan", "/api/bulk-ingest/submit",
 })
 REVIEWER_POST_PATHS = frozenset({
     "/api/review/decide", "/api/review/decide-batch", "/api/review/rate-memo",

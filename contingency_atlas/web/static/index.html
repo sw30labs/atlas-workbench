@@ -952,6 +952,49 @@ textarea.rv-input { resize: vertical; line-height: 1.5; }
 .about-links a { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; color: var(--teal); border: 1px solid var(--line-strong); border-radius: 5px; padding: 8px 16px; text-decoration: none; transition: all 0.15s; }
 .about-links a:hover { background: var(--cyan); color: #04121a; border-color: var(--cyan); }
 .about-foot { margin-top: 22px; font-family: var(--mono); font-size: 10px; color: var(--faint); letter-spacing: 0.1em; line-height: 1.8; text-align: center; }
+/* ── bulk import ─────────────────────────────────── */
+.bi-panel { margin-bottom: 16px; }
+.bi-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end; }
+.bi-field { display: flex; flex-direction: column; gap: 5px; font: 9.5px var(--mono); letter-spacing: .14em; color: var(--faint); text-transform: uppercase; min-width: 220px; }
+.bi-field select, .bi-field input { background: rgba(4,8,16,0.7); border: 1px solid var(--line); border-radius: 7px; color: var(--txt); font: 11.5px var(--mono); padding: 9px 12px; text-transform: none; letter-spacing: .02em; }
+.bi-check { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--txt); padding-bottom: 9px; }
+.bi-check small { color: var(--faint); font: 10px var(--mono); }
+.bi-check input:disabled + span { opacity: .5; }
+.bi-msg { font: 10.5px var(--mono); line-height: 1.55; color: var(--faint); margin-top: 10px; overflow-wrap: anywhere; }
+.bi-msg:empty { display: none; }
+.bi-msg.err { color: var(--red); }
+.bi-msg.ok { color: var(--green); }
+.bi-msg.warn { color: var(--amber); }
+.bi-bar { height: 6px; background: #12203a; border-radius: 3px; overflow: hidden; margin-top: 10px; }
+.bi-bar i { display: block; height: 100%; background: var(--cyan); transition: width .3s; }
+.bi-kpis { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+.bi-kpi { border: 1px solid var(--line); border-radius: 7px; padding: 8px 12px; font: 10px var(--mono); color: var(--faint); letter-spacing: .1em; }
+.bi-kpi b { display: block; font-size: 16px; color: var(--txt); letter-spacing: .02em; }
+.bi-alert { border: 1px solid rgba(251,191,36,0.45); border-left: 3px solid var(--amber); background: rgba(251,191,36,0.06); border-radius: 0 7px 7px 0; padding: 10px 13px; margin-top: 9px; font-size: 12px; }
+.bi-alert.injection { border-color: rgba(248,113,113,0.5); border-left-color: var(--red); background: rgba(248,113,113,0.07); }
+.bi-alert strong { font: 10px var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--amber); }
+.bi-alert.injection strong { color: var(--red); }
+.bi-alert blockquote { margin: 7px 0 0; padding: 7px 10px; background: rgba(4,8,16,0.7); border-radius: 5px; font: 11px var(--mono); color: var(--dim); white-space: pre-wrap; overflow-wrap: anywhere; }
+.bi-tag { display: inline-block; font: 8.5px var(--mono); letter-spacing: .12em; padding: 2px 7px; border-radius: 3px; border: 1px solid var(--line-strong); color: var(--teal); text-transform: uppercase; margin: 1px 3px 1px 0; white-space: nowrap; }
+.bi-tag.warn { color: var(--amber); border-color: rgba(251,191,36,0.4); background: rgba(251,191,36,0.06); }
+.bi-tag.bad { color: var(--red); border-color: rgba(248,113,113,0.4); background: rgba(248,113,113,0.06); }
+.bi-tag.ok { color: var(--green); border-color: rgba(52,211,153,0.4); }
+.bi-tag.proposed { color: var(--amber); border-color: var(--amber); background: rgba(251,191,36,0.1); font-weight: 700; }
+.bi-table-wrap { overflow-x: auto; max-width: 100%; }
+.bi-table td { vertical-align: top; overflow-wrap: anywhere; }
+.bi-table td small { display: block; color: var(--faint); font: 10px var(--mono); margin-top: 2px; }
+.bi-table th { cursor: default; }
+.bi-spans { font: 10.5px var(--mono); color: var(--dim); }
+.bi-spans q { color: var(--txt); }
+.bi-err { color: var(--red); font-size: 11px; }
+.bi-conflict { color: var(--amber); font-size: 11px; }
+.bi-pager { display: flex; gap: 10px; align-items: center; margin-top: 10px; font: 10px var(--mono); color: var(--faint); }
+.bi-plan { margin-top: 12px; font-size: 12px; }
+.bi-plan h4 { font: 10px var(--mono); letter-spacing: .18em; color: var(--dim); text-transform: uppercase; margin: 12px 0 6px; }
+.bi-plan ul { margin-left: 18px; }
+.bi-plan li { margin: 2px 0; overflow-wrap: anywhere; }
+.bi-dropped li { color: var(--amber); }
+.bi-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 </style>
 <link rel="stylesheet" href="/experience.css">
 </head>
@@ -1014,6 +1057,7 @@ textarea.rv-input { resize: vertical; line-height: 1.5; }
     </button>
 
     <button class="nav-btn" data-view="organization"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="5" r="3"/><circle cx="5" cy="18" r="3"/><circle cx="19" cy="18" r="3"/><path d="M10 8 6 15m8-7 4 7M8 18h8"/></svg> Organization</button>
+    <button class="nav-btn" data-view="bulk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 7h6l2 2h10v10H3z"/><path d="M12 17v-6m-3 3 3-3 3 3"/></svg> Bulk import</button>
     <div class="nav-label loop">Discovery workflow</div>
     <button class="nav-btn" data-view="evidence">
       <span class="step">1</span>
@@ -1443,6 +1487,41 @@ textarea.rv-input { resize: vertical; line-height: 1.5; }
         <div id="review-detail"></div>
       </div>
       <div class="foot-note" id="review-agreement"></div>
+    </section>
+    <!-- ═══ BULK IMPORT ═══ -->
+    <section class="view" id="view-bulk" aria-labelledby="bi-title">
+      <div class="view-head">
+        <h1 id="bi-title">BULK <em>IMPORT</em></h1>
+        <p>Point Atlas at a folder of organization documents. The pods stage one reviewable batch; nothing is imported or approved until you confirm a plan below.</p>
+      </div>
+      <div class="panel bi-panel" id="bi-start">
+        <div class="panel-title">1 · Choose a folder</div>
+        <div class="bi-row">
+          <label class="bi-field" for="bi-folder">Folder
+            <select id="bi-folder" aria-label="Folder to ingest"><option value="">Loading folders…</option></select>
+          </label>
+          <label class="bi-check"><input type="checkbox" id="bi-llm" disabled aria-describedby="bi-llm-note"><span>Use local LLM</span> <small id="bi-llm-note"></small></label>
+          <label class="bi-check"><input type="checkbox" id="bi-synthetic"><span>Label records synthetic</span></label>
+          <label class="bi-field" for="bi-actor">Your name
+            <input id="bi-actor" maxlength="160" autocomplete="name" aria-label="Your name, recorded as the operator">
+          </label>
+          <button class="btn primary" id="bi-run" type="button">STAGE BATCH</button>
+        </div>
+        <div class="bi-row" style="margin-top:12px">
+          <label class="bi-field" for="bi-recent">Or reopen a staged batch
+            <select id="bi-recent" aria-label="Reopen a staged batch"><option value="">—</option></select>
+          </label>
+        </div>
+        <p class="bi-msg" id="bi-roots"></p>
+        <p class="bi-msg" id="bi-start-msg" role="status" aria-live="polite"></p>
+      </div>
+      <div class="panel bi-panel" id="bi-progress" hidden>
+        <div class="panel-title">2 · Staging</div>
+        <div id="bi-progress-text" class="bi-msg" role="status" aria-live="polite"></div>
+        <div class="bi-bar" role="progressbar" id="bi-progress-bar" aria-label="Bulk import progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i style="width:0%"></i></div>
+        <div class="rv-actions"><button class="btn danger" id="bi-cancel" type="button">CANCEL</button></div>
+      </div>
+      <div id="bi-review"></div>
     </section>
     <!-- ═══ COSTS ═══ -->
     <section class="view" id="view-costs">
@@ -6596,6 +6675,7 @@ async function checkOmlx() {
     if (activeRunPhase === "phase3" && !scenarioPlanState.loading)
       renderScenarioPlanner();
   }
+  if (typeof biSyncLlmOption === "function") biSyncLlmOption();
 }
 setInterval(checkOmlx, 20000); /* self-heal if OMLX or the server changes state */
 
@@ -7243,6 +7323,7 @@ async function submitModelSettings(event) {
 function initView(name) {
   if (name === "organization") { document.dispatchEvent(new CustomEvent("atlas:organization")); return; }
   if (name === "settings") { loadSettings(); viewInited[name] = true; return; }
+  if (name === "bulk") { renderBulkImport(); viewInited[name] = true; return; }
   if (viewInited[name]) return;
   viewInited[name] = true;
   if (name === "overview") {
@@ -7275,9 +7356,9 @@ function initView(name) {
   if (name === "settings") loadSettings();
   if (name === "about") renderAbout();
 }
-const VIEWS = ["organization", "overview", "evidence", "risks", "findings", "review", "pipeline", "playground", "costs", "scenarios", "compounds", "settings", "about"];
+const VIEWS = ["organization", "bulk", "overview", "evidence", "risks", "findings", "review", "pipeline", "playground", "costs", "scenarios", "compounds", "settings", "about"];
 const WORKSPACE_ROOT = {
-  organization: "organization", overview: "overview",
+  organization: "organization", bulk: "bulk", overview: "overview",
   evidence: "evidence", risks: "evidence", findings: "evidence",
   review: "review",
   pipeline: "pipeline", playground: "pipeline", costs: "pipeline",
@@ -7398,6 +7479,519 @@ $$("#evidence-events-table th").forEach(th => th.addEventListener("click", () =>
     routeFromLocation();
   }, wait);
 })();
+</script>
+<script>
+/* ═══ BULK IMPORT ═══ */
+/* Folder → staged batch → review → plan → two-click confirm → import gate.
+   Nothing auto-submits. The first click on WRITE arms it; the second writes.
+   Any change to the selection, the operator name or the plan disarms it. */
+const BI_PAGE = 100;
+const BI_STATUSES = ["ready", "needs_review", "invalid"];
+const biState = {
+  folders: null, batch: null, committable: new Set(), jobId: null, timer: null,
+  mode: "list", selected: new Set(), plan: null, planKey: "", planBusy: false,
+  armed: null, submitting: false, result: null,
+  filter: { contract: "", status: "", method: "", q: "" }, page: 0,
+};
+
+function biActor() {
+  const principal = window.atlasPrincipal;
+  if (principal && principal.mode === "proxy") return principal.subject;
+  return ((($("#bi-actor") || {}).value) || "").trim();
+}
+function biSelection() {
+  return biState.mode === "all" ? "all" : [...biState.selected].sort();
+}
+const biSelectionKey = () => JSON.stringify([biState.batch && biState.batch.batch_id, biSelection()]);
+const biSignature = () => JSON.stringify([biSelectionKey(), biActor(), biState.plan && biState.plan.plan_digest]);
+
+function biCommittableIds(batch) {
+  const ids = new Set();
+  for (const payload of ((batch.handoff || {}).org_context || [])) {
+    for (const id of payload.candidate_ids || []) ids.add(id);
+  }
+  return ids;
+}
+function biCandidates() { return (biState.batch && biState.batch.candidates) || []; }
+function biReadyIds(kind) {
+  return biCandidates().filter(c => biState.committable.has(c.id) && c.status === "ready" && (!kind || c.kind === kind)).map(c => c.id);
+}
+
+/* ── selection: every change clears the plan and disarms ── */
+function biSelectionChanged() {
+  biState.plan = null; biState.planKey = ""; biState.armed = null; biState.result = null;
+  biSetCommitStatus("", "");
+  biRenderSelectionMarks();
+  biRenderCommit();
+}
+function biSelectAllReady() {
+  biState.mode = "all";
+  biState.selected = new Set(biReadyIds());
+  biSelectionChanged();
+}
+function biClearSelection() {
+  biState.mode = "list"; biState.selected = new Set();
+  biSelectionChanged();
+}
+function biSelectContract(kind, on) {
+  biState.mode = "list";
+  for (const id of biReadyIds(kind)) on ? biState.selected.add(id) : biState.selected.delete(id);
+  biSelectionChanged();
+}
+function biToggle(id, on) {
+  if (!biState.committable.has(id)) return;
+  biState.mode = "list";
+  on ? biState.selected.add(id) : biState.selected.delete(id);
+  biSelectionChanged();
+}
+
+async function biPost(path, body) {
+  const resp = await fetch(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  let payload = {};
+  try { payload = await resp.json(); } catch { payload = {}; }
+  if (!resp.ok) throw new Error(payload.error || ("Request failed (" + resp.status + ")"));
+  return payload;
+}
+
+async function biPreviewPlan() {
+  if (!biState.batch || biState.planBusy) return;
+  const selection = biSelection();
+  if (selection !== "all" && !selection.length) { biSetCommitStatus("Select at least one record first.", "err"); return; }
+  const key = biSelectionKey();
+  biState.planBusy = true; biState.armed = null; biState.result = null;
+  biSetCommitStatus("", "");
+  biRenderCommit();
+  let error = "";
+  try {
+    const plan = await biPost("/api/bulk-ingest/plan", { batch_id: biState.batch.batch_id, selection });
+    if (key === biSelectionKey()) { biState.plan = plan; biState.planKey = key; } // else the selection moved on
+  } catch (e) {
+    biState.plan = null; biState.planKey = ""; error = e.message;
+  } finally {
+    biState.planBusy = false;
+  }
+  biRenderCommit();
+  if (error) biSetCommitStatus(error, "err");
+}
+
+async function biSubmit() {
+  if (biState.submitting || !biState.batch) return;
+  const plan = biState.plan;
+  if (!plan || biState.planKey !== biSelectionKey() || !(plan.payloads || []).length) {
+    biSetCommitStatus("Preview the plan for this selection first.", "err"); return;
+  }
+  const actor = biActor();
+  if (!actor) { biSetCommitStatus("Enter your name to record this import.", "err"); return; }
+  const signature = biSignature();
+  const armed = biState.armed;
+  if (!armed || armed.signature !== signature) {
+    biState.armed = { signature };
+    biUpdateCommitControls();
+    biSetCommitStatus(`Write ${plan.selected} record${plan.selected === 1 ? "" : "s"} into the private organization workspace as ${actor}? ` +
+      "Each payload is atomic; the sequence is not. Click WRITE again to confirm.", "warn");
+    return;
+  }
+  biState.armed = null;
+  biState.submitting = true;
+  biUpdateCommitControls();
+  biSetCommitStatus("WRITING THROUGH THE IMPORT GATE…", "");
+  try {
+    biState.result = await biPost("/api/bulk-ingest/submit", {
+      batch_id: biState.batch.batch_id, selection: biSelection(), plan_digest: plan.plan_digest, actor,
+    });
+    biState.result.ok = true;
+  } catch (e) {
+    biState.result = { ok: false, error: e.message };
+  } finally {
+    biState.submitting = false;
+  }
+  biSetCommitStatus("", "");
+  biRenderCommit();
+}
+
+/* ── commit controls (also the disarm check) ── */
+function biUpdateCommitControls() {
+  const write = $("#bi-write"), planBtn = $("#bi-plan-btn");
+  if (!write || !planBtn) return;
+  const armed = biState.armed;
+  if (armed && armed.signature !== biSignature()) {
+    biState.armed = null;
+    biSetCommitStatus("", "");
+  }
+  const plan = biState.plan;
+  const planFresh = !!plan && biState.planKey === biSelectionKey();
+  const count = biState.mode === "all" ? biReadyIds().length : biState.selected.size;
+  const busy = biState.submitting || biState.planBusy;
+  planBtn.disabled = busy || !count;
+  planBtn.textContent = biState.planBusy ? "PLANNING…" : "PREVIEW PLAN";
+  write.disabled = busy || !planFresh || !(plan.payloads || []).length || !biActor();
+  const n = planFresh ? plan.selected : 0;
+  write.textContent = biState.submitting ? "WRITING…" : biState.armed ? `CONFIRM WRITE ${n}` : `WRITE ${n} RECORD${n === 1 ? "" : "S"}`;
+  write.setAttribute("aria-label", biState.armed ? `Confirm writing ${n} records` : `Write ${n} planned records`);
+  const counter = $("#bi-selected-count");
+  if (counter) counter.textContent = biState.mode === "all" ? `ALL READY (${count})` : `${count} SELECTED`;
+}
+function biSetCommitStatus(text, kind) {
+  const el = $("#bi-commit-status");
+  if (!el) return;
+  el.textContent = text;
+  el.className = "bi-msg" + (kind ? " " + kind : "");
+}
+
+/* ── rendering ── */
+function biTag(text, cls = "") { return `<span class="bi-tag ${esc(cls)}">${esc(text)}</span>`; }
+function biStatusTag(status) {
+  return biTag(String(status || "").replace("_", " "), status === "ready" ? "ok" : status === "invalid" ? "bad" : "warn");
+}
+function biContractBadge(c) {
+  if (c.contract_status === "proposed") return biTag("proposed contract: schema not yet approved, will not be written", "proposed");
+  if (c.kind === "evidence_events" || c.contract_status === "evidence") return biTag("goes to research review as pending", "warn");
+  if (c.kind === "taxonomy_crosswalk") return biTag("status: proposed — needs reviewer sign-off", "warn");
+  return "";
+}
+function biLabel(c) {
+  const d = c.data || {};
+  return d.name || d.title || d.headline || d.statement || d.org_label || d.org_ref || c.id;
+}
+
+function biFiltered() {
+  const f = biState.filter, q = f.q.toLowerCase();
+  return biCandidates().filter(c =>
+    (!f.contract || c.kind === f.contract) && (!f.status || c.status === f.status)
+    && (!f.method || (c.provenance || []).some(p => p.method === f.method))
+    && (!q || (c.id + " " + biLabel(c) + " " + (c.provenance || []).map(p => p.file).join(" ")).toLowerCase().includes(q)));
+}
+
+function biRenderAttention(batch) {
+  const alerts = [];
+  for (const d of batch.documents || []) {
+    for (const flag of d.flags || []) {
+      if (flag.flag !== "injection" && flag.flag !== "pii") continue;
+      alerts.push(`<div class="bi-alert ${flag.flag === "injection" ? "injection" : ""}" role="note">
+        <strong>${flag.flag === "injection" ? "Injection-like text · treated as data, never obeyed" : "Personal data · excluded from extraction"}</strong>
+        <div>${esc(d.path)}${flag.locator ? " · " + esc(flag.locator) : ""} — ${esc(flag.reason)}</div>
+        ${flag.excerpt ? `<blockquote>${esc(flag.excerpt)}</blockquote>` : ""}</div>`);
+    }
+  }
+  return alerts.length ? `<div class="panel bi-panel" aria-label="Flags that need attention"><div class="panel-title">Needs attention</div>${alerts.join("")}</div>` : "";
+}
+
+function biRenderFiles(batch) {
+  const docs = batch.documents || [];
+  const listed = new Set(docs.map(d => d.path));
+  const extra = ((batch.manifest || {}).entries || []).filter(e => !listed.has(e.path) && e.status !== "accepted");
+  const row = (path, format, status, routes, flags, reason) => `<tr><td class="mono">${esc(path)}</td><td class="mono">${esc(format || "")}</td>
+    <td>${status === "accepted" ? biTag("read", "ok") : biTag(status, status === "quarantined" ? "bad" : "warn")}</td>
+    <td>${(routes || []).map(r => biTag(r, r === "quarantine" ? "bad" : r === "ignore" ? "warn" : "")).join("")}</td>
+    <td>${(flags || []).map(f => biTag(f, f === "injection" || f === "pii" ? "bad" : "warn")).join("")}</td>
+    <td class="dim">${esc(reason || "")}</td></tr>`;
+  const routeReason = d => {
+    const ignore = (d.routes || []).find(r => r.route === "ignore" || r.route === "quarantine");
+    const flagReasons = (d.flags || []).filter(f => f.flag !== "injection").map(f => f.reason);
+    return [d.reason, ignore ? (ignore.reasons || []).join("; ") : "", ...flagReasons].filter(Boolean).join(" · ");
+  };
+  const counts = batch.counts || {};
+  const byRoute = Object.entries(counts.files_by_route || {}).map(([k, v]) => biTag(`${k} ${v}`, k === "quarantine" ? "bad" : k === "ignore" ? "warn" : "")).join("");
+  const byFlag = Object.entries(counts.files_by_flag || {}).map(([k, v]) => biTag(`${k} ${v}`, k === "injection" || k === "pii" ? "bad" : "warn")).join("");
+  return `<div class="panel bi-panel"><div class="panel-title">Files by route and flag</div>
+    <p style="margin-bottom:8px">${byRoute}</p><p style="margin-bottom:10px">${byFlag}</p>
+    <details><summary class="bi-msg" style="cursor:pointer">All ${docs.length + extra.length} files, with reasons for quarantined and ignored ones</summary>
+    <div class="bi-table-wrap"><table class="data bi-table" aria-label="Files in the batch"><thead><tr><th scope="col">File</th><th scope="col">Format</th><th scope="col">Read</th><th scope="col">Route</th><th scope="col">Flags</th><th scope="col">Reason</th></tr></thead><tbody>
+    ${docs.map(d => row(d.path, d.format, d.status, d.route_names, d.flag_names, routeReason(d))).join("")}
+    ${extra.map(e => row(e.path, e.format, e.status, [], [], e.reason)).join("")}
+    </tbody></table></div></details></div>`;
+}
+
+function biRenderContracts(batch) {
+  const groups = {};
+  for (const c of biCandidates()) {
+    const g = groups[c.kind] || (groups[c.kind] = { total: 0, ready: 0, needs_review: 0, invalid: 0, sample: c, committable: 0 });
+    g.total++; g[c.status] = (g[c.status] || 0) + 1;
+    if (biState.committable.has(c.id)) g.committable++;
+  }
+  const rows = Object.entries(groups).sort().map(([kind, g]) => {
+    const ready = biReadyIds(kind);
+    const selectable = g.committable > 0;
+    const checked = selectable && ready.length && ready.every(id => biState.selected.has(id));
+    return `<tr><td class="mono">${esc(kind)} ${biContractBadge(g.sample)}</td><td>${g.total}</td><td>${g.ready || 0}</td><td>${g.needs_review || 0}</td><td>${g.invalid || 0}</td>
+      <td>${selectable ? `<label class="bi-check" style="padding:0"><input type="checkbox" data-bi-contract="${esc(kind)}" ${checked ? "checked" : ""} ${ready.length ? "" : "disabled"} aria-label="Select all ready ${esc(kind)} records"><span>${ready.length} ready</span></label>` : `<span class="dim">read-only</span>`}</td></tr>`;
+  }).join("");
+  return `<div class="panel bi-panel"><div class="panel-title">Records by contract</div>
+    <div class="bi-table-wrap"><table class="data bi-table" aria-label="Records grouped by contract"><thead><tr><th scope="col">Contract</th><th scope="col">Total</th><th scope="col">Ready</th><th scope="col">Needs review</th><th scope="col">Invalid</th><th scope="col">Select</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+}
+
+function biRecordRow(c) {
+  const prov = c.provenance || [];
+  const sources = prov.map(p => `<div class="mono">${esc(p.file)}<small>${esc(p.locator || "")}</small></div>`).join("");
+  const methods = [...new Set(prov.map(p => p.method))].map(m => biTag(m, m === "llm" ? "warn" : "")).join("");
+  const spans = prov.flatMap(p => Object.entries(p.spans || {}).map(([k, v]) => `<div class="bi-spans">${esc(k)}: <q>${esc(v)}</q></div>`)).join("");
+  const meta = c.meta || {};
+  const conflicts = (meta.conflicts || []).map(x => `<div class="bi-conflict">${esc(x.field)}: ${(x.values || []).map((v, i) =>
+    `<q>${esc(typeof v === "string" ? v : JSON.stringify(v))}</q> <small>${esc((x.files || [])[i] || "")}${(x.locators || [])[i] ? " · " + esc(x.locators[i]) : ""}</small>`).join(" vs ")}</div>`).join("");
+  const unresolved = meta.unresolved_links ? `<div class="bi-conflict">unresolved links: ${esc(JSON.stringify(meta.unresolved_links))}</div>` : "";
+  const errors = (c.errors || []).map(e => `<div class="bi-err">${esc(e)}</div>`).join("");
+  const warnings = (c.warnings || []).map(w => `<div class="bi-conflict">${esc(w)}</div>`).join("");
+  const selectable = biState.committable.has(c.id);
+  const check = selectable
+    ? `<input type="checkbox" data-bi-select="${esc(c.id)}" ${biState.selected.has(c.id) ? "checked" : ""} aria-label="Select ${esc(biLabel(c))}">`
+    : `<span class="dim" title="Not importable from this screen">—</span>`;
+  return `<tr><td>${check}</td><td>${esc(biLabel(c))}<small>${esc(c.id)}</small>${biContractBadge(c)}</td><td class="mono">${esc(c.kind)}</td><td>${biStatusTag(c.status)}</td>
+    <td>${sources}</td><td>${methods}</td><td>${spans || '<span class="dim">—</span>'}</td><td>${errors}${warnings}${unresolved}</td><td>${conflicts || '<span class="dim">—</span>'}</td></tr>`;
+}
+
+function biRenderRecords() {
+  const host = $("#bi-records");
+  if (!host) return;
+  const rows = biFiltered();
+  const pages = Math.max(1, Math.ceil(rows.length / BI_PAGE));
+  biState.page = Math.min(biState.page, pages - 1);
+  const slice = rows.slice(biState.page * BI_PAGE, (biState.page + 1) * BI_PAGE);
+  host.innerHTML = `<div class="bi-table-wrap"><table class="data bi-table" aria-label="Staged records"><thead><tr><th scope="col"><span class="bi-sr">Select</span></th><th scope="col">Record</th><th scope="col">Contract</th><th scope="col">Status</th><th scope="col">Source · locator</th><th scope="col">Method</th><th scope="col">Quoted spans</th><th scope="col">Validation</th><th scope="col">Conflicts</th></tr></thead>
+    <tbody>${slice.map(biRecordRow).join("") || '<tr><td colspan="9" class="dim">No record matches these filters.</td></tr>'}</tbody></table></div>
+    <div class="bi-pager"><button class="btn ghost" type="button" data-bi-page="-1" ${biState.page ? "" : "disabled"} aria-label="Previous page">‹ PREV</button>
+    <span>page ${biState.page + 1} / ${pages} · ${rows.length} record${rows.length === 1 ? "" : "s"}</span>
+    <button class="btn ghost" type="button" data-bi-page="1" ${biState.page + 1 < pages ? "" : "disabled"} aria-label="Next page">NEXT ›</button></div>`;
+}
+
+function biRenderSelectionMarks() {
+  for (const box of $$("#bi-review [data-bi-select]")) box.checked = biState.selected.has(box.dataset.biSelect);
+  for (const box of $$("#bi-review [data-bi-contract]")) {
+    const ready = biReadyIds(box.dataset.biContract);
+    box.checked = !!ready.length && ready.every(id => biState.selected.has(id));
+  }
+}
+
+function biRenderCommit() {
+  const host = $("#bi-plan-out");
+  if (!host) return;
+  const plan = biState.plan, result = biState.result;
+  let html = "";
+  if (plan && biState.planKey === biSelectionKey()) {
+    html += `<div class="bi-plan"><h4>Plan · ${plan.selected} record${plan.selected === 1 ? "" : "s"} will be written</h4>
+      ${(plan.payloads || []).map(p => `<div><span class="mono">${esc(p.file)}</span> · ${(p.records || []).length} record(s)
+        <details><summary class="bi-msg" style="cursor:pointer">Show records</summary><ul>${(p.records || []).map(r => `<li><span class="mono">${esc(r.kind)}</span> · ${esc(r.label)} <small class="dim">${esc(r.id)}</small></li>`).join("")}</ul></details></div>`).join("") || '<p class="dim">Nothing in this selection can be written.</p>'}
+      ${(plan.skipped || []).length ? `<h4>Dropped from the plan (${plan.skipped.length})</h4><details><summary class="bi-msg" style="cursor:pointer">Why each record was dropped</summary><ul class="bi-dropped">${plan.skipped.map(s => `<li><span class="mono">${esc(s.id)}</span> — ${esc(s.reason)}</li>`).join("")}</ul></details>` : ""}
+      ${(plan.warnings || []).length ? `<h4>Warnings</h4><ul class="bi-dropped">${plan.warnings.map(w => `<li>${esc(w)}</li>`).join("")}</ul>` : ""}</div>`;
+  }
+  if (result) {
+    html += result.ok
+      ? `<div class="bi-plan" role="status"><h4>Written · ${esc(result.imported_count)} record(s) as ${esc(result.actor)}</h4><ul>${(result.payloads || []).map(p => `<li><span class="mono">${esc(p.file)}</span> · ${esc(p.imported_count)} imported</li>`).join("")}</ul>
+         ${(result.warnings || []).length ? `<ul class="bi-dropped">${result.warnings.map(w => `<li>${esc(w)}</li>`).join("")}</ul>` : ""}<p class="bi-msg">Nothing was approved. Organization records are in the private workspace; review them under Organization.</p></div>`
+      : `<div class="bi-plan" role="alert"><h4>Not written</h4><div class="bi-err" style="white-space:pre-wrap">${esc(result.error)}</div></div>`;
+  }
+  host.innerHTML = html;
+  biUpdateCommitControls();
+}
+
+function biRenderReview() {
+  const host = $("#bi-review");
+  const batch = biState.batch;
+  if (!host) return;
+  if (!batch) { host.innerHTML = ""; return; }
+  const kinds = [...new Set(biCandidates().map(c => c.kind))].sort();
+  const counts = batch.counts || {};
+  const sev = counts.issues_by_severity || {};
+  const proxy = window.atlasPrincipal && window.atlasPrincipal.mode === "proxy";
+  host.innerHTML = `
+    <div class="panel bi-panel"><div class="panel-title">3 · Review batch ${esc(batch.batch_id)}</div>
+      <div class="bi-kpis">
+        <div class="bi-kpi"><b>${esc(counts.files ?? 0)}</b>FILES</div>
+        <div class="bi-kpi"><b>${biCandidates().length}</b>RECORDS</div>
+        <div class="bi-kpi"><b>${biReadyIds().length}</b>READY TO IMPORT</div>
+        <div class="bi-kpi"><b>${esc(sev.error || 0)}</b>ERRORS</div>
+        <div class="bi-kpi"><b>${esc(sev.warning || 0)}</b>WARNINGS</div>
+      </div>
+      <p class="bi-msg">${esc(batch.status)} · ${esc(batch.classification)} · ${batch.use_llm ? "local LLM used" : "deterministic only"} · prepared by ${esc(batch.prepared_by)} · ${esc(batch.folder)}</p>
+      <p class="bi-msg">${esc(batch.notice || "")}</p>
+    </div>
+    ${biRenderAttention(batch)}
+    ${biRenderFiles(batch)}
+    ${biRenderContracts(batch)}
+    <div class="panel bi-panel"><div class="panel-title">Records</div>
+      <div class="toolbar">
+        <label class="bi-field" for="bi-f-contract">Contract<select id="bi-f-contract" data-bi-filter="contract"><option value="">All contracts</option>${kinds.map(k => `<option value="${esc(k)}" ${biState.filter.contract === k ? "selected" : ""}>${esc(k)}</option>`).join("")}</select></label>
+        <label class="bi-field" for="bi-f-status">Status<select id="bi-f-status" data-bi-filter="status"><option value="">All statuses</option>${BI_STATUSES.map(s => `<option value="${s}" ${biState.filter.status === s ? "selected" : ""}>${s.replace("_", " ")}</option>`).join("")}</select></label>
+        <label class="bi-field" for="bi-f-method">Method<select id="bi-f-method" data-bi-filter="method"><option value="">Any method</option><option value="deterministic" ${biState.filter.method === "deterministic" ? "selected" : ""}>deterministic</option><option value="llm" ${biState.filter.method === "llm" ? "selected" : ""}>llm</option></select></label>
+        <label class="bi-field" for="bi-f-q">Search<input id="bi-f-q" data-bi-filter="q" type="search" value="${esc(biState.filter.q)}" placeholder="name, id or file"></label>
+      </div>
+      <div id="bi-records"></div>
+    </div>
+    <div class="panel bi-panel" id="bi-commit"><div class="panel-title">4 · Commit through the import gate</div>
+      <p class="bi-msg">Only valid organization-context records can be written. Nothing is approved; evidence stays pending in research review. Proposed-contract records are read-only.</p>
+      <div class="rv-actions" style="flex-wrap:wrap">
+        <strong class="mono" id="bi-selected-count">0 SELECTED</strong>
+        <button class="btn ghost" type="button" id="bi-select-ready">SELECT ALL READY</button>
+        <button class="btn ghost" type="button" id="bi-select-clear">CLEAR</button>
+        <label class="bi-field" for="bi-commit-actor" style="min-width:200px">Reviewer name<input id="bi-commit-actor" maxlength="160" autocomplete="name" ${proxy ? "readonly" : ""} value="${esc(biActor())}" aria-label="Reviewer name recorded with the import"></label>
+        <button class="btn ghost" type="button" id="bi-plan-btn">PREVIEW PLAN</button>
+        <button class="btn primary" type="button" id="bi-write" disabled>WRITE 0 RECORDS</button>
+      </div>
+      <div class="bi-msg" id="bi-commit-status" role="status" aria-live="polite"></div>
+      <div id="bi-plan-out"></div>
+    </div>`;
+  biRenderRecords();
+  biRenderCommit();
+}
+
+/* ── loading, running and polling ── */
+async function biLoadBatch(batchId) {
+  const msg = $("#bi-start-msg");
+  try {
+    const resp = await fetch("/api/bulk-ingest/batch?id=" + encodeURIComponent(batchId));
+    const payload = await resp.json();
+    if (!resp.ok) throw new Error(payload.error || "The batch could not be loaded.");
+    biState.batch = payload;
+    biState.committable = biCommittableIds(payload);
+    biState.mode = "list"; biState.selected = new Set(); biState.page = 0;
+    biState.plan = null; biState.planKey = ""; biState.armed = null; biState.result = null;
+    biRenderReview();
+  } catch (e) {
+    if (msg) { msg.textContent = e.message; msg.className = "bi-msg err"; }
+  }
+}
+
+function biSyncLlmOption() {
+  const box = $("#bi-llm"), note = $("#bi-llm-note");
+  if (!box) return;
+  const reachable = typeof OMLX !== "undefined" && !!OMLX.reachable;
+  box.disabled = !reachable;
+  if (!reachable) box.checked = false;
+  if (note) note.textContent = reachable ? "(local model reachable)" : "(local model offline: deterministic only)";
+}
+
+async function biLoadFolders() {
+  const select = $("#bi-folder"), recent = $("#bi-recent"), roots = $("#bi-roots");
+  try {
+    const resp = await fetch("/api/bulk-ingest/folders");
+    const payload = await resp.json();
+    if (!resp.ok) throw new Error(payload.error || "Folders could not be listed.");
+    biState.folders = payload;
+    select.innerHTML = (payload.folders || []).length
+      ? payload.folders.map(f => `<option value="${esc(f.path)}">${esc(f.label)} · ${esc(f.files)} file${f.files === 1 ? "" : "s"}</option>`).join("")
+      : '<option value="">No ingestable folder under the allowed roots</option>';
+    recent.innerHTML = '<option value="">—</option>' + (payload.batches || []).map(b =>
+      `<option value="${esc(b.batch_id)}">${esc(b.batch_id)} · ${esc(b.status)} · ${esc(b.generated_at || "")}</option>`).join("");
+    roots.textContent = "Allowed roots: " + (payload.roots || []).map(r => r.path + (r.exists ? "" : " (missing)")).join(" · ");
+  } catch (e) {
+    select.innerHTML = '<option value="">Unavailable</option>';
+    roots.textContent = e.message; roots.className = "bi-msg err";
+  }
+}
+
+function biShowProgress(job) {
+  const panel = $("#bi-progress"), text = $("#bi-progress-text"), bar = $("#bi-progress-bar");
+  panel.hidden = false;
+  const p = job.progress || {};
+  const pct = p.total ? Math.round(100 * (p.done || 0) / p.total) : 0;
+  text.textContent = job.status === "running"
+    ? `${(p.stage || job.state || "queued").toUpperCase()}${p.total ? ` · ${p.done || 0}/${p.total}` : ""}${p.file ? " · " + p.file : ""}${job.cancel_requested ? " · cancelling…" : ""}`
+    : "";
+  bar.setAttribute("aria-valuenow", String(pct));
+  bar.querySelector("i").style.width = pct + "%";
+  $("#bi-cancel").disabled = job.status !== "running" || !!job.cancel_requested;
+}
+
+function biPoll(jobId) {
+  clearInterval(biState.timer);
+  biState.timer = setInterval(async () => {
+    let job;
+    try { job = await (await fetch("/api/jobs/" + jobId)).json(); } catch { return; }
+    biShowProgress(job);
+    if (job.status === "running") return;
+    clearInterval(biState.timer); biState.timer = null; biState.jobId = null;
+    $("#bi-run").disabled = false;
+    const text = $("#bi-progress-text"), result = job.result || {};
+    $("#bi-progress").hidden = true;
+    const msg = $("#bi-start-msg");
+    if (job.state === "completed" && result.status === "cancelled") {
+      msg.textContent = "Cancelled. Nothing was staged."; msg.className = "bi-msg warn";
+    } else if (job.state === "completed" && result.batch_id) {
+      msg.textContent = `Staged ${result.batch_id} (${result.status}). Nothing has been imported.`; msg.className = "bi-msg ok";
+      await biLoadFolders();
+      await biLoadBatch(result.batch_id);
+    } else {
+      msg.textContent = "Bulk import failed: " + (job.error || "unknown error"); msg.className = "bi-msg err";
+    }
+    if (text) text.textContent = "";
+  }, 1000);
+}
+
+async function biStart() {
+  const msg = $("#bi-start-msg");
+  const folder = $("#bi-folder").value;
+  const actor = biActor();
+  if (!folder) { msg.textContent = "Choose a folder first."; msg.className = "bi-msg err"; return; }
+  if (!actor) { msg.textContent = "Enter your name; it is recorded as the operator who prepared the batch."; msg.className = "bi-msg err"; return; }
+  try { localStorage.setItem("atlas-actor", JSON.stringify(actor)); } catch { /* preference only */ }
+  $("#bi-run").disabled = true;
+  try {
+    const payload = await biPost("/api/run", {
+      phase: "bulk_ingest", folder, actor,
+      use_llm: !$("#bi-llm").disabled && $("#bi-llm").checked,
+      classification: $("#bi-synthetic").checked ? "synthetic" : "organization",
+    });
+    biState.jobId = payload.job_id;
+    msg.textContent = ""; msg.className = "bi-msg";
+    biShowProgress({ status: "running", progress: { stage: "queued" } });
+    biPoll(payload.job_id);
+  } catch (e) {
+    $("#bi-run").disabled = false;
+    msg.textContent = e.message; msg.className = "bi-msg err";
+  }
+}
+
+async function biCancel() {
+  if (!biState.jobId) return;
+  $("#bi-cancel").disabled = true;
+  try { await biPost("/api/jobs/cancel", { job_id: biState.jobId, actor: biActor() || "local operator" }); }
+  catch (e) { const msg = $("#bi-start-msg"); msg.textContent = e.message; msg.className = "bi-msg err"; }
+}
+
+function biBind() {
+  const actorField = $("#bi-actor");
+  let saved = "";
+  try { saved = JSON.parse(localStorage.getItem("atlas-actor")) || ""; } catch { saved = ""; }
+  const principal = window.atlasPrincipal;
+  if (principal && principal.mode === "proxy") { actorField.value = principal.subject; actorField.readOnly = true; }
+  else if (!actorField.value) actorField.value = saved;
+  $("#bi-run").addEventListener("click", biStart);
+  $("#bi-cancel").addEventListener("click", biCancel);
+  $("#bi-recent").addEventListener("change", e => { if (e.target.value) biLoadBatch(e.target.value); });
+  const review = $("#bi-review");
+  review.addEventListener("change", e => {
+    const t = e.target;
+    if (t.dataset.biSelect) biToggle(t.dataset.biSelect, t.checked);
+    else if (t.dataset.biContract) biSelectContract(t.dataset.biContract, t.checked);
+    else if (t.dataset.biFilter && t.dataset.biFilter !== "q") { biState.filter[t.dataset.biFilter] = t.value; biState.page = 0; biRenderRecords(); }
+  });
+  review.addEventListener("input", e => {
+    const t = e.target;
+    if (t.dataset.biFilter === "q") { biState.filter.q = t.value.trim(); biState.page = 0; biRenderRecords(); }
+    if (t.id === "bi-commit-actor") { actorField.value = t.value; biUpdateCommitControls(); }
+  });
+  review.addEventListener("click", e => {
+    const t = e.target.closest("button");
+    if (!t) return;
+    if (t.id === "bi-select-ready") biSelectAllReady();
+    else if (t.id === "bi-select-clear") biClearSelection();
+    else if (t.id === "bi-plan-btn") biPreviewPlan();
+    else if (t.id === "bi-write") biSubmit();
+    else if (t.dataset.biPage) { biState.page += Number(t.dataset.biPage); biRenderRecords(); }
+  });
+  actorField.addEventListener("input", () => {
+    const mirror = $("#bi-commit-actor");
+    if (mirror) mirror.value = actorField.value;
+    biUpdateCommitControls();
+  });
+}
+
+let biBound = false;
+function renderBulkImport() {
+  if (!biBound) { biBind(); biBound = true; }
+  biSyncLlmOption();
+  biLoadFolders();
+}
+/* ═══ END BULK IMPORT ═══ */
 </script>
 <script src="/experience.js"></script>
 </body>

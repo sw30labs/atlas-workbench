@@ -164,11 +164,11 @@ def load_yaml_settings(path: Path | None = None) -> dict[str, Any]:
         raise ValueError(f"Invalid YAML in {path}: {e}") from e
     if not isinstance(data, dict):
         raise ValueError(f"{path}: top level must be a mapping, got {type(data).__name__}")
-    unknown_top = set(data) - {"provider", "omlx", "dgx", "organization_context"}
+    unknown_top = set(data) - {"provider", "omlx", "dgx", "organization_context", "bulk_ingest"}
     if unknown_top:
         raise ValueError(
             f"{path}: unknown section(s) {sorted(unknown_top)} "
-            f"(supported: 'provider', 'omlx', 'dgx', 'organization_context')"
+            f"(supported: 'provider', 'omlx', 'dgx', 'organization_context', 'bulk_ingest')"
         )
     out: dict[str, Any] = {}
     if "provider" in data:
@@ -182,7 +182,26 @@ def load_yaml_settings(path: Path | None = None) -> dict[str, Any]:
         "enabled": ("context_enabled", bool),
         "db_path": ("context_db_path", str),
     }))
+    out.update(_parse_bulk_ingest_section(path, data))
     return out
+
+
+def _parse_bulk_ingest_section(path: Path, data: dict[str, Any]) -> dict[str, Any]:
+    """YAML ``bulk_ingest: {roots: [dir, ...]}``: folders the dashboard may ingest."""
+    raw = data.get("bulk_ingest") or {}
+    if not isinstance(raw, dict):
+        raise ValueError(f"{path}: 'bulk_ingest' must be a mapping")
+    unknown = set(raw) - {"roots"}
+    if unknown:
+        raise ValueError(f"{path}: unknown bulk_ingest key(s) {sorted(unknown)} (supported: ['roots'])")
+    if "roots" not in raw:
+        return {}
+    roots = raw["roots"]
+    if roots is None:
+        roots = []
+    if not isinstance(roots, list) or not all(isinstance(r, str) and r.strip() for r in roots):
+        raise ValueError(f"{path}: bulk_ingest.roots must be a list of directory paths")
+    return {"bulk_ingest_roots": [Path(r.strip()) for r in roots]}
 
 
 class Settings(BaseModel):
@@ -190,6 +209,13 @@ class Settings(BaseModel):
 
     context_enabled: bool = Field(default=False, description="Explicit opt-in to the private organization workspace")
     context_db_path: Path = Field(default=Path("organization-context.db"))
+    # Folders the dashboard's Bulk import may read. None means the defaults:
+    # <workspace>/inbox and the checkout's examples/ directory. Relative
+    # entries resolve under the project root. An empty list disables the screen.
+    bulk_ingest_roots: list[Path] | None = Field(
+        default=None,
+        description="Allowed parent folders for dashboard bulk ingest (ATLAS_BULK_INGEST_ROOTS)",
+    )
 
     # ── LLM (OMLX) ──
     omlx_base_url: str = Field(
@@ -405,6 +431,14 @@ class Settings(BaseModel):
 
         if "context_enabled" not in explicit and (v := os.environ.get("ATLAS_CONTEXT_ENABLED")):
             object.__setattr__(self, "context_enabled", _coerce_bool(v))
+
+        if "bulk_ingest_roots" not in explicit and (v := os.environ.get("ATLAS_BULK_INGEST_ROOTS")) is not None:
+            object.__setattr__(self, "bulk_ingest_roots", [Path(p) for p in v.split(os.pathsep) if p.strip()])
+        if self.bulk_ingest_roots is None:
+            object.__setattr__(self, "bulk_ingest_roots", [self.workspace / "inbox", root / "examples"])
+        object.__setattr__(self, "bulk_ingest_roots", [
+            _abs_under_root(Path(p).expanduser(), root) for p in self.bulk_ingest_roots
+        ])
 
         # driftlab_data_dir: expanduser + absolute (not forced under project)
         dd = Path(self.driftlab_data_dir).expanduser()

@@ -101,6 +101,7 @@ def test_primary_navigation_expresses_the_operator_loop(source):
     assert views == [
         "overview",
         "organization",
+        "bulk",  # onboarding: stage a whole folder instead of one form per record
         "evidence",
         "review",
         "pipeline",
