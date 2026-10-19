@@ -1,0 +1,60 @@
+﻿### SYNTHETIC — fictional ACME Bank demo data. Not real ACME or any bank's data. Third-party register extract as at 30.09.2026 ###
+Supplier ID;Supplier Name;Contracting Entity;Service Provided;Category;Materiality;DORA ICT TPP;Supports IBS;Exit Plan;Concentration Flag;Substitutability;Relationship Owner;Last DD Review;Notes
+TP-0001;Amazon Web Services EMEA SARL;ACME Bank plc;Public cloud hosting (IaaS/PaaS);Cloud;Material outsourcing;Y;Mobile App | Customer Identity & Access (CIAM) | Internet Banking | FDTM | Merchant Acquiring;Documented - not tested;Y;Low;Head of Cloud Platforms;08.12.2024;Hosts 5 Tier 1 services in one primary region - see SA-2026 V-06
+TP-0002;Microsoft Ireland Operations Ltd;ACME Bank plc;Public cloud hosting (IaaS/PaaS);Cloud;Material outsourcing;Y;CTLE | Regulatory Reporting Hub | Wealth Advisory Portal | KYC Onboarding | RPH;Documented - tested 2025-11;Y;Low;Head of Cloud Platforms;08.07.2025;
+TP-0003;Google Cloud EMEA Ltd;ACME Bank plc;Analytics & ML platform;Cloud;Important;Y;FDTM | Regulatory Reporting Hub;Documented - not tested;N;Medium;Head of Data Platforms;18.04.2026;
+TP-0004;Microsoft 365;ACME Bank plc;Collaboration & email (SaaS);SaaS;Important;Y;Contact Centre & Branch Servicing;Documented - not tested;Y;Low;Head of Workplace Technology;25.06.2025;
+TP-0005;Visa Europe Ltd;ACME Bank plc;Card scheme;Payment scheme;Critical (non-outsourcing);N;Card Authorisation Platform | Credit Card Servicing | Acquiring;N/A - scheme membership;Y;Low;Head of Cards Partnerships;10.11.2024;
+TP-0006;Mastercard Europe SA;ACME Bank plc;Card scheme;Payment scheme;Critical (non-outsourcing);N;CAP | Credit Card Servicing | Merchant Acquiring;N/A - scheme membership;Y;Low;Head of Cards Partnerships;27.11.2025;
+TP-0007;S.W.I.F.T. SC;ACME Bank plc;Financial messaging network;FMI;Critical (non-outsourcing);N;Cross-Border Payments (SWIFT) | Trade Finance Documentary | Securities Custody & Settlement | CHAPS & High-Value Payments;N/A - FMI;Y;Low;Head of Wholesale Payments;15.12.2024;
+TP-0008;Bank of England;ACME Bank plc;RTGS settlement / CHAPS;FMI;Critical (non-outsourcing);N;CHAPS & High-Value Payments | CTLE;N/A - FMI;Y;Low;Head of Wholesale Payments;15.11.2024;
+TP-0009;Pay.UK Ltd;ACME Bank plc;Payment scheme operator (FPS, Bacs);FMI;Critical (non-outsourcing);N;Faster Payments Gateway | Bacs;N/A - FMI;Y;Low;Head of Payments Operations;11.11.2024;
+TP-0010;Vocalink Ltd;ACME Bank plc;Payment scheme central infrastructure;FMI;Critical (non-outsourcing);N;Faster Payments Gateway | Bacs;N/A - FMI;Y;Low;Head of Payments Operations;22.10.2025;
+TP-0011;EBA CLEARING;ACME Bank Europe DAC;Euro clearing (STEP2 / RT1);FMI;Critical (non-outsourcing);N;SEPA Payments;N/A - FMI;Y;Low;Head of Payments, ACME Bank Europe;14.02.2025;
+TP-0012;Fiserv UK Ltd;ACME Bank plc;Merchant processing;Processing;Material outsourcing;Y;Merchant Acquiring;Documented - not tested;Y;Low;Head of Merchant Services;08.09.2025;
+TP-0013;FIS;ACME Bank plc;Payroll processing software;Software;Important;Y;Corporate Payroll Bureau;Documented - tested 2025-06;N;Medium;Head of Corporate Cash Management;18.05.2026;
+TP-0014;Temenos UK Ltd;ACME Bank plc;Core banking software licence & support;Software;Material outsourcing;Y;Core Deposits Ledger | SEPA Payments;Documented - not tested;Y;Low;Head of Core Banking Platforms;31.05.2026;
+TP-0015;Oracle Corporation UK;ACME Bank plc;Database licences & support;Software;Important;Y;Core Deposits Ledger | Regulatory Reporting Hub | RPH;Documented - not tested;Y;Low;Head of Infrastructure;24.10.2024;
+TP-0016;IBM United Kingdom Ltd;ACME Bank plc;Mainframe & middleware support;Infrastructure;Material outsourcing;Y;Core Deposits Ledger | RPH | Direct Debits & Bacs Processing;Documented - tested 2024-09;Y;Low;Head of Infrastructure;25.01.2026;
+TP-0017;Kyndryl UK;ACME Bank plc;Managed infrastructure services;Infrastructure;Material outsourcing;Y;CDL | Bacs;Documented - not tested;N;Medium;Head of Infrastructure;13.04.2026;
+TP-0018;Equinix (UK) Ltd;ACME Bank plc;Colocation data centre;Infrastructure;Material outsourcing;Y;Core Deposits Ledger | CAP | Retail Payments Hub | CHAPS & High-Value Payments;Documented - not tested;Y;Low;Head of Data Centre Services;21.01.2025;LON-2 colocation
+TP-0019;Cloudflare Ltd;ACME Bank plc;CDN, WAF & DDoS mitigation;Security;Important;Y;Online Banking | Mobile Banking App;Documented - not tested;N;Medium;CISO Office;26.06.2025;
+TP-0020;Akamai;ACME Bank plc;CDN (secondary);Security;Standard;Y;Internet Banking;Documented - tested 2025-03;N;High;CISO Office;01.08.2026;
+TP-0021;CrowdStrike UK Ltd;ACME Bank plc;Endpoint detection & response;Security;Important;Y;Contact Centre | Client Onboarding & KYC;Documented - not tested;Y;Medium;CISO Office;28.11.2025;
+TP-0022;Zscaler Inc;ACME Bank plc;Secure web gateway / ZTNA;Security;Important;Y;Contact Centre;Documented - not tested;N;Medium;CISO Office;27.03.2025;
+TP-0023;Thales;ACME Bank plc;Hardware security modules & support;Security;Important;Y;CAP | ATM & Cash Services | Retail Payments Hub;Documented - not tested;Y;Low;Head of Cards Technology;07.11.2025;Shared HSM cluster (cards + payments)
+TP-0024;Entrust;ACME Bank plc;Card personalisation;Processing;Important;Y;Credit Card Servicing;Documented - tested 2025-10;N;Medium;Head of Cards Operations;24.12.2024;
+TP-0025;Twilio Ireland Ltd;ACME Bank plc;SMS one-time passcode delivery;SaaS;Important;Y;CIAM;Documented - not tested;N;High;Head of Digital Identity;04.11.2024;
+TP-0026;salesforce.com EMEA Ltd;ACME Bank plc;CRM (SaaS);SaaS;Important;Y;Contact Centre | Wealth Advisory Portal;Documented - not tested;N;Medium;Head of Customer Operations;24.11.2024;
+TP-0027;ServiceNow UK Ltd;ACME Bank plc;ITSM & GRC (SaaS);SaaS;Standard;Y;;Documented - not tested;N;Medium;Head of Workplace Technology;30.12.2024;
+TP-0028;LSEG Data & Analytics;ACME Bank plc;Market data & screening data;Data;Important;Y;FX eTrading | Collateral Mgmt | Payment Screening | KYC Onboarding;Documented - not tested;Y;Medium;Head of Market Data;06.05.2025;
+TP-0029;Bloomberg L.P.;ACME Bank plc;Market data & terminals;Data;Important;Y;FX eTrading | Collateral Mgmt;Documented - tested 2025-05;N;Medium;Head of Market Data;25.03.2025;
+TP-0030;Dow Jones Risk & Compliance;ACME Bank plc;Sanctions & PEP list data;Data;Important;Y;Payment Screening;Documented - tested 2025-09;N;High;Head of Financial Crime Operations;02.12.2025;
+TP-0031;LexisNexis Risk Solutions;ACME Bank plc;Identity verification data;Data;Standard;Y;KYC Onboarding;Documented - not tested;N;High;Head of Client Lifecycle Operations;05.09.2025;
+TP-0032;Experian Ltd;ACME Bank plc;Credit reference agency;Data;Important;Y;Mortgage Origination Platform | Commercial Lending Platform;Documented - not tested;N;Medium;Head of Credit Decisioning;27.06.2026;
+TP-0033;Equifax Ltd;ACME Bank plc;Credit reference agency;Data;Standard;Y;Mortgage Origination;Documented - not tested;N;High;Head of Credit Decisioning;19.05.2026;
+TP-0034;TransUnion International UK;ACME Bank plc;Credit reference agency;Data;Standard;Y;Mortgage Origination;Documented - not tested;N;High;Head of Credit Decisioning;09.05.2026;
+TP-0035;Fenergo Ltd;ACME Bank plc;Client lifecycle management software;Software;Important;Y;KYC Onboarding;Documented - not tested;N;Medium;Head of Client Lifecycle Operations;01.06.2025;
+TP-0036;NICE Actimize;ACME Bank plc;Transaction monitoring & screening software;Software;Important;Y;FDTM | Payment Screening;Documented - not tested;Y;Low;Head of Financial Crime Operations;20.05.2026;
+TP-0037;Featurespace Ltd;ACME Bank plc;Real-time fraud scoring;Software;Important;Y;Fraud Detection & Transaction Monitoring;Documented - not tested;N;Medium;Head of Fraud Risk Operations;27.03.2026;
+TP-0038;Murex SAS;ACME Bank plc;Trading & risk platform software;Software;Material outsourcing;Y;FX eTrading | Collateral Mgmt;Documented - not tested;Y;Low;Head of Markets Technology;31.03.2026;
+TP-0039;Finastra;ACME Bank plc;Trade finance & lending software;Software;Important;Y;Trade Finance Documentary | Commercial Lending Platform;Documented - not tested;N;Medium;Head of Trade Operations;27.02.2025;
+TP-0040;Broadridge;ACME Bank plc;Securities processing;Processing;Important;Y;Securities Custody & Settlement;Documented - not tested;N;Medium;Head of Securities Services;01.02.2025;
+TP-0041;Euroclear Bank;ACME Bank plc;Securities settlement (CSD/ICSD);FMI;Critical (non-outsourcing);N;Securities Custody & Settlement | Collateral Management;N/A - FMI;Y;Low;Head of Securities Services;06.02.2026;
+TP-0042;CLS Bank International;ACME Bank plc;FX settlement;FMI;Critical (non-outsourcing);N;FX eTrading | CTLE;N/A - FMI;Y;Low;Head of Markets Operations;24.09.2025;
+TP-0043;LCH Ltd;ACME Bank plc;Central counterparty clearing;FMI;Critical (non-outsourcing);N;Collateral Mgmt;N/A - FMI;Y;Low;Head of Markets Operations;26.03.2026;
+TP-0044;NCR Atleos;ACME Bank plc;ATM hardware & managed services;Infrastructure;Material outsourcing;Y;ATM & Cash Services;Documented - tested 2025-04;N;Medium;Head of Cash Operations;25.04.2025;
+TP-0045;Diebold Nixdorf;ACME Bank plc;ATM hardware maintenance (secondary);Infrastructure;Standard;Y;ATM Estate;Documented - not tested;N;High;Head of Cash Operations;21.05.2026;
+TP-0046;Loomis UK;ACME Bank plc;Cash-in-transit;Logistics;Important;N;ATM & Cash Services;Documented - not tested;N;Medium;Head of Cash Operations;29.11.2025;
+TP-0047;Iron Mountain UK;ACME Bank plc;Physical records storage;Logistics;Standard;N;Mortgage Origination Platform;Documented - not tested;N;High;Head of Records Management;15.12.2025;
+TP-0048;DocuSign International (EMEA);ACME Bank plc;E-signature (SaaS);SaaS;Standard;Y;Mortgage Origination Platform | Commercial Lending Platform;Documented - not tested;N;High;Head of Home Finance Operations;02.10.2025;
+TP-0049;Tata Consultancy Services Ltd;ACME Bank plc;Application development & support;Professional services;Material outsourcing;Y;Retail Payments Hub | Direct Debits & Bacs Processing | FPS Gateway;Documented - not tested;Y;Medium;Head of Payments Technology;20.05.2025;
+TP-0050;Infosys Ltd;ACME Bank plc;Application support;Professional services;Important;Y;CLP | KYC Onboarding;Documented - not tested;N;Medium;Head of Lending Technology;02.12.2024;
+TP-0051;Accenture (UK) Ltd;ACME Bank plc;Regulatory reporting managed service;Professional services;Important;Y;Reg Reporting;Documented - not tested;N;Medium;Head of Regulatory Reporting;15.06.2026;
+TP-0052;British Telecommunications plc;ACME Bank plc;WAN & branch connectivity;Telecoms;Material outsourcing;Y;Contact Centre | ATM Estate | RPH;Documented - not tested;Y;Low;Head of Network Services;06.10.2025;
+TP-0053;Vodafone Ltd;ACME Bank plc;Mobile & contact-centre telephony;Telecoms;Important;Y;Contact Centre & Branch Servicing;Documented - not tested;N;Medium;Head of Network Services;26.01.2025;
+TP-0054;Quillfern Print Logistics Ltd;ACME Bank plc;Statement print & mail;Logistics;Material outsourcing;N;Contact Centre & Branch Servicing | Cards Servicing | Mortgage Origination Platform;Not documented;Y;Medium;Head of Customer Operations;11.10.2025;"Sole supplier; no exit plan - IA-2026-031"
+TP-0055;Tessellate Data Labs Ltd;ACME Bank plc;Device intelligence & identity verification (SaaS);SaaS;Important;Y;CIAM | Client Onboarding & KYC;Documented - not tested;N;Medium;Head of Digital Identity;25.06.2026;Sub-processor confirmation requested Sep-26 (see email thread)
+TP-0056;Harbourline Cash Services;ACME Bank plc;Cash processing (HK);Logistics;Standard;N;Trade Finance Docs;Not documented;N;High;Head of Trade Operations;06.07.2025;
+TP-0057;Corvane Contact Solutions;ACME Bank plc;Contact-centre overflow (outsourced);Professional services;Material outsourcing;N;Contact Centre;Documented - not tested;N;Medium;Head of Customer Operations;26.01.2025;Overflow capacity assumption SA-2026 A-03
+TP-0058;Pellucid Archive Ltd;ACME Bank plc;Electronic records archive (SaaS);SaaS;Standard;Y;Regulatory Reporting Hub;Documented - not tested;N;High;Head of Records Management;28.02.2026;

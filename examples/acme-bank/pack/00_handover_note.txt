@@ -1,0 +1,22 @@
+SYNTHETIC — fictional ACME Bank demo data. Not real ACME or any bank's data.
+
+ACME Bank - NFR / Operational Resilience - day-one information pack
+From: Head of Operational Resilience (2LoD NFR)
+Date: 30/09/2026
+
+Hi both - as promised, this is what we pulled off the shared drive and GRC for the onboarding.
+Folders roughly follow our team structure:
+
+  01 - op res: IBS register (GRC export), the Retail Payments BIA, third-party register, tolerances, self-assessment
+  02 - scenarios: register, last workshop minutes, NFR taxonomy, the June BRC deck
+  03 - loss data: GRC loss extract (all entities), near-miss log, two recent PIRs
+  04 - external events our analysts keep an eye on
+  05 - controls library, the cyber tabletop report, the IA report on exit planning
+  06 - last ICAAP chapter and the annual op risk report
+  07 - odds and ends that were in the folder
+
+Caveats: the loss extract mixes date formats depending on the source system (the US legacy loss DB
+exports month-first). Scenario numbers in the BRC deck are more recent than the register in places.
+I think there are two versions of the payments BIA in there.
+
+Shout if anything is missing.
