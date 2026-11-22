@@ -2,6 +2,8 @@
 
 **Operational-risk scenarios you can actually run, review, and defend.**
 
+**[Browse the walkthrough →](https://sw30labs.github.io/atlas-workbench/)**
+
 Atlas Workbench turns public research into structured, testable
 operational-risk scenarios: what could fail, how it would propagate, who owns
 the response, and what evidence supports the claim. A scenario is a hypothesis,
