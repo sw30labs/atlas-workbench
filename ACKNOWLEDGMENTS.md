@@ -57,7 +57,7 @@ The project’s public-source research may begin with primary publications from:
 - [UK Financial Conduct Authority](https://www.fca.org.uk/news)
 - [Prudential Regulation Authority](https://www.bankofengland.co.uk/prudential-regulation)
 - [European Banking Authority](https://www.eba.europa.eu/publications-and-media/press-releases)
-- [European Central Bank](https://www.ecb.europa.eu/press/html/index.en.html)
+- [European Central Bank](https://www.ecb.europa.eu/press/pubbydate/html/index.en.html)
 - [Cybersecurity and Infrastructure Security Agency](https://www.cisa.gov/news-events/cybersecurity-advisories)
 - [National Institute of Standards and Technology](https://www.nist.gov/news-events/news)
 

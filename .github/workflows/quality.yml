@@ -1,0 +1,56 @@
+name: Quality
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install
+        run: python -m pip install -e '.[dev]'
+      - name: Compile
+        run: python -m compileall -q workbench_atlas scripts
+      - name: Ruff
+        run: python -m ruff check --select F821,F811,F402,E9,F841 workbench_atlas scripts tests
+      - name: Pytest
+        run: python -m pytest -q
+      - name: Offline verification
+        run: python scripts/verify_all.py
+      - name: Scout registry
+        run: python scripts/scout_sources.py validate
+      - name: Public release gate
+        run: python scripts/public_release_gate.py --history
+
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build the sdist and wheel
+        run: |
+          python -m pip install build
+          python -m build
+      - name: Confirm py.typed is in the wheel
+        run: |
+          python -c "import pathlib, zipfile
+          wheels = list(pathlib.Path('dist').glob('*.whl'))
+          assert wheels, 'no wheel was built'
+          names = zipfile.ZipFile(wheels[0]).namelist()
+          assert any(name.endswith('py.typed') for name in names), names"

@@ -3,16 +3,18 @@
 Keep the repository private until every item below is complete. Changing
 visibility is an administrative release action, not a substitute for review.
 
-Items checked below were verified on 2026-08-29 against a separately created,
-one-commit clean export. Public package metadata names “Atlas Workbench
+The checks below, except the two visibility steps, were re-verified on
+2026-11-21 in this worktree. Public package metadata names “Atlas Workbench
 contributors.” Named authorship is deliberately retained only where normal
-scholarly attribution requires it (the authored white paper and citations);
-personal contact data is not published. External URL availability, tagging,
-repository settings, and visibility remain release-time actions.
+scholarly attribution requires it (the authored white paper and citations).
+Git commits and the annotated `0.2.0` tag keep the maintainer identity that
+created them; publishing the repository publishes that identity. Repository
+visibility and private vulnerability reporting remain the two release-time
+actions at the end of this list.
 
 - [x] Run `python -m pytest`, `python scripts/verify_all.py`,
       `python scripts/scout_sources.py validate`, and
-      `python scripts/public_release_gate.py --history` from a clean clone.
+      `python scripts/public_release_gate.py --history`.
 - [x] Run a dedicated secret scanner against the worktree and complete Git
       history.
 - [x] Inspect every tracked filename and blob; confirm that no runtime
@@ -22,8 +24,10 @@ repository settings, and visibility remain release-time actions.
       `REVIEWED_BINARY_SHA256` in `scripts/public_release_gate.py`.
 - [x] Confirm the only bundled records are the conspicuously fictional,
       CC0-1.0 fixtures listed in `examples/fixture_manifest.json`.
-- [ ] Recheck the employer-independence disclosure, ORX exclusion and
-      acknowledgment, Taleb no-persona statement, and all external links.
+- [x] Recheck the employer-independence disclosure, ORX exclusion and
+      acknowledgment, Taleb no-persona statement, and the external links in
+      those statements and the project metadata. On 2026-11-21 the ECB press
+      link was updated to the page it now redirects to.
 - [x] Verify that all non-synthetic records, if any are introduced later, have
       record-level public-source provenance and completed human review; confirm
       no pending, rejected, or `needs_update` record entered a released output.
@@ -37,24 +41,21 @@ repository settings, and visibility remain release-time actions.
 - [x] Review dependency resolution, source/wheel contents, licenses, and
       third-party notices.
 - [x] Decide whether the release metadata should name an individual author.
-      Keep personal email addresses out of the public history unless one is
-      intentionally public.
-- [ ] Create the release tag first, then add an accurate `date-released` to
-      `CITATION.cff`.
-- [ ] Leave the canonical URLs in `pyproject.toml` and `CITATION.cff` on the
-      current GitHub project until the real GitLab project path is known.
-      Do not invent that path.
+      Package files name “Atlas Workbench contributors” and contain no
+      personal email address. Commit and tag metadata keep the existing
+      maintainer identity, as described above.
+- [x] The `0.2.0` tag was created on 2026-11-21. `CITATION.cff` records
+      version `0.2.0` and `date-released: 2026-11-21`.
+- [x] Confirm the canonical URLs in `pyproject.toml` and `CITATION.cff`
+      are `https://github.com/sw30labs/atlas-workbench`. That repository is
+      the project. Do not point them at another forge.
 - [ ] Coordinate the visibility change with an administrator. Immediately
-      enable the forge’s confidential vulnerability report. On GitLab that is
-      a confidential issue to the maintainers. Verify that a reporter can use
-      it, and test the documented security channel.
+      enable GitHub private vulnerability reporting. Verify that a reporter
+      can use it, and test the documented security channel.
 - [ ] Confirm the repository is public only after all post-change security
       settings have been verified.
 
-The private reporting channel follows the forge that hosts the public
-project. `SECURITY.md` must match that forge before visibility changes.
-If the project stays on GitHub, private vulnerability reporting is documented
-at
+The private reporting channel is GitHub private vulnerability reporting.
+`SECURITY.md` must match that before visibility changes. The setting is
+documented at
 <https://docs.github.com/en/code-security/how-tos/report-and-fix-vulnerabilities/configure-vulnerability-reporting/configure-for-a-repository>.
-GitLab uses confidential issues. Canonical URLs stay on the current GitHub
-project until the real GitLab path is known.

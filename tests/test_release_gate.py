@@ -58,6 +58,36 @@ def test_real_home_paths_are_still_caught(text, label):
     assert label in _labels(text)
 
 
+def test_documented_placeholder_home_is_not_a_leak():
+    placeholder = "/" + "Users" + "/" + "you" + "/.atlas"
+    assert "private macOS home path" not in _labels(
+        f"data directory  {placeholder}"
+    )
+    assert "private macOS home path" in _labels(f"ran in {USERS}someone/REPOS/x")
+
+
+def test_moved_disclosure_paths_remain_exempt():
+    term = _joined("O", "RX")
+    author = _joined("Tal", "eb")
+    assert not gate._scan_text("PUBLIC_RELEASE_CHECKLIST.md", f"no {term} data")
+    assert not gate._scan_text(
+        "contingency_atlas/web/about.yaml", f"no {term}; {author} influenced"
+    )
+    assert not gate._scan_text(
+        "docs/essays/checklist-empty-cells/article.md", f"see {term}"
+    )
+    assert gate._scan_text("docs/not-a-disclosure.md", term)
+
+
+def test_historical_digest_is_accepted_at_the_current_path(monkeypatch):
+    data = b"previous-reviewed-frame"
+    digest = hashlib.sha256(data).hexdigest()
+    monkeypatch.setattr(gate, "_HISTORICAL_REVIEWED_DIGESTS", frozenset({digest}))
+    assert gate.historical_binary_failure(
+        "docs/deck/frames/01-briefing.png", data
+    ) is None
+
+
 def test_a_path_leak_beside_a_url_is_still_caught():
     """Blanking URLs must not blank the rest of the line."""
     text = f"see https://x.example.org/news{HOME}1 and also {HOME}deploy/secret"

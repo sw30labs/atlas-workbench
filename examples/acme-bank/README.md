@@ -87,8 +87,7 @@ zip entry timestamps are fixed to 2026-09-30 and PDFs are built with ReportLab's
 produces byte-identical files. It needs the legacy repository (read-only) for the public events; the committed outputs
 are self-contained, so CI never regenerates them. `tests/test_acme_pack.py` checks the pack offline.
 
-Binary files (xlsx, docx, pptx, pdf) are not in `scripts/public_release_gate.py`'s reviewed-binary allowlist; they need
-review and digest registration (or exclusion) before a public release.
+Binary files (xlsx, docx, pptx, pdf), including the deliberate lock file, duplicate, and corrupt workbook, are registered by digest in `scripts/public_release_gate.py`. Replacing one requires a new review and digest.
 
 Provenance class of ACME material: `synthetic`; generator `scripts/build_acme_pack.py` (acme-pack-1); seed 20260930;
 created 2026-09-30; review status: confirmed to allege no real-party event.

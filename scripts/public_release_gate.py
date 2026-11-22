@@ -72,6 +72,7 @@ DISCLOSURE_EXEMPTIONS: dict[str, frozenset[str]] = {
             "workbench_atlas/web/about.yaml",
             "docs/research/essays/checklist-empty-cells/article.md",
             "docs/deck/index.html",
+            "docs/REFERENCE_README.md",
         }
     ),
     "author acknowledgment": frozenset(
@@ -84,6 +85,24 @@ DISCLOSURE_EXEMPTIONS: dict[str, frozenset[str]] = {
             "README.md",
             "workbench_atlas/web/about.yaml",
             "docs/deck/index.html",
+            "docs/REFERENCE_README.md",
+        }
+    ),
+}
+# The same disclosure sentences lived at these paths before the docs shelf
+# and the package rename. The files are gone; history still has the blobs.
+HISTORICAL_DISCLOSURE_PATHS: dict[str, frozenset[str]] = {
+    "external industry resource": frozenset(
+        {
+            "PUBLIC_RELEASE_CHECKLIST.md",
+            "contingency_atlas/web/about.yaml",
+            "docs/essays/checklist-empty-cells/article.md",
+        }
+    ),
+    "author acknowledgment": frozenset(
+        {
+            "PUBLIC_RELEASE_CHECKLIST.md",
+            "contingency_atlas/web/about.yaml",
         }
     ),
 }
@@ -141,13 +160,53 @@ REVIEWED_BINARY_SHA256 = {
     "docs/deck/frames/14b-preparing.png": "c59d93f3c520d658901c2ee255a4960a33009bd0da349a8221a31a6f7c32b934",
     "docs/deck/frames/14c-draft-open.png": "e6b4e307954f6125eaa9928aef97a27c4d4e56ca83d7fdb8df5c4568d38e0fbc",
     "docs/deck/frames/15b-export-preview.png": "393eade804ec15d515635898c178559cf2f24097a3be84ec1b9e593cca5e1728",
+    # Synthetic ACME Bank Office pack, generator acme-pack-1, seed 20260930.
+    # Reviewed 2026-11-21: fictional institution, .example contacts, and the
+    # deliberate traps (lock file, byte-identical duplicate, corrupt workbook,
+    # canteen menu, fictional staff list). No real party is alleged.
+    "examples/acme-bank/pack/01_operational_resilience/BIA_Retail_Payments_v3.1.xlsx": "1726ec3e890d692d196bb757fbd4f290155e69e66ba51e718cbbd1a8a36e99c4",
+    "examples/acme-bank/pack/01_operational_resilience/BIA_Retail_Payments_v3.2.xlsx": "cdb7f2096bf9100732102dbe9c2d492a392c0a6bfac7ec2e818e65dff97676c3",
+    "examples/acme-bank/pack/01_operational_resilience/IBS_register_FY26.xlsx": "5e9f8d196177d20ffce2621960d6eebbc5e699c9efe08be43b814fb2e8605671",
+    "examples/acme-bank/pack/01_operational_resilience/impact_tolerance_statements.docx": "9816dd95d6db6dbb0e06508f8cdf1c1e4e45472b14e4085165e53ac5ea1c32d7",
+    "examples/acme-bank/pack/01_operational_resilience/self_assessment_2026_summary.pdf": "944924c2beed812b3e59d07169c042a61a0c39152e6d8d8e2060b5b3687ebc52",
+    "examples/acme-bank/pack/01_operational_resilience/~$IBS_register_FY26.xlsx": "2ad9f1b4eb68f0f26fc2f921d4ccc42c4be8c653301f0783b678d8c2eb6c991e",
+    "examples/acme-bank/pack/02_scenarios_and_taxonomy/ACME_Scenario_Register_2025.xlsx": "c14ee492df885f304210a3458d682d3cc69454aef8285d0a414ba0f1fe322c72",
+    "examples/acme-bank/pack/02_scenarios_and_taxonomy/NFR_Taxonomy_v4.xlsx": "0d0a266f996a91043bbdab5dd673c7dc48930788fb2e564d3f7dbb1b3e694fde",
+    "examples/acme-bank/pack/02_scenarios_and_taxonomy/board_risk_committee_scenarios_Q2.pptx": "66ad03f3726ade438c8c65c8fc1efedb91eb3aa301ff8bb4610de92ea405f565",
+    "examples/acme-bank/pack/02_scenarios_and_taxonomy/scenario_workshop_minutes_2025-11-12.docx": "62520efcf5e744dbc278b1983e09351116e6a52f9f280f9d3450af25af09d644",
+    "examples/acme-bank/pack/03_internal_loss_data/PIR_2025-INC-0442_card_auth_outage.docx": "b1216e2a0994c2e671968b0d38d46038c47a48ab0d97122cc3429bdc5cbcdfec",
+    "examples/acme-bank/pack/03_internal_loss_data/near_miss_log_2026.xlsx": "423e16c76d789fe726fbb031ea85a05ad4b3fcf385e2c4bab048b4daee3c7209",
+    "examples/acme-bank/pack/04_external_loss_watchlist/external_loss_watchlist_2026Q3.xlsx": "6385dc8bc3c30314ace05ea5cb0d2f66d52fa1c48871d1e19f9f8f0be746a4bc",
+    "examples/acme-bank/pack/05_controls_and_testing/internal_audit_finding_IA-2026-031.pdf": "470ae9fde4a94d61407a06378915a25f6ad762c28852ced930d384c867ebada6",
+    "examples/acme-bank/pack/05_controls_and_testing/key_controls_library.xlsx": "68fa5c1ef3ba84852ae2523236afd5776764a728870a6eedd85a2a6cd626bfa8",
+    "examples/acme-bank/pack/05_controls_and_testing/resilience_exercise_2026_cyber_tabletop.docx": "41e16228f78b6f674996a5a9f831dbfa3c031adbf447fb30f35e856ec2ddc25d",
+    "examples/acme-bank/pack/06_prior_reports/ICAAP_2025_oprisk_scenario_chapter.pdf": "8c5ae66517fd34efc36d3f04ef2ed3d4a5319ca68c84f071a79f351ad2fde2b1",
+    "examples/acme-bank/pack/06_prior_reports/annual_oprisk_report_2025.docx": "80234f831390af7d71f557d284e91f85f09036e23d17aa194336bf026139243f",
+    "examples/acme-bank/pack/07_misc/BIA_Retail_Payments_v3.2 (copy).xlsx": "cdb7f2096bf9100732102dbe9c2d492a392c0a6bfac7ec2e818e65dff97676c3",
+    "examples/acme-bank/pack/07_misc/canteen_menu_october.docx": "77e184a61134ea2af608a16a91818ff64cb73dcc6a17cb56c1c4e1525ff2926b",
+    "examples/acme-bank/pack/07_misc/corrupted_export.xlsx": "dda1310bcd6a3b5c517985ae4aa9acf2748c7b62c3002bbc5bf1412cfcbabd86",
+    "examples/acme-bank/pack/07_misc/team_contact_list.xlsx": "cc072d075cb2b5b7c09c0922f27b145b6bee222f2f928ff787d0bf0e192fbfb3",
 }
 REVIEWED_BINARY_PATHS = frozenset(REVIEWED_BINARY_SHA256)
 # Older commits store these same figure bytes at docs/whitepaper/ and
 # docs/essays/. The 2026-08-29 manuscript digest stays valid after the rebuild.
 # A historical blob is reviewed when its digest matches, even after the move.
 _HISTORICAL_REVIEWED_DIGESTS = frozenset({
+    # Whitepaper PDF before the 2026-11-21 rebuild.
     "dd4f314682630d07cbea8fa2472e0bdb8fc4db8deac668c27ec9fb47e93384f3",
+    # Deck frames before the 2026-11-21 rename. Same fictional demo.
+    "342eee701e8a26d5a715f81b58014d1a04988d333c47f6b3013b1e60529b8c4d",
+    "a60106f6f0c59938d4a7d61990ada207dfb31117c732f43057f15dcdf91b39cb",
+    "290a94a755bfb09ab5445d7f615a740fe10cd4a133d0bf6f333d0e1d55395971",
+    "636a28bf7121113ece5ca2bf1ff8c7b60706e8d1d1a0404bf9819a169284dc05",
+    "82eb7cd36576d4ae2c3ad55b13109af42aee08e6d26d00759029e035adfdf696",
+    "6539ca433a43751f4e04780dbd5a8f4458575ed1926ee6c6202141053918f4d0",
+    "ac2c49bf8f1721fdb93b80a31bfde6fdeb5ece4924cc5ad0c97ded1abd3a09be",
+    "6fae289f2f00096fa92ad25ce1c40487973dee8288fcb9eae54578eec2a3fabe",
+    "54c6b20903dbfd3b7706c55139d5aa1b29f5604e0fb79bc1a8f8b35b9a977daf",
+    "1df09e16937be6214d6d84a3138c2def270e373644de3298a4c78e77f2937fe1",
+    "e209ca49d003cb5b3093d68a66d7a07b8f6d8193b99a38be4020e0f097c9e605",
+    "201935ccc04e8cae088204ea448486e0b87c016208f8c51b903855068ca4ea3d",
 })
 REVIEWED_BINARY_DIGESTS = (
     frozenset(REVIEWED_BINARY_SHA256.values()) | _HISTORICAL_REVIEWED_DIGESTS
@@ -157,6 +216,11 @@ REVIEWED_BINARY_DIGESTS = (
 def historical_binary_failure(path_label: str, data: bytes) -> str | None:
     """Return a finding for an unreviewed binary, or None when the bytes were reviewed."""
     digest = hashlib.sha256(data).hexdigest()
+    # A replaced file keeps its path. The previous bytes stay reviewed when
+    # their digest was recorded, including the rebuilt whitepaper and the
+    # deck frames from before the rename.
+    if digest in _HISTORICAL_REVIEWED_DIGESTS:
+        return None
     if path_label in REVIEWED_BINARY_PATHS:
         if digest != REVIEWED_BINARY_SHA256[path_label]:
             return f"{path_label}: reviewed binary digest mismatch"
@@ -174,6 +238,8 @@ _URL_EXEMPT_RULES = frozenset({
     "private macOS home path",
     "private Linux home path",
 })
+# The old quick start wrote this placeholder. It is not a person's home.
+_PLACEHOLDER_MACOS_HOME = "/" + "Users" + "/" + "you" + "/"
 _URL_IN_TEXT = re.compile(r"https?://\S+")
 
 # Per-rule, per-path exemptions. This remains explicit even when empty so any
@@ -268,6 +334,13 @@ def _first_match(
     return None
 
 
+def _disclosure_path_allowed(label: str, path: str) -> bool:
+    """Current disclosure files and the paths those sentences used to have."""
+    return path in DISCLOSURE_EXEMPTIONS.get(
+        label, ()
+    ) or path in HISTORICAL_DISCLOSURE_PATHS.get(label, ())
+
+
 def _scan_text(
     path_label: str,
     text: str,
@@ -281,6 +354,9 @@ def _scan_text(
     # offsets so reported line numbers stay correct. Every other rule still
     # sees URLs, which is what catches a credential embedded in one.
     without_urls = _URL_IN_TEXT.sub(lambda m: " " * len(m.group(0)), text)
+    without_urls = without_urls.replace(
+        _PLACEHOLDER_MACOS_HOME, " " * len(_PLACEHOLDER_MACOS_HOME)
+    )
     normalized = _normalized_identifier_text(text)
     for label, pattern in GLOBAL_FORBIDDEN.items():
         if label in excluded_rules or exemption_path in RULE_EXEMPTIONS.get(label, ()):
@@ -292,9 +368,7 @@ def _scan_text(
             line = haystack.count("\n", 0, match.start()) + 1
             failures.append(f"{path_label}:{line}: {label}")
     for label, pattern in DISCLOSURE_ONLY.items():
-        if label in excluded_rules or exemption_path in DISCLOSURE_EXEMPTIONS.get(
-            label, ()
-        ):
+        if label in excluded_rules or _disclosure_path_allowed(label, exemption_path):
             continue
         found = _first_match(pattern, text, normalized)
         if found:

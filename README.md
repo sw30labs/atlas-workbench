@@ -1,4 +1,4 @@
-# Atlas Workbench Workbench
+# Atlas Workbench
 
 **Operational-risk scenarios you can actually run, review, and defend.**
 

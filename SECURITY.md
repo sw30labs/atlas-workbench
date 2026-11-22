@@ -12,9 +12,8 @@ time, but maintainers will triage credible reports as promptly as practical.
 
 ## Report privately
 
-When the project is public, use the forge’s confidential vulnerability report
-if it has one. On GitLab, open a confidential issue and assign it to the
-maintainers. Do not put exploit details in a public issue.
+When the project is public, use GitHub private vulnerability reporting.
+Do not put exploit details in a public issue.
 
 Until a public project path exists, contact the repository owner through a
 private channel. Do not open an issue containing exploit details, credentials,
