@@ -17,7 +17,7 @@
     <marker id="r" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#ef4444"/></marker>
   </defs>
 
-  <text class="ttl" x="30" y="34">Contingency Atlas — current architecture</text>
+  <text class="ttl" x="30" y="34">Atlas Workbench — current architecture</text>
   <text class="sub" x="30" y="52">solid border = component · dashed = external · green = store · red = enforcement point</text>
 
   <!-- external -->
@@ -38,7 +38,7 @@
 
   <!-- atlas zone -->
   <rect class="zone" x="300" y="70" width="790" height="620" rx="10"/>
-  <text class="zl" x="320" y="94">CONTINGENCY ATLAS · LOCALHOST</text>
+  <text class="zl" x="320" y="94">ATLAS WORKBENCH · LOCALHOST</text>
 
   <!-- pipeline -->
   <rect class="box" x="330" y="110" width="340" height="250" rx="8"/>

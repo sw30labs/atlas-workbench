@@ -1,13 +1,13 @@
-# Contingency Atlas Workbench
+# Atlas Workbench Workbench
 
 **Operational-risk scenarios you can actually run, review, and defend.**
 
-Contingency Atlas turns public research into structured, testable
+Atlas Workbench turns public research into structured, testable
 operational-risk scenarios: what could fail, how it would propagate, who owns
 the response, and what evidence supports the claim. A scenario is a hypothesis,
 not a prediction — the workbench exists to help you challenge it.
 
-This is the usability-focused edition of Contingency Atlas: same engine and
+This is the usability-focused edition of Atlas Workbench: same engine and
 provenance rules, one command to a working dashboard, one place for your data,
 and a single `atlas` command instead of a dozen scripts.
 
@@ -15,7 +15,7 @@ and a single `atlas` command instead of a dozen scripts.
 
 This is an independent personal research project:
 
-- Contingency Atlas is not affiliated with, sponsored, supplied, approved, or
+- Atlas Workbench is not affiliated with, sponsored, supplied, approved, or
   endorsed by the author's employer or any other organization. No employer
   code, data, internal reports, client information, systems, methods, or other
   confidential or proprietary material is included.
@@ -49,10 +49,10 @@ the conspicuously fictional demo corpus, and opens
 Requirements: Python 3.12 or 3.13. If [`uv`](https://docs.astral.sh/uv/) is on
 your `PATH`, `start.sh` will fetch a suitable interpreter for you.
 
-Prefer doing it by hand?
+Prefer doing it by hand? `--seed` installs pip into the virtualenv. Without it, `pip` is not there.
 
 ```bash
-uv venv --python 3.13 .venv
+uv venv --python 3.13 --seed .venv
 source .venv/bin/activate
 pip install -e .
 atlas up
@@ -86,7 +86,7 @@ These stay separate from the six commands above. They are for scoring research, 
 
 ```console
 $ atlas status
-Contingency Atlas status
+Atlas Workbench status
   data directory  ~/.atlas
   initialized     yes
 
@@ -201,7 +201,7 @@ for convenience.
 |---|---|
 | Six-step manual setup (`scripts/setup_and_run.sh`) | `./start.sh`, idempotent |
 | Runtime stores in the repo root / cwd | One `ATLAS_HOME` directory |
-| `python -m contingency_atlas.web` + env vars | `atlas serve` |
+| `python -m workbench_atlas.web` + env vars | `atlas serve` |
 | `scripts/review_records.py …` | `atlas review …` (same audited path) |
 | `scripts/seed_demo.py --output-dir …` | `atlas demo` |
 | `pip install -e '.[dev,ontology]'` | `pip install -e .` (guard deps included) |
@@ -222,7 +222,7 @@ make check       # lint + test
 ```
 
 ```text
-contingency_atlas/     engine, phases, scoring, dashboard, and the `atlas` CLI
+workbench_atlas/     engine, phases, scoring, dashboard, and the `atlas` CLI
   cli/                 argument parsing, home resolution, commands
   demo.py              demo-corpus seeder (behind `atlas demo`)
   review_cli.py        review commands (behind `atlas review`)

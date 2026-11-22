@@ -25,7 +25,7 @@ I am not arguing that workshops are obsolete. I am arguing that they inherit the
 
 ## What the Project Refuses to Skip
 
-Contingency Atlas is an independent research project that explores that problem with public sources, synthetic examples, and a small versioned taxonomy. Banking is a demanding test domain because coupled operational failures are consequential and unusually difficult to enumerate.
+Atlas Workbench is an independent research project that explores that problem with public sources, synthetic examples, and a small versioned taxonomy. Banking is a demanding test domain because coupled operational failures are consequential and unusually difficult to enumerate.
 
 The mechanics matter less than the discipline, which comes down to four rules:
 
@@ -92,4 +92,4 @@ The list you inherit holds the last generation's losses, and it earns its keep. 
 
 [^5]: Deborah J. Mitchell, J. Edward Russo, and Nancy Pennington, "Back to the Future: Temporal Perspective in the Explanation of Events," *Journal of Behavioral Decision Making* 2, no. 1 (1989): 25–38 — "prospective hindsight," the cognitive basis Klein builds on.
 
-[^6]: Nicolas Cravino, *Rating Compound Operational-Risk Scenarios: A Deterministic Scoring Algorithm with Pre-Registered Falsification*, Contingency Atlas white paper, scoring engine `algorithm_version` 0.1.0, paper revision 2 (3 August 2026). Specifies the deterministic layer stack, auditability contract, synthetic-regime results, and disclosed estimator defects. Companion sources in the public repo: [WHITEPAPER_v2.md](https://github.com/sw30labs/contingency-atlas/blob/main/docs/research/whitepaper/WHITEPAPER_v2.md), manuscript PDF under `docs/research/whitepaper/manuscript/`, and [algorithm-spec.md](https://github.com/sw30labs/contingency-atlas/blob/main/docs/research/redesignv1/algorithm-spec.md). Repository: [github.com/sw30labs/contingency-atlas](https://github.com/sw30labs/contingency-atlas). Research-tier outputs only — not capital parameters or risk advice; see the project's `DISCLAIMER.md`.
+[^6]: Nicolas Cravino, *Rating Compound Operational-Risk Scenarios: A Deterministic Scoring Algorithm with Pre-Registered Falsification*, Atlas Workbench white paper, scoring engine `algorithm_version` 0.1.0, paper revision 2 (3 August 2026). Specifies the deterministic layer stack, auditability contract, synthetic-regime results, and disclosed estimator defects. Companion sources in the public repo: [WHITEPAPER_v2.md](https://github.com/sw30labs/atlas-workbench/blob/main/docs/research/whitepaper/WHITEPAPER_v2.md), manuscript PDF under `docs/research/whitepaper/manuscript/`, and [algorithm-spec.md](https://github.com/sw30labs/atlas-workbench/blob/main/docs/research/redesignv1/algorithm-spec.md). Repository: [github.com/sw30labs/workbench-atlas](https://github.com/sw30labs/atlas-workbench). Research-tier outputs only — not capital parameters or risk advice; see the project's `DISCLAIMER.md`.

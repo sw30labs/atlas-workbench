@@ -5,11 +5,11 @@ import sqlite3
 
 import pytest
 
-from contingency_atlas.compound_graduate import migrate_graduations
-from contingency_atlas.compound_join import migrate_compound
-from contingency_atlas.config import Settings
-from contingency_atlas.schema import migrate, migrate_evidence_events
-from contingency_atlas.web import server
+from workbench_atlas.compound_graduate import migrate_graduations
+from workbench_atlas.compound_join import migrate_compound
+from workbench_atlas.config import Settings
+from workbench_atlas.schema import migrate, migrate_evidence_events
+from workbench_atlas.web import server
 
 
 @pytest.fixture()
@@ -130,7 +130,7 @@ def test_payload_compounds_empty_before_first_join(tmp_path, monkeypatch):
 
 
 def test_index_has_compounds_view():
-    html = open("contingency_atlas/web/static/index.html").read()
+    html = open("workbench_atlas/web/static/index.html").read()
     assert 'data-view="compounds"' in html
     assert 'id="view-compounds"' in html
     assert '"compounds"' in html  # in VIEWS list

@@ -10,7 +10,7 @@ from types import SimpleNamespace
 
 import yaml
 
-from contingency_atlas.web import server
+from workbench_atlas.web import server
 
 
 INDEX = Path(server.STATIC_DIR) / "index.html"

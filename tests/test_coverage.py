@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 
-from contingency_atlas.coverage import recommend_scenario_coverage
+from workbench_atlas.coverage import recommend_scenario_coverage
 
 
 def _evidence(event_id: str, *, status: str = "approved", category: str = "Digital resilience"):

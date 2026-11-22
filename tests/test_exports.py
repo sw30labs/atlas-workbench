@@ -9,12 +9,12 @@ import zipfile
 
 import pytest
 
-from contingency_atlas.exports import ExportError, build_snapshot, export_data, main
+from workbench_atlas.exports import ExportError, build_snapshot, export_data, main
 
 
 @pytest.mark.parametrize("format", [[], {}, None, 1, True])
 def test_render_rejects_malformed_format_without_type_error(format):
-    from contingency_atlas.exports import render_snapshot
+    from workbench_atlas.exports import render_snapshot
 
     with pytest.raises(ExportError, match="Choose json, csv, xlsx, pdf, docx or pptx"):
         render_snapshot({}, format=format)
@@ -22,7 +22,7 @@ def test_render_rejects_malformed_format_without_type_error(format):
 
 @pytest.mark.parametrize("format", ["docx", "pptx"])
 def test_editable_office_reports_preserve_source_text_and_private_context(export_settings, format):
-    from contingency_atlas.exports import render_snapshot
+    from workbench_atlas.exports import render_snapshot
 
     snapshot = build_snapshot(export_settings, scenario_ids=["SYN-SCN-A"])
     snapshot["manifest"]["classification"] = "includes_organization_context"
@@ -62,7 +62,7 @@ def test_editable_office_reports_preserve_source_text_and_private_context(export
 
 
 def test_powerpoint_paginates_long_text_without_dropping_the_end(export_settings):
-    from contingency_atlas.exports import render_snapshot
+    from workbench_atlas.exports import render_snapshot
     from pptx import Presentation
 
     snapshot = build_snapshot(export_settings, scenario_ids=["SYN-SCN-A"])
@@ -82,7 +82,7 @@ def test_powerpoint_paginates_long_text_without_dropping_the_end(export_settings
 
 
 def test_pdf_generic_organization_records_use_readable_nested_fields(export_settings):
-    from contingency_atlas.exports import render_snapshot
+    from workbench_atlas.exports import render_snapshot
     from pypdf import PdfReader
 
     snapshot = build_snapshot(export_settings, scenario_ids=["SYN-SCN-A"])
@@ -97,7 +97,7 @@ def test_pdf_generic_organization_records_use_readable_nested_fields(export_sett
 
 @pytest.fixture
 def export_settings(settings):
-    from contingency_atlas.compound_join import migrate_compound
+    from workbench_atlas.compound_join import migrate_compound
 
     migrate_compound(str(settings.scenario_db_path))
     with sqlite3.connect(settings.scenario_db_path) as conn:
@@ -161,7 +161,7 @@ def test_compound_selection_includes_risk_evidence_and_score_components(export_s
 
 
 def test_decision_history_is_selected_with_linked_evidence(export_settings):
-    from contingency_atlas.decisions import append_decision, decision_event
+    from workbench_atlas.decisions import append_decision, decision_event
 
     with sqlite3.connect(export_settings.evidence_db_path) as conn:
         for eid in ("SYN-EVT-000", "SYN-EVT-010"):
@@ -185,7 +185,7 @@ def test_context_requires_explicit_selection_and_enabled_workspace(export_settin
 
 
 def test_private_context_requires_opt_in_and_stays_scoped_to_selected_scenario(export_settings, tmp_path):
-    from contingency_atlas.context import import_records
+    from workbench_atlas.context import import_records
 
     settings = export_settings.model_copy(update={"context_enabled": True, "context_db_path": tmp_path / "context.db"})
     records = []
@@ -206,8 +206,8 @@ def test_private_context_requires_opt_in_and_stays_scoped_to_selected_scenario(e
 
 
 def test_private_evidence_assessment_includes_counterevidence_and_its_history(export_settings, tmp_path):
-    from contingency_atlas.context import save_record
-    from contingency_atlas.decisions import append_decision, decision_event
+    from workbench_atlas.context import save_record
+    from workbench_atlas.decisions import append_decision, decision_event
 
     settings = export_settings.model_copy(update={"context_enabled": True, "context_db_path": tmp_path / "context.db"})
     for suffix, evidence_id in (("A", "SYN-EVT-010"), ("B", "SYN-EVT-011")):
@@ -392,11 +392,11 @@ def test_pdf_wraps_long_text_escapes_markup_and_keeps_provenance(export_settings
     for expected in ("Fictional payments disruption", "literal markup", "SYN-EVT-000",
                      "approved_synthetic", "FICTIONAL SYNTHETIC SCENARIO", "rights review", "Page 1"):
         assert expected in text
-    assert all("CONTINGENCY ATLAS" in page.extract_text() for page in reader.pages)
+    assert all("ATLAS WORKBENCH" in page.extract_text() for page in reader.pages)
 
 
 def test_cli_writes_output_but_never_overwrites(export_settings, tmp_path, monkeypatch):
-    monkeypatch.setattr("contingency_atlas.exports.get_settings", lambda: export_settings)
+    monkeypatch.setattr("workbench_atlas.exports.get_settings", lambda: export_settings)
     output = tmp_path / "review.json"
     assert main(["--format", "json", "--scenario-id", "SYN-SCN-A", "--output", str(output)]) == 0
     first = output.read_bytes()

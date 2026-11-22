@@ -7,15 +7,15 @@ from contextlib import contextmanager
 from http.server import ThreadingHTTPServer
 from pathlib import Path
 
-from contingency_atlas.db import list_evidence_events
-from contingency_atlas.phases.phase2_risks import load_emerging_risks
-from contingency_atlas.web import runner
-from contingency_atlas.web.intake_flow import (
+from workbench_atlas.db import list_evidence_events
+from workbench_atlas.phases.phase2_risks import load_emerging_risks
+from workbench_atlas.web import runner
+from workbench_atlas.web.intake_flow import (
     IntakeDraftStore,
     prepare_research_material,
     submit_draft_to_review,
 )
-from contingency_atlas.web.server import DashboardHandler
+from workbench_atlas.web.server import DashboardHandler
 
 
 @contextmanager
@@ -185,7 +185,7 @@ def test_risk_stays_held_when_supporting_prepared_evidence_is_not_selected(setti
 
 
 def test_prepare_and_submit_http_routes_dispatch(monkeypatch, settings):
-    from contingency_atlas.web import intake_flow, server
+    from workbench_atlas.web import intake_flow, server
 
     monkeypatch.setattr(server, "get_settings", lambda: settings)
     monkeypatch.setattr(runner, "omlx_reachable", lambda *_args, **_kwargs: True)
@@ -239,7 +239,7 @@ def test_prepare_and_submit_http_routes_dispatch(monkeypatch, settings):
 
 
 def test_recommendation_http_route_is_approved_only(monkeypatch, settings):
-    from contingency_atlas.web import server
+    from workbench_atlas.web import server
 
     monkeypatch.setattr(server, "get_settings", lambda: settings)
     with _dashboard_server() as port:
@@ -256,7 +256,7 @@ def test_recommendation_http_route_is_approved_only(monkeypatch, settings):
 def test_dashboard_exposes_staged_intake_and_separate_approved_planner():
     html = (
         Path(__file__).parents[1]
-        / "contingency_atlas/web/static/index.html"
+        / "workbench_atlas/web/static/index.html"
     ).read_text()
 
     assert '{ k: "research_material", label: "Research material", required: true' in html

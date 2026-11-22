@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from contingency_atlas.web import server
+from workbench_atlas.web import server
 
 
 def test_scenario_paging_limits_cards_and_preserves_full_filtered_selection():

@@ -9,8 +9,8 @@ from http.server import ThreadingHTTPServer
 
 import pytest
 
-from contingency_atlas.scoring.telemetry import TelemetryLogger
-from contingency_atlas.web.server import DashboardHandler, build_token_usage
+from workbench_atlas.scoring.telemetry import TelemetryLogger
+from workbench_atlas.web.server import DashboardHandler, build_token_usage
 
 
 @contextmanager
@@ -78,7 +78,7 @@ def test_endpoint(usage_events):
 
 
 def test_overview_has_token_chart():
-    html = open("contingency_atlas/web/static/index.html").read()
+    html = open("workbench_atlas/web/static/index.html").read()
     assert 'id="ch-tokens"' in html
     assert 'data-period="7d"' in html and 'data-period="7w"' in html
     assert "drawTokens" in html and "loadTokenUsage" in html

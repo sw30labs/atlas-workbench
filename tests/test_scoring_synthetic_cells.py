@@ -5,9 +5,9 @@ import math
 
 import pytest
 
-from contingency_atlas.scoring.cli import eval_main, score_main
-from contingency_atlas.scoring.egress import EgressGateway
-from contingency_atlas.scoring.synthetic_aggregation import (
+from workbench_atlas.scoring.cli import eval_main, score_main
+from workbench_atlas.scoring.egress import EgressGateway
+from workbench_atlas.scoring.synthetic_aggregation import (
     SyntheticAggregationReport,
     build_synthetic_features,
     prepare_synthetic_events,
@@ -15,7 +15,7 @@ from contingency_atlas.scoring.synthetic_aggregation import (
     severity_from_quantiles,
     write_synthetic_aggregation,
 )
-from contingency_atlas.scoring.synthetic_events import (
+from workbench_atlas.scoring.synthetic_events import (
     SCORING_CELL_CODES,
     SEGMENT_CODES,
     SyntheticEventConfig,

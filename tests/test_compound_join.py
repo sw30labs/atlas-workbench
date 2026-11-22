@@ -7,13 +7,13 @@ from pathlib import Path
 
 import pytest
 
-from contingency_atlas.compound_join import (
+from workbench_atlas.compound_join import (
     is_due,
     migrate_compound,
     run_compound_join,
 )
-from contingency_atlas.config import Settings
-from contingency_atlas.scoring.scorer import ScorerConfig
+from workbench_atlas.config import Settings
+from workbench_atlas.scoring.scorer import ScorerConfig
 
 FAST = ScorerConfig(mc_draws=300, interval_draws=300)
 
@@ -165,8 +165,8 @@ def test_scored_path_writes_rows_and_artifact(tmp_path):
 
 
 def test_pipeline_includes_compound_join_node(tmp_workspace):
-    from contingency_atlas.pipeline import run_pipeline
-    from contingency_atlas.config import Settings
+    from workbench_atlas.pipeline import run_pipeline
+    from workbench_atlas.config import Settings
 
     settings = Settings(
         scenario_db_path=tmp_workspace / "atlas.db",

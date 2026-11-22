@@ -20,7 +20,7 @@ gates stay where they are:
   are always staged `status: "proposed"` with an empty reviewer and no
   `reviewed_on`. Pods never approve a mapping.
 
-Code: `contingency_atlas/bulk_ingest/`. Tests: `tests/test_bulk_ingest_*.py`
+Code: `workbench_atlas/bulk_ingest/`. Tests: `tests/test_bulk_ingest_*.py`
 (offline, synthetic fixtures built in `tmp_path`). Scorer:
 `scripts/score_bulk_ingest.py`.
 
@@ -353,8 +353,8 @@ ingest folder and may not contain the public stores.
 ## Submitting (the human gate)
 
 ```bash
-python -m contingency_atlas.bulk_ingest submit <batch.json> --actor "Named reviewer" --select all
-python -m contingency_atlas.bulk_ingest submit <batch.json> --actor "Named reviewer" --select bulk-svc-…,bulk-dep-…
+python -m workbench_atlas.bulk_ingest submit <batch.json> --actor "Named reviewer" --select all
+python -m workbench_atlas.bulk_ingest submit <batch.json> --actor "Named reviewer" --select bulk-svc-…,bulk-dep-…
 ```
 
 `--actor` and `--select` are required. The plan (payload, kind, id, label,
@@ -394,7 +394,7 @@ Python: `plan_submission(batch, selection)` and
 ## CLI
 
 ```bash
-python -m contingency_atlas.bulk_ingest <folder> [--out DIR] [--llm] [--json] [--actor NAME] [--synthetic] [--workers N]
+python -m workbench_atlas.bulk_ingest <folder> [--out DIR] [--llm] [--json] [--actor NAME] [--synthetic] [--workers N]
 ```
 
 The command prints files by route and flag, records by contract and status,
@@ -453,7 +453,7 @@ Measured 2026-10-18 on `examples/acme-bank/pack` with
 reads the key, and every change is generic: no pack names are in the code.
 
 ```bash
-python -m contingency_atlas.bulk_ingest examples/acme-bank/pack --out "$OUT" --synthetic --actor "demo operator"
+python -m workbench_atlas.bulk_ingest examples/acme-bank/pack --out "$OUT" --synthetic --actor "demo operator"
 python scripts/score_bulk_ingest.py "$OUT/batch.json" examples/acme-bank/answer_key.json
 ```
 
@@ -522,7 +522,7 @@ numbers are recorded here. To measure once a model is loaded:
 
 ```bash
 curl -s http://127.0.0.1:8000/api/status | python -m json.tool | grep -A3 loaded_models
-OMLX_MODEL=<the loaded model id> python -m contingency_atlas.bulk_ingest examples/acme-bank/pack --llm --out "$OUT_LLM" --synthetic --actor "demo operator"
+OMLX_MODEL=<the loaded model id> python -m workbench_atlas.bulk_ingest examples/acme-bank/pack --llm --out "$OUT_LLM" --synthetic --actor "demo operator"
 python scripts/score_bulk_ingest.py "$OUT_LLM/batch.json" examples/acme-bank/answer_key.json   # prints the LLM line
 ```
 
@@ -556,7 +556,7 @@ an LLM-derived record.
 ## Dashboard
 
 The **Bulk import** screen (`#bulk` in the dashboard rail) drives the same
-pipeline as a job. Code: `contingency_atlas/web/bulk_ingest_web.py`, the
+pipeline as a job. Code: `workbench_atlas/web/bulk_ingest_web.py`, the
 `bulk_ingest` phase in `web/runner.py`, routes in `web/server.py`, the
 screen in `web/static/index.html` (between the `BULK IMPORT` markers). Tests:
 `tests/test_web_bulk_ingest.py`.

@@ -10,7 +10,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from contingency_atlas.web.access import (
+from workbench_atlas.web.access import (
     AccessConfig, AccessError, NonceStore, Principal, allowed_origin,
     authorize_request, bind_actor, load_access_config, peer_request_allowed,
     permitted, proxy_adapter_headers, sign_proxy_headers,

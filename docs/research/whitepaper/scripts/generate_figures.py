@@ -1,5 +1,5 @@
 """
-Generate all figures for the Contingency Atlas scoring white paper (v2).
+Generate all figures for the Atlas Workbench scoring white paper (v2).
 Every data figure reads the real evaluation artifacts under generated/ —
 no hardcoded results. Figure 3 is formula-derived (deterministic), and its
 caption in the manuscript says so.

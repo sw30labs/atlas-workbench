@@ -6,13 +6,13 @@ here (services, vendors' roles at ACME, scenarios, losses, controls, people,
 reports) is invented demonstration data. The only real-world material is the
 external loss watchlist, which re-exports approved public evidence records
 (citations and independently authored summaries, never source text) from the
-legacy contingency-atlas repository. Those records are about real
+legacy workbench-atlas repository. Those records are about real
 organizations and are NOT rebranded as ACME.
 
 Usage:
     .venv/bin/python scripts/build_acme_pack.py [--legacy PATH] [--out PATH]
 
-The legacy repository defaults to ../contingency-atlas (or $ACME_LEGACY_REPO).
+The legacy repository defaults to ../workbench-atlas (or $ACME_LEGACY_REPO).
 Outputs are committed, so CI never needs to regenerate them.
 """
 
@@ -39,7 +39,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_LEGACY = ROOT.parent / "contingency-atlas"
+DEFAULT_LEGACY = ROOT.parent / "workbench-atlas"
 DEFAULT_OUT = ROOT / "examples" / "acme-bank"
 
 SEED = 20260930
@@ -3003,7 +3003,7 @@ def build_readme(out: Path, pack: Path, stats: dict, c: dict) -> None:
         "## What is real and what is not",
         "",
         "- **External loss watchlist (real, public).** The events in `04_external_loss_watchlist/` are real public events about",
-        "  real organisations, re-exported from the approved public evidence corpus of the legacy `contingency-atlas`",
+        "  real organisations, re-exported from the approved public evidence corpus of the legacy `workbench-atlas`",
         "  repository: event id, headline, organisation, country, region, loss amount, source date, Atlas classification,",
         "  source URL, publisher, title and the independently authored summary. No source text is included. They are **not**",
         "  rebranded as ACME. The ACME analyst columns (relevance, linked scenario, owner, comment, date added) are synthetic",
@@ -3033,8 +3033,8 @@ def build_readme(out: Path, pack: Path, stats: dict, c: dict) -> None:
         "## Regenerating",
         "",
         "```bash",
-        ".venv/bin/python scripts/build_acme_pack.py            # legacy repo defaults to ../contingency-atlas",
-        ".venv/bin/python scripts/build_acme_pack.py --legacy /path/to/contingency-atlas",
+        ".venv/bin/python scripts/build_acme_pack.py            # legacy repo defaults to ../workbench-atlas",
+        ".venv/bin/python scripts/build_acme_pack.py --legacy /path/to/workbench-atlas",
         "```",
         "",
         f"The generator is deterministic (seed {SEED}, generator version `{GENERATOR_VERSION}`). Document core properties and",
@@ -3059,7 +3059,7 @@ def build_readme(out: Path, pack: Path, stats: dict, c: dict) -> None:
 def legacy_checks(legacy: Path) -> None:
     missing = [p for p in ("event_evidence.db", "atlas.db", "emerging_risks.json") if not (legacy / p).is_file()]
     if missing:
-        raise SystemExit(f"legacy contingency-atlas repository not found or incomplete at {legacy} "
+        raise SystemExit(f"legacy workbench-atlas repository not found or incomplete at {legacy} "
                          f"(missing: {', '.join(missing)}). Pass --legacy PATH or set ACME_LEGACY_REPO. "
                          "The committed pack does not need regenerating for CI.")
     con = sqlite3.connect(f"file:{legacy / 'atlas.db'}?mode=ro", uri=True)

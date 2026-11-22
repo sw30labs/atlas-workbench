@@ -19,9 +19,9 @@ from pathlib import Path
 
 import pytest
 
-from contingency_atlas.config import Settings
-from contingency_atlas.dedup import MergeError, apply_merge, candidate_duplicates
-from contingency_atlas.proposals import (
+from workbench_atlas.config import Settings
+from workbench_atlas.dedup import MergeError, apply_merge, candidate_duplicates
+from workbench_atlas.proposals import (
     acceptance_stats,
     advise_merge,
     create_merge_proposals,
@@ -30,10 +30,10 @@ from contingency_atlas.proposals import (
     migrate_proposals,
     record_advisory,
 )
-from contingency_atlas.review import ReviewError, approve_merge, reject_merge
-from contingency_atlas.schema import migrate
-from contingency_atlas.web import server
-from contingency_atlas.web.server import DashboardHandler
+from workbench_atlas.review import ReviewError, approve_merge, reject_merge
+from workbench_atlas.schema import migrate
+from workbench_atlas.web import server
+from workbench_atlas.web.server import DashboardHandler
 
 
 def _risk(issue, description, refs, first_seen="", status="approved", **extra):

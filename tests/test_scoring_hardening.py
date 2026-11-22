@@ -5,10 +5,10 @@ import random
 
 import pytest
 
-from contingency_atlas.scoring.calibration import calibrate_atoms
-from contingency_atlas.scoring.evt import evt_overlay, fit_gpd_mom, gpd_tail_quantile
-from contingency_atlas.scoring.scorer import DetScorer, ScorerConfig
-from contingency_atlas.scoring.synthetic import R0Config, generate_r0
+from workbench_atlas.scoring.calibration import calibrate_atoms
+from workbench_atlas.scoring.evt import evt_overlay, fit_gpd_mom, gpd_tail_quantile
+from workbench_atlas.scoring.scorer import DetScorer, ScorerConfig
+from workbench_atlas.scoring.synthetic import R0Config, generate_r0
 
 
 # ---------------------------------------------------------------------------

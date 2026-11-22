@@ -4,13 +4,13 @@ from __future__ import annotations
 
 import json
 
-from contingency_atlas.compound_join_llm import propose_joins
-from contingency_atlas.config import Settings
-from contingency_atlas.llm import OMLXClient
-from contingency_atlas.refutations import generate_refutation_memo
-from contingency_atlas.scoring.egress import EgressGateway, verify_audit_chain
-from contingency_atlas.scoring.elicitation import channel_audit, elicit_analogues
-from contingency_atlas.scoring.telemetry import TelemetryLogger
+from workbench_atlas.compound_join_llm import propose_joins
+from workbench_atlas.config import Settings
+from workbench_atlas.llm import OMLXClient
+from workbench_atlas.refutations import generate_refutation_memo
+from workbench_atlas.scoring.egress import EgressGateway, verify_audit_chain
+from workbench_atlas.scoring.elicitation import channel_audit, elicit_analogues
+from workbench_atlas.scoring.telemetry import TelemetryLogger
 
 
 def _remote_spy(monkeypatch, tmp_path, response):

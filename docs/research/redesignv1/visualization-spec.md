@@ -218,5 +218,5 @@ data: { "node": "score_jdg", "reason": "s2_field" }
 
 ## 7. Open questions
 
-1. Embed console in existing `contingency_atlas.web` — **(REC)** yes, new route `/multiverse`.
+1. Embed console in existing `workbench_atlas.web` — **(REC)** yes, new route `/multiverse`.
 2. 3D viz — **out of scope**.

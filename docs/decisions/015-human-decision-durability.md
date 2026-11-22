@@ -36,13 +36,13 @@ Two mechanisms, neither of which puts governed runtime data in this repository.
 
 1. **Snapshot before overwrite.** `save_emerging_risks` copies the outgoing
    file to `generated/snapshots/` before the atomic replace
-   (`contingency_atlas/snapshots.py`). It is content-addressed, so an
+   (`workbench_atlas/snapshots.py`). It is content-addressed, so an
    unchanged rewrite adds nothing, and pruned to a bounded count. A
    snapshot failure is logged and never blocks the write: refusing to save
    real work in order to protect a copy of it is the wrong trade.
 
 2. **A separate data history.** `scripts/data_history.py` versions the data
-   files in their own git directory (`~/.contingency-atlas-data.git` by
+   files in their own git directory (`~/.workbench-atlas-data.git` by
    default, `ATLAS_DATA_GIT_DIR` to override) pointed at the same working
    tree, so files stay where the application expects them. SQLite stores are
    committed as `.sql` text dumps, since the review decisions inside them are

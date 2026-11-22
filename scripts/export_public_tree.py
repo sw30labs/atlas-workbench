@@ -13,8 +13,8 @@ from pathlib import Path
 
 from public_release_gate import ROOT
 
-PUBLIC_AUTHOR = "Contingency Atlas contributors"
-PUBLIC_EMAIL = "contributors" + chr(64) + "contingency-atlas.invalid"
+PUBLIC_AUTHOR = "Atlas Workbench contributors"
+PUBLIC_EMAIL = "contributors" + chr(64) + "workbench-atlas.invalid"
 _REPOSITORY_ENVIRONMENT = {
     "GIT_ALTERNATE_OBJECT_DIRECTORIES",
     "GIT_COMMON_DIR",
@@ -106,7 +106,7 @@ def export_public_tree(destination: Path, *, initialize_git: bool = False) -> Pa
         )
     )
     index_directory = tempfile.TemporaryDirectory(
-        prefix="contingency-atlas-public-index-"
+        prefix="workbench-atlas-public-index-"
     )
     index_path = Path(index_directory.name) / "index"
     git_env = _clean_environment()

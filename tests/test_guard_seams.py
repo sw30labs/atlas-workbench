@@ -20,7 +20,7 @@ from pathlib import Path
 
 import pytest
 
-from contingency_atlas.guard_hook import GuardError, GuardRejected
+from workbench_atlas.guard_hook import GuardError, GuardRejected
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -41,7 +41,7 @@ def test_enabled_guard_fails_closed_when_bundle_is_missing(
     monkeypatch,
     tmp_path,
 ):
-    import contingency_atlas.guard_hook as hook
+    import workbench_atlas.guard_hook as hook
 
     monkeypatch.setattr(hook, "GUARD_SCRIPT", tmp_path / "missing-guard.py")
     with pytest.raises(GuardError, match="installed bundle is incomplete"):
@@ -105,7 +105,7 @@ def test_synthetic_bundle_fixture_matches_expected_without_runtime_store(tmp_pat
     ],
 )
 def test_builders_set_the_door_discriminator(builder, row, expected):
-    import contingency_atlas.guard_hook as hook
+    import workbench_atlas.guard_hook as hook
 
     assert getattr(hook, builder)(row)["kind"] == expected
 
@@ -122,14 +122,14 @@ def test_builders_set_the_door_discriminator(builder, row, expected):
 )
 def test_a_producer_column_named_kind_cannot_shadow_the_discriminator(builder, row):
     """The exact failure mode: a source row carrying its own `kind` column."""
-    import contingency_atlas.guard_hook as hook
+    import workbench_atlas.guard_hook as hook
 
     record = getattr(hook, builder)({**row, "kind": "rogue"})
     assert record["kind"] != "rogue"
 
 
 def test_channel_proposal_carries_its_domain_kind_separately():
-    from contingency_atlas.guard_hook import channel_proposal_record
+    from workbench_atlas.guard_hook import channel_proposal_record
 
     record = channel_proposal_record({"proposal_id": "cp-1", "kind": "edge_add"})
     assert record["kind"] == "channel_proposal"
@@ -152,7 +152,7 @@ def _mapping_proposal(**overrides):
 
 
 def test_mapping_proposals_reuse_both_c09_ledger_invariants(guard_on):
-    from contingency_atlas.guard_hook import mapping_proposal_record, validate
+    from workbench_atlas.guard_hook import mapping_proposal_record, validate
 
     candidates = [
         _mapping_proposal(),
@@ -199,7 +199,7 @@ def _risk(**over):
 
 
 def test_a_clean_register_save_is_admitted(guard_on, tmp_path):
-    from contingency_atlas.phases.phase2_risks import save_emerging_risks
+    from workbench_atlas.phases.phase2_risks import save_emerging_risks
 
     register = tmp_path / "emerging_risks.json"
     save_emerging_risks(register, [_risk()])
@@ -215,7 +215,7 @@ def test_a_rejected_batch_leaves_the_previous_register_byte_identical(
     canonical event id is a REJECT — the same witness the bundle's own
     fixtures use.
     """
-    from contingency_atlas.phases.phase2_risks import save_emerging_risks
+    from workbench_atlas.phases.phase2_risks import save_emerging_risks
 
     register = tmp_path / "emerging_risks.json"
     save_emerging_risks(register, [_risk()])
@@ -241,12 +241,12 @@ def test_a_channel_proposal_survives_the_guarded_seam(guard_on, tmp_path):
     silent — proposals simply stop existing, and the only symptom is a log
     line. Assert the row actually lands.
     """
-    from contingency_atlas.proposals import (
+    from workbench_atlas.proposals import (
         create_channel_proposals,
         list_proposals,
         migrate_proposals,
     )
-    from contingency_atlas.schema import migrate
+    from workbench_atlas.schema import migrate
 
     db = str(tmp_path / "atlas.db")
     migrate(db)

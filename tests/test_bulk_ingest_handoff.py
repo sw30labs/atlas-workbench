@@ -7,12 +7,12 @@ from pathlib import Path
 import pytest
 
 from bulk_ingest_helpers import build_mini_pack, private_settings, records, run, write_services_xlsx
-from contingency_atlas import imports
-from contingency_atlas.bulk_ingest import SubmitError, plan_submission, run_bulk_ingest_job, submit_batch
-from contingency_atlas.bulk_ingest import stager
-from contingency_atlas.bulk_ingest.__main__ import main as cli_main
-from contingency_atlas.bulk_ingest.orchestrator import default_output_dir
-from contingency_atlas.context import RECORD_MODELS, context_payload
+from workbench_atlas import imports
+from workbench_atlas.bulk_ingest import SubmitError, plan_submission, run_bulk_ingest_job, submit_batch
+from workbench_atlas.bulk_ingest import stager
+from workbench_atlas.bulk_ingest.__main__ import main as cli_main
+from workbench_atlas.bulk_ingest.orchestrator import default_output_dir
+from workbench_atlas.context import RECORD_MODELS, context_payload
 
 
 @pytest.fixture(autouse=True)
@@ -65,7 +65,7 @@ def test_payloads_split_under_limits_in_dependency_order(psettings, tmp_path, mo
 
 
 def _candidates(result):
-    from contingency_atlas.bulk_ingest.models import Candidate, Provenance
+    from workbench_atlas.bulk_ingest.models import Candidate, Provenance
 
     return [Candidate(c["kind"], c["data"], [Provenance(**p) for p in c["provenance"]], c["meta"], c["id"],
                       c["errors"], c["warnings"], c["status"]) for c in result.candidates]
@@ -149,7 +149,7 @@ def test_evidence_and_proposed_handoffs(psettings, tmp_path):
     assert rows and all(r["status"] == "proposed" and r["reviewer"] == "" and not r.get("reviewed_on")
                         for r in rows)
     assert not psettings.evidence_db_path.read_bytes() == b""  # public store untouched below
-    from contingency_atlas.db import list_evidence_events
+    from workbench_atlas.db import list_evidence_events
 
     assert not any(e["event_id"].startswith("EVT-BULK") for e in list_evidence_events(str(psettings.evidence_db_path)))
 
@@ -174,7 +174,7 @@ def test_job_entry_point(psettings, tmp_path):
 
 
 def test_cli_run_and_submit_gate(psettings, tmp_path, monkeypatch, capsys):
-    import contingency_atlas.bulk_ingest.__main__ as cli
+    import workbench_atlas.bulk_ingest.__main__ as cli
 
     monkeypatch.setattr(cli, "get_settings", lambda: psettings)
     root = build_mini_pack(tmp_path / "pack")

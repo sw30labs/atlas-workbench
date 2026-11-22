@@ -4,7 +4,7 @@
      height="820"
      role="img"
      aria-labelledby="architecture-title architecture-description">
-  <title id="architecture-title">Contingency Atlas architecture</title>
+  <title id="architecture-title">Atlas Workbench architecture</title>
   <desc id="architecture-description">
     An optional scout emits pending public-source proposals for independent
     review. Public-source research and clearly marked synthetic fixtures pass
@@ -129,7 +129,7 @@
   <circle cx="1106" cy="70" r="62" fill="none" stroke="#55D6D0"
           stroke-width="1" opacity="0.12"/>
 
-  <text x="52" y="51" class="eyebrow">CONTINGENCY ATLAS</text>
+  <text x="52" y="51" class="eyebrow">ATLAS WORKBENCH</text>
   <text x="52" y="88" class="title">Evidence to governed foresight</text>
   <text x="52" y="115" class="subtitle">
     A reviewable path from researched signals to operational-risk hypotheses

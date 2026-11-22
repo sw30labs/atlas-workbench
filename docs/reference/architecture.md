@@ -2,7 +2,7 @@
 
 ## 1. Purpose and non-goals
 
-Contingency Atlas is an operational-risk foresight and scenario-analysis
+Atlas Workbench is an operational-risk foresight and scenario-analysis
 system. It (a) ingests public evidence and artifacts into a structured
 store, (b) monitors emerging risks, (c) generates and prioritizes
 scenarios, and (d) monthly joins the risk catalog into **compound
@@ -30,7 +30,7 @@ flowchart LR
         OMLX[OMLX local inference<br/>OpenAI-compatible endpoint]
     end
 
-    subgraph Atlas["Contingency Atlas (localhost)"]
+    subgraph Atlas["Atlas Workbench (localhost)"]
         UI[Dashboard<br/>stdlib HTTP server :8080]
         RQ[Review queue<br/>human boundary + advisory assist]
         PL[Pipeline<br/>LangGraph · 8 phases]
@@ -72,24 +72,24 @@ governs anything that would leave for external models (ADR-002).
 
 | Component | Location | Responsibility |
 |-----------|----------|----------------|
-| **Pipeline** | `contingency_atlas/pipeline.py`, `phases/` | Eight LangGraph nodes: ingest evidence → risk monitor → generate scenarios → prioritize → patterns → maintain → compound join → graduate |
-| **Scoring engine** | `contingency_atlas/scoring/` | Deterministic hybrid F×S + dependence + MC + EVT; pair candidates; evaluation harness (incl. `task_bcal.py` levels, `task_loss.py` severities, multiseed + bootstrap CIs); calibration; external feature screen |
-| **Judgment ledger** | `contingency_atlas/scoring/judgment_ledger.py` | Hash-chained claim ledger (`generated/judgment/ledger.jsonl`): frozen forecasts → quarterly resolution → Brier over resolved claims |
-| **Elicitation** | `contingency_atlas/scoring/elicitation.py` | OMLX channel audit + analogue elicitation + contamination canary; output is proposals only |
-| **Compound join** | `contingency_atlas/compound_join.py` | Monthly batch step: channel-blocked pair scoring into `compound_scenarios` |
-| **Compound graduation** | `contingency_atlas/compound_graduate.py` | Deterministic eligibility → LLM-drafted document → QA judge → library insert |
-| **Artifact ingestion** | `contingency_atlas/ingest_artifacts.py` | Upload → markdown (MarkItDown optional) → bounded chunk-map extraction → rubric check → review-first prefill |
-| **Review workflow** | `contingency_atlas/review.py` | The human boundary: attestation-gated approvals, non-raising validation reports, cross-process register lock |
-| **Advisory pre-analysis** | `contingency_atlas/review_assist.py` | Judge-model pre-analysis of pending records — verdict-style for events/risks, explanation-only (no recommendation) for channel proposals; content-hashed suggestion cache; suggestion-vs-decision agreement audit (ADR-013) |
-| **Deep research** | `contingency_atlas/research.py` | Bounded DDG search + capped public-page fetches (PDFs parsed locally with pypdf) → pending evidence candidates + coverage memo; gated channel-proposal mode files no candidates and drafts the reviewer's reason; proposal-only (ADR-013) |
-| **Proposal queues** | `contingency_atlas/proposals.py` | Merge / channel / analogue proposal stores; decided in `review.py` (reviewer + reason); never auto-applied (ADR-014) |
-| **External-framework overlay** | `contingency_atlas/frameworks/` | Local-file MITRE ATLAS catalog import, release pinning, relationship lookup, and manual scenario-mapping proposals; approved context is display-only and non-scoring (ADR-016) |
-| **Dedup scan** | `contingency_atlas/dedup.py` | Token-Jaccard `candidate_duplicates` ranker; `apply_merge` under the register lock (ADR-014) |
-| **Refutation memos** | `contingency_atlas/refutations.py` | Display-only devil's-advocate memos; `definition_stress` windowed re-score; spot-audit report |
-| **LLM client** | `contingency_atlas/llm.py` | OpenAI-compatible client; the telemetry choke point (ADR-007) |
-| **Dashboard** | `contingency_atlas/web/` | stdlib HTTP server, loopback-only; seven-item command deck organized as Briefing → Research → Review → Analyze → Scenarios, with Settings and Method & Help utilities. Specialist surfaces are contextual tabs: Research holds Evidence, Signals & Radar, and Findings; Analyze holds Run cycle, Validation, and Telemetry; Scenarios holds Library and Compound candidates. |
-| **Egress gateway** | `contingency_atlas/scoring/egress.py` | Allow-list validation + deny scans + hash-chained audit log |
-| **Telemetry** | `contingency_atlas/scoring/telemetry.py` | Event model, pricing, run reports, production sink |
+| **Pipeline** | `workbench_atlas/pipeline.py`, `phases/` | Eight LangGraph nodes: ingest evidence → risk monitor → generate scenarios → prioritize → patterns → maintain → compound join → graduate |
+| **Scoring engine** | `workbench_atlas/scoring/` | Deterministic hybrid F×S + dependence + MC + EVT; pair candidates; evaluation harness (incl. `task_bcal.py` levels, `task_loss.py` severities, multiseed + bootstrap CIs); calibration; external feature screen |
+| **Judgment ledger** | `workbench_atlas/scoring/judgment_ledger.py` | Hash-chained claim ledger (`generated/judgment/ledger.jsonl`): frozen forecasts → quarterly resolution → Brier over resolved claims |
+| **Elicitation** | `workbench_atlas/scoring/elicitation.py` | OMLX channel audit + analogue elicitation + contamination canary; output is proposals only |
+| **Compound join** | `workbench_atlas/compound_join.py` | Monthly batch step: channel-blocked pair scoring into `compound_scenarios` |
+| **Compound graduation** | `workbench_atlas/compound_graduate.py` | Deterministic eligibility → LLM-drafted document → QA judge → library insert |
+| **Artifact ingestion** | `workbench_atlas/ingest_artifacts.py` | Upload → markdown (MarkItDown optional) → bounded chunk-map extraction → rubric check → review-first prefill |
+| **Review workflow** | `workbench_atlas/review.py` | The human boundary: attestation-gated approvals, non-raising validation reports, cross-process register lock |
+| **Advisory pre-analysis** | `workbench_atlas/review_assist.py` | Judge-model pre-analysis of pending records — verdict-style for events/risks, explanation-only (no recommendation) for channel proposals; content-hashed suggestion cache; suggestion-vs-decision agreement audit (ADR-013) |
+| **Deep research** | `workbench_atlas/research.py` | Bounded DDG search + capped public-page fetches (PDFs parsed locally with pypdf) → pending evidence candidates + coverage memo; gated channel-proposal mode files no candidates and drafts the reviewer's reason; proposal-only (ADR-013) |
+| **Proposal queues** | `workbench_atlas/proposals.py` | Merge / channel / analogue proposal stores; decided in `review.py` (reviewer + reason); never auto-applied (ADR-014) |
+| **External-framework overlay** | `workbench_atlas/frameworks/` | Local-file MITRE ATLAS catalog import, release pinning, relationship lookup, and manual scenario-mapping proposals; approved context is display-only and non-scoring (ADR-016) |
+| **Dedup scan** | `workbench_atlas/dedup.py` | Token-Jaccard `candidate_duplicates` ranker; `apply_merge` under the register lock (ADR-014) |
+| **Refutation memos** | `workbench_atlas/refutations.py` | Display-only devil's-advocate memos; `definition_stress` windowed re-score; spot-audit report |
+| **LLM client** | `workbench_atlas/llm.py` | OpenAI-compatible client; the telemetry choke point (ADR-007) |
+| **Dashboard** | `workbench_atlas/web/` | stdlib HTTP server, loopback-only; seven-item command deck organized as Briefing → Research → Review → Analyze → Scenarios, with Settings and Method & Help utilities. Specialist surfaces are contextual tabs: Research holds Evidence, Signals & Radar, and Findings; Analyze holds Run cycle, Validation, and Telemetry; Scenarios holds Library and Compound candidates. |
+| **Egress gateway** | `workbench_atlas/scoring/egress.py` | Allow-list validation + deny scans + hash-chained audit log |
+| **Telemetry** | `workbench_atlas/scoring/telemetry.py` | Event model, pricing, run reports, production sink |
 | **Stores** | `atlas.db`, `event_evidence.db`, `emerging_risks.json`, `generated/telemetry/*.jsonl`, `generated/judgment/ledger.jsonl` | SQLite + JSON/JSONL (ADR-009); atlas.db holds the `compound_scenarios` current view over the append-only `score_realizations` history, proposal queues, refutation memos, and optional versioned external-framework catalog and mapping decisions |
 
 ## 4. The eight phases

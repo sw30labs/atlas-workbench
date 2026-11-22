@@ -17,21 +17,21 @@ from itertools import combinations
 
 import pytest
 
-from contingency_atlas.compound_join import HOLDOUT_QUARTERS, migrate_compound
-from contingency_atlas.compound_join_llm import (
+from workbench_atlas.compound_join import HOLDOUT_QUARTERS, migrate_compound
+from workbench_atlas.compound_join_llm import (
     JOIN_ARTIFACT_NAME,
     propose_joins,
     run_llm_compound_join,
 )
-from contingency_atlas.config import Settings
-from contingency_atlas.proposals import list_proposals, migrate_proposals
-from contingency_atlas.scoring.judgment_ledger import (
+from workbench_atlas.config import Settings
+from workbench_atlas.proposals import list_proposals, migrate_proposals
+from workbench_atlas.scoring.judgment_ledger import (
     calibration_report,
     resolve_claims,
     verify_chain,
 )
-from contingency_atlas.scoring.r1 import build_signal_series
-from contingency_atlas.scoring.scorer import ScorerConfig
+from workbench_atlas.scoring.r1 import build_signal_series
+from workbench_atlas.scoring.scorer import ScorerConfig
 
 FAST = ScorerConfig(mc_draws=300, interval_draws=300)
 
@@ -327,7 +327,7 @@ def test_guard_rejected_join_is_marked_and_kept_out_of_the_ledger(
     a claim that looks dispositionable but that no human can ever reach, and a
     frozen ledger claim with no disposition path.
     """
-    import contingency_atlas.compound_join_llm as mod
+    import workbench_atlas.compound_join_llm as mod
 
     settings = _setup(tmp_path)
     atoms = _atoms(settings)
@@ -483,7 +483,7 @@ def test_fiction_canary_measures_confabulation(tmp_path):
 
 
 def test_runner_phase_registered():
-    from contingency_atlas.web.runner import VALID_PHASES
+    from workbench_atlas.web.runner import VALID_PHASES
 
     assert "compound_join_llm" in VALID_PHASES
 
@@ -552,7 +552,7 @@ def test_steer_does_not_relax_intake(tmp_path):
 
 def test_steer_is_capped_and_normalized():
     """Untrusted free text: bounded so it cannot become a second prompt."""
-    from contingency_atlas.compound_join_llm import MAX_STEER_CHARS, propose_joins
+    from workbench_atlas.compound_join_llm import MAX_STEER_CHARS, propose_joins
 
     seen = {}
 

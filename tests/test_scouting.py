@@ -14,8 +14,8 @@ from pathlib import Path
 
 import pytest
 
-import contingency_atlas.scouting as scouting
-from contingency_atlas.scouting import (
+import workbench_atlas.scouting as scouting
+from workbench_atlas.scouting import (
     SOURCE_CATEGORIES,
     FetchFailure,
     FetchResponse,

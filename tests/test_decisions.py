@@ -6,11 +6,11 @@ from concurrent.futures import ThreadPoolExecutor
 
 import pytest
 
-from contingency_atlas.db import add_evidence_event, get_evidence_event
-from contingency_atlas.decisions import list_decisions, record_revision
-from contingency_atlas.phases.phase2_risks import load_emerging_risks
-from contingency_atlas.review import ReviewError, reject_evidence, reject_risk
-from contingency_atlas.schema import migrate_evidence_events
+from workbench_atlas.db import add_evidence_event, get_evidence_event
+from workbench_atlas.decisions import list_decisions, record_revision
+from workbench_atlas.phases.phase2_risks import load_emerging_risks
+from workbench_atlas.review import ReviewError, reject_evidence, reject_risk
+from workbench_atlas.schema import migrate_evidence_events
 
 
 @pytest.fixture

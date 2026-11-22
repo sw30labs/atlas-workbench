@@ -1,0 +1,55 @@
+{
+  "agent": "workbench-atlas-pipeline",
+  "uuid": "baseline-workbench-atlas-pipeline-v1",
+  "metadata": {
+    "title": "Atlas Workbench Pipeline — Project Governance Baseline",
+    "version": "1.0.0",
+    "description": "OSCAL-style DriftLab profile for the six-phase Atlas Workbench risk intelligence pipeline (LangGraph)."
+  },
+  "props": [
+    {"name": "dl:tool-allow", "value": "phase1|ingest_batch,extract_event"},
+    {"name": "dl:tool-allow", "value": "phase2|run_monitoring_cycle,identify_new_risks"},
+    {"name": "dl:tool-allow", "value": "phase3|run_generation_cycle,ralph_loop_qa"},
+    {"name": "dl:tool-allow", "value": "phase4|run_prioritization_cycle"},
+    {"name": "dl:tool-allow", "value": "phase5|run_pattern_analysis,causal_deep_agents"},
+    {"name": "dl:tool-allow", "value": "phase6|run_maintenance_cycle"},
+    {"name": "dl:tool-allow", "value": "pipeline_start|build_pipeline"},
+
+    {"name": "dl:route-allow", "value": "__start__->phase1"},
+    {"name": "dl:route-allow", "value": "__start__->pipeline_start"},
+    {"name": "dl:route-allow", "value": "pipeline_start->phase1"},
+    {"name": "dl:route-allow", "value": "__start__->LangGraph"},
+    {"name": "dl:route-allow", "value": "__start__->phase2"},
+    {"name": "dl:route-allow", "value": "__start__->phase3"},
+    {"name": "dl:route-allow", "value": "__start__->phase4"},
+    {"name": "dl:route-allow", "value": "__start__->phase5"},
+    {"name": "dl:route-allow", "value": "__start__->phase6"},
+    {"name": "dl:route-allow", "value": "phase1->phase2"},
+    {"name": "dl:route-allow", "value": "phase2->phase3"},
+    {"name": "dl:route-allow", "value": "phase3->phase4"},
+    {"name": "dl:route-allow", "value": "phase4->phase5"},
+    {"name": "dl:route-allow", "value": "phase5->phase6"},
+    {"name": "dl:route-allow", "value": "phase6->__end__"},
+    {"name": "dl:route-allow", "value": "phase1->phase1"},
+    {"name": "dl:route-allow", "value": "phase2->phase2"},
+    {"name": "dl:route-allow", "value": "phase3->phase3"},
+    {"name": "dl:route-allow", "value": "phase4->phase4"},
+    {"name": "dl:route-allow", "value": "phase5->phase5"},
+    {"name": "dl:route-allow", "value": "phase6->phase6"},
+    {"name": "dl:route-allow", "value": "pipeline_start->pipeline_start"},
+
+    {"name": "dl:fallback-for", "value": "error|phase6"},
+    {"name": "dl:fallback-for", "value": "timeout|phase6"},
+
+    {"name": "dl:critical-sink", "value": "phase6"},
+    {"name": "dl:critical-sink", "value": "phase3"},
+
+    {"name": "dl:autonomy-budget", "value": "1.0"},
+    {"name": "dl:decision-node", "value": "phase3"},
+    {"name": "dl:decision-node", "value": "phase6"},
+
+    {"name": "dl:required-step", "value": "phase4"},
+    {"name": "dl:required-step", "value": "phase5"},
+    {"name": "dl:required-step", "value": "phase6"}
+  ]
+}

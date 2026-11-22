@@ -5,8 +5,8 @@ from datetime import date, timedelta
 
 import pytest
 
-from contingency_atlas.config import Settings
-from contingency_atlas.context import (
+from workbench_atlas.config import Settings
+from workbench_atlas.context import (
     ContextError, archive_record, context_payload, export_context, import_records, save_record,
 )
 

@@ -49,7 +49,7 @@ score realizations are retained in a full snapshot.
 ## Application API
 
 ```python
-from contingency_atlas.exports import build_snapshot, export_data, render_snapshot
+from workbench_atlas.exports import build_snapshot, export_data, render_snapshot
 
 snapshot = build_snapshot(settings, scenario_ids=["SCENARIO_ID"])
 preview = snapshot["manifest"]

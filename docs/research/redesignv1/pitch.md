@@ -1,4 +1,4 @@
-# Pitch — Contingency Atlas (Project Review, ~5 minutes)
+# Pitch — Atlas Workbench (Project Review, ~5 minutes)
 
 *No slides. Spoken structure. Plain language.*
 
@@ -6,7 +6,7 @@
 
 ## 1. Context / objective
 
-Contingency Atlas is an AI-assisted **operational-risk scenario analysis engine**: it systematically builds **compound** scenarios — combinations of emerging risks that could hit together — and scores them in a way we can audit, using public signals and planted synthetic data under explicit controls.
+Atlas Workbench is an AI-assisted **operational-risk scenario analysis engine**: it systematically builds **compound** scenarios — combinations of emerging risks that could hit together — and scores them in a way we can audit, using public signals and planted synthetic data under explicit controls.
 
 ---
 

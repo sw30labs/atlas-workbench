@@ -16,8 +16,8 @@ def tmp_workspace(tmp_path):
     import json
     from datetime import date, timedelta
 
-    from contingency_atlas.db import add_evidence_event
-    from contingency_atlas.schema import migrate, migrate_evidence_events
+    from workbench_atlas.db import add_evidence_event
+    from workbench_atlas.schema import migrate, migrate_evidence_events
 
     workspace = tmp_path / "workspace"
     workspace.mkdir()
@@ -81,7 +81,7 @@ def tmp_workspace(tmp_path):
 @pytest.fixture
 def settings(tmp_workspace):
     """Settings pointing to the temp workspace."""
-    from contingency_atlas.config import Settings
+    from workbench_atlas.config import Settings
     return Settings(
         scenario_db_path=tmp_workspace / "atlas.db",
         evidence_db_path=tmp_workspace / "event_evidence.db",
@@ -93,7 +93,7 @@ def settings(tmp_workspace):
 @pytest.fixture
 def omlox_client(settings):
     """OMLX client (may not be reachable in CI)."""
-    from contingency_atlas.llm import OMLXClient
+    from workbench_atlas.llm import OMLXClient
     client = OMLXClient(settings)
     yield client
     client.close()
@@ -102,8 +102,8 @@ def omlox_client(settings):
 @pytest.fixture
 def mock_omlox_client():
     """Mock OMLX client that doesn't make real calls."""
-    from contingency_atlas.llm import OMLXClient
-    from contingency_atlas.config import Settings
+    from workbench_atlas.llm import OMLXClient
+    from workbench_atlas.config import Settings
 
     class MockClient(OMLXClient):
         def __init__(self):
@@ -132,7 +132,7 @@ def mock_omlox_client():
 @pytest.fixture
 def empty_db(tmp_path):
     """Create an empty atlas.db with the full schema."""
-    from contingency_atlas.schema import migrate
+    from workbench_atlas.schema import migrate
     db_path = str(tmp_path / "test_atlas.db")
     migrate(db_path)
     return db_path

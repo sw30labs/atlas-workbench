@@ -16,11 +16,11 @@ def _make_evidence_event(category: str, date: str, headline: str = "Test") -> di
 
 class TestTemporalCausality:
     def test_empty_events(self):
-        from contingency_atlas.phases.phase5_patterns import temporal_causality
+        from workbench_atlas.phases.phase5_patterns import temporal_causality
         assert temporal_causality([]) == []
 
     def test_detects_temporal_link(self):
-        from contingency_atlas.phases.phase5_patterns import temporal_causality
+        from workbench_atlas.phases.phase5_patterns import temporal_causality
         # Construct a clear pattern: Cyber always precedes AML within 30 days
         base = datetime(2020, 1, 1)
         events = []
@@ -44,7 +44,7 @@ class TestTemporalCausality:
             assert f.cause_event != f.effect_event
 
     def test_parse_date(self):
-        from contingency_atlas.phases.phase5_patterns import _parse_date
+        from workbench_atlas.phases.phase5_patterns import _parse_date
         assert _parse_date("2024-06-01") is not None
         assert _parse_date(None) is None
         assert _parse_date("invalid") is None
@@ -52,11 +52,11 @@ class TestTemporalCausality:
 
 class TestThematicCorrelation:
     def test_empty_scenarios(self):
-        from contingency_atlas.phases.phase5_patterns import thematic_correlation
+        from workbench_atlas.phases.phase5_patterns import thematic_correlation
         assert thematic_correlation([]) == []
 
     def test_detects_cooccurrence(self):
-        from contingency_atlas.phases.phase5_patterns import thematic_correlation
+        from workbench_atlas.phases.phase5_patterns import thematic_correlation
         # Multi-label: Cyber+AI together often; Climate alone
         scenarios = [
             {
@@ -85,12 +85,12 @@ class TestThematicCorrelation:
 
 class TestCausalDeepAgents:
     def test_synthesize_empty(self, mock_omlox_client):
-        from contingency_atlas.phases.phase5_patterns import CausalDeepAgents
+        from workbench_atlas.phases.phase5_patterns import CausalDeepAgents
         agents = CausalDeepAgents(mock_omlox_client)
         assert agents.synthesize([]) == []
 
     def test_synthesize_with_mock(self, mock_omlox_client):
-        from contingency_atlas.phases.phase5_patterns import CausalDeepAgents
+        from workbench_atlas.phases.phase5_patterns import CausalDeepAgents
         call_count = [0]
 
         def mock_json(*a, **k):
@@ -141,7 +141,7 @@ class TestCausalDeepAgents:
 
 class TestRunPatternAnalysis:
     def test_run_without_llm(self, tmp_workspace):
-        from contingency_atlas.phases.phase5_patterns import run_pattern_analysis
+        from workbench_atlas.phases.phase5_patterns import run_pattern_analysis
         result = run_pattern_analysis(
             str(tmp_workspace / "atlas.db"),
             client=None,
@@ -154,7 +154,7 @@ class TestRunPatternAnalysis:
         assert result.llm_synthesis == []
 
     def test_run_with_mock_llm(self, mock_omlox_client, tmp_workspace):
-        from contingency_atlas.phases.phase5_patterns import run_pattern_analysis
+        from workbench_atlas.phases.phase5_patterns import run_pattern_analysis
         call_count = [0]
 
         def mock_json(*a, **k):
@@ -176,7 +176,7 @@ class TestRunPatternAnalysis:
         assert isinstance(result.errors, list)
 
     def test_persist_findings(self, empty_db):
-        from contingency_atlas.phases.phase5_patterns import (
+        from workbench_atlas.phases.phase5_patterns import (
             AnalysisResult, CausalFinding, PatternDetection, persist_findings
         )
         result = AnalysisResult(

@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-from contingency_atlas.db import (
+from workbench_atlas.db import (
     add_evidence_event,
     get_latest_signpost_assessment,
     get_evidence_event,
@@ -21,7 +21,7 @@ from contingency_atlas.db import (
     update_scenario_fields,
     upsert_scenario,
 )
-from contingency_atlas.review import (
+from workbench_atlas.review import (
     ReviewError,
     approve_evidence,
     approve_risk,
@@ -33,7 +33,7 @@ from contingency_atlas.review import (
     reject_risk,
     reject_signpost_assessment,
 )
-from contingency_atlas.schema import migrate, migrate_evidence_events
+from workbench_atlas.schema import migrate, migrate_evidence_events
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -180,7 +180,7 @@ def test_evidence_locator_allows_document_text_but_rejects_private_url(tmp_path)
 
 
 def test_regulatory_release_requires_instrument_status(tmp_path):
-    from contingency_atlas.review import (
+    from workbench_atlas.review import (
         evidence_validation_report,
         validate_evidence_for_approval,
     )
@@ -719,7 +719,7 @@ def test_signpost_decision_rechecks_evidence_if_preflight_is_bypassed(
     tmp_path,
     monkeypatch,
 ):
-    import contingency_atlas.review as review_module
+    import workbench_atlas.review as review_module
 
     db_path = _scenario_db(tmp_path)
     evidence_db = _evidence_db(tmp_path)

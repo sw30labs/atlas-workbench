@@ -39,7 +39,7 @@ env/
 *.keystore
 *.local.yaml
 *.local.yml
-contingency-atlas.local.yaml
+workbench-atlas.local.yaml
 
 # Runtime databases and SQLite sidecars
 *.db

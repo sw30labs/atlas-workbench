@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# One command to a running Contingency Atlas dashboard.
+# One command to a running Atlas Workbench dashboard.
 #
 #   ./start.sh              # set up, load the demo corpus, open the dashboard
 #   ./start.sh --port 9000  # same, on another port
@@ -18,7 +18,7 @@ die() { printf '\nstart.sh: %s\n' "$*" >&2; exit 1; }
 if [ ! -x "$VENV/bin/python" ]; then
   printf 'Creating %s with Python %s...\n' "$VENV" "$PYTHON_VERSION"
   if command -v uv >/dev/null 2>&1; then
-    uv venv --python "$PYTHON_VERSION" "$VENV" || die "could not create the virtualenv"
+    uv venv --python "$PYTHON_VERSION" --seed "$VENV" || die "could not create the virtualenv"
   else
     for candidate in "python$PYTHON_VERSION" python3.13 python3.12 python3; do
       if command -v "$candidate" >/dev/null 2>&1; then

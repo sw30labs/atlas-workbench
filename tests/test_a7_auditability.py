@@ -13,23 +13,23 @@ from pathlib import Path
 
 import pytest
 
-from contingency_atlas.compound_graduate import (
+from workbench_atlas.compound_graduate import (
     _derive_compound_metadata,
     eligible_compounds,
     migrate_graduations,
     run_compound_graduation,
 )
-from contingency_atlas.compound_join import migrate_compound, run_compound_join
-from contingency_atlas.config import Settings
-from contingency_atlas.db import upsert_scenario
-from contingency_atlas.schema import migrate
-from contingency_atlas.scoring.inventory import slugify
-from contingency_atlas.scoring.models import (
+from workbench_atlas.compound_join import migrate_compound, run_compound_join
+from workbench_atlas.config import Settings
+from workbench_atlas.db import upsert_scenario
+from workbench_atlas.schema import migrate
+from workbench_atlas.scoring.inventory import slugify
+from workbench_atlas.scoring.models import (
     IncidentEvent,
     RiskAtom,
     pair_id_for,
 )
-from contingency_atlas.scoring.scorer import DetScorer, ScorerConfig
+from workbench_atlas.scoring.scorer import DetScorer, ScorerConfig
 
 FAST = ScorerConfig(mc_draws=300, interval_draws=300)
 
@@ -450,7 +450,7 @@ def test_activation_regime_graduation_omits_dollar_band(tmp_path):
 
 
 def test_phase4_excludes_graduated_compounds(tmp_workspace, mock_omlox_client):
-    from contingency_atlas.phases.phase4_prioritize import run_prioritization_cycle
+    from workbench_atlas.phases.phase4_prioritize import run_prioritization_cycle
 
     db = str(tmp_workspace / "atlas.db")
     upsert_scenario(db, {

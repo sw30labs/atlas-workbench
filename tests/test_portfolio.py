@@ -5,8 +5,8 @@ from urllib.parse import urlencode
 
 import pytest
 
-from contingency_atlas.web import portfolio
-from contingency_atlas.web.portfolio import PortfolioError, build_scenario_page
+from workbench_atlas.web import portfolio
+from workbench_atlas.web.portfolio import PortfolioError, build_scenario_page
 
 
 @pytest.fixture
@@ -107,7 +107,7 @@ def test_offset_cap_never_returns_an_unusable_continuation(catalog, monkeypatch)
 
 
 def test_mixin_uses_routing_seam_without_bypassing_parent_authorization(catalog, monkeypatch):
-    from contingency_atlas.web import server
+    from workbench_atlas.web import server
     monkeypatch.setattr(server, "get_settings", lambda: catalog)
     class Handler(portfolio.PortfolioHandlerMixin):
         path = "/api/scenarios?limit=1"

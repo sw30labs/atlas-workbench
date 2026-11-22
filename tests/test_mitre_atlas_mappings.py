@@ -7,8 +7,8 @@ import sqlite3
 
 import pytest
 
-from contingency_atlas.db import get_scenario, update_scenario_fields, upsert_scenario
-from contingency_atlas.frameworks.mappings import (
+from workbench_atlas.db import get_scenario, update_scenario_fields, upsert_scenario
+from workbench_atlas.frameworks.mappings import (
     MappingError,
     approved_mappings_for_scenarios,
     create_mapping_proposal,
@@ -20,13 +20,13 @@ from contingency_atlas.frameworks.mappings import (
     resolve_mapping_context,
     scenario_content_hash,
 )
-from contingency_atlas.frameworks.store import activate_release, framework_status
-from contingency_atlas.review import (
+from workbench_atlas.frameworks.store import activate_release, framework_status
+from workbench_atlas.review import (
     ReviewError,
     approve_mitre_atlas_mapping,
     reject_mitre_atlas_mapping,
 )
-from contingency_atlas.schema import migrate
+from workbench_atlas.schema import migrate
 
 
 def _make_catalog(conn: sqlite3.Connection) -> None:
@@ -362,8 +362,8 @@ def test_proposal_validates_scenario_release_and_object_type(mapping_db):
 
 
 def test_guard_rejection_leaves_mapping_proposal_unstored(mapping_db, monkeypatch):
-    import contingency_atlas.frameworks.mappings as mapping_store
-    from contingency_atlas.guard_hook import GuardRejected, GuardReport
+    import workbench_atlas.frameworks.mappings as mapping_store
+    from workbench_atlas.guard_hook import GuardRejected, GuardReport
 
     observed: dict[str, object] = {}
 

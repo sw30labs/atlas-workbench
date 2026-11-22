@@ -1,4 +1,4 @@
-# Contingency Atlas — Technical Documentation
+# Atlas Workbench — Technical Documentation
 
 **Audience:** engineers, model validators, and risk sponsors.
 **Scope:** the system as it exists in `main` today — the eight-phase
@@ -38,7 +38,7 @@ deliberately removed.
 
 ## System in one paragraph
 
-Contingency Atlas monitors public sources for emerging banking
+Atlas Workbench monitors public sources for emerging banking
 operational-risk signals, maintains a scenario library, and — monthly —
 joins the risk catalog into compound scenarios (pairs of emerging risks
 that could co-materialize), scored by a deterministic hybrid

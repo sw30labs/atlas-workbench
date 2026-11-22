@@ -55,7 +55,7 @@ accepted as importable business fields.
 ## Application API
 
 ```python
-from contingency_atlas.imports import preview_import, submit_import
+from workbench_atlas.imports import preview_import, submit_import
 
 preview = preview_import(
     settings,

@@ -1,0 +1,29 @@
+# Atlas Workbench configuration.
+#
+# Every value here can be overridden with an environment variable; see
+# `.env.example` and `docs/CONFIGURATION.md`.
+#
+# Precedence: explicit code arguments > environment > this file > defaults.
+# Unknown keys are rejected loudly so a typo cannot silently change behaviour.
+
+# Active LLM backend: "omlx" (local MLX server) or "dgx" (vLLM on NVIDIA).
+provider: omlx
+
+omlx:
+  base_url: http://127.0.0.1:8000/v1
+  model: DeepSeek-V4-Flash-0731-MXFP4-MLX
+  model_judge: DeepSeek-V4-Flash-0731-MXFP4-MLX
+  model_final_judge: ""
+  timeout: 600
+  max_tokens: 16384
+
+dgx:
+  base_url: http://127.0.0.1:8000/v1
+  model: Qwen/Qwen3.6-27B-FP8
+  model_judge: Qwen/Qwen3.6-27B-FP8
+  model_final_judge: ""
+  timeout: 600
+  max_tokens: 16384
+  enable_thinking: false
+
+# API keys never belong in this file. Use OMLX_API_KEY / DGX_API_KEY.

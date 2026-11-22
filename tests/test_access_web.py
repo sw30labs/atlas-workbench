@@ -11,8 +11,8 @@ from pathlib import Path
 
 import pytest
 
-from contingency_atlas.web import enterprise, server
-from contingency_atlas.web.access import sign_proxy_headers
+from workbench_atlas.web import enterprise, server
+from workbench_atlas.web.access import sign_proxy_headers
 
 SECRET = b"synthetic-proxy-http-test-material-0001"
 ORIGIN = "https://atlas.example.org"

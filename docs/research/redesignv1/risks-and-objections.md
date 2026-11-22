@@ -1,4 +1,4 @@
-# Risks and Objections — The Uncomfortable Case Against Contingency Atlas
+# Risks and Objections — The Uncomfortable Case Against Atlas Workbench
 
 This document is intentionally hostile. If you cannot answer these, do not pitch.
 

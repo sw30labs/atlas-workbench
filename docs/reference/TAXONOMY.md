@@ -1,13 +1,13 @@
-# Contingency Atlas Risk Taxonomy 1.0
+# Atlas Workbench Risk Taxonomy 1.0
 
-The Contingency Atlas Risk Taxonomy is a compact, independently authored
+The Atlas Workbench Risk Taxonomy is a compact, independently authored
 classification used by this project. Earlier documentation may call it the
 “Atlas taxonomy”; the qualified name is now preferred to distinguish it from
 MITRE ATLAS™. It exists to make demo behavior deterministic and reviewable.
 It is not an industry standard, regulatory classification, loss data taxonomy,
 MITRE taxonomy, or compatibility claim.
 
-The implementation lives in `contingency_atlas/categories.py`. Broad keyword
+The implementation lives in `workbench_atlas/categories.py`. Broad keyword
 rules provide a suggested category; a human reviewer owns the final
 classification. Categories may overlap, and `Multi-risk convergence` is the
 fallback when no single domain is sufficiently supported.
@@ -86,8 +86,8 @@ complete lifecycle and field semantics.
 ## Relationship to MITRE ATLAS
 
 MITRE ATLAS describes adversary behavior against AI-enabled systems through
-external tactics, techniques, mitigations, and case studies. The Contingency
-Atlas Risk Taxonomy instead describes the banking operational-risk domain and
+external tactics, techniques, mitigations, and case studies. The Atlas
+Workbench Risk Taxonomy instead describes the banking operational-risk domain and
 consequence. Neither vocabulary replaces the other.
 
 The optional MITRE ATLAS integration therefore stores reviewed
@@ -96,7 +96,7 @@ mapping does not change a scenario's native category, driver, cause, maturity,
 likelihood, impact, urgency, or compound score. It records hypothesized
 applicability, not observed adversary attribution. An ATLAS case study related
 to a mapped technique is an upstream example and is not evidence that the
-Contingency Atlas scenario occurred.
+Atlas Workbench scenario occurred.
 
 ## Impact bands
 
@@ -128,7 +128,7 @@ meaning, or matching precedence requires a new applicable version and
 migration notes.
 
 The stable `atlas-1.0` identifier is retained for compatibility even though the
-display name is now “Contingency Atlas Risk Taxonomy.” MITRE ATLAS releases use
+display name is now “Atlas Workbench Risk Taxonomy.” MITRE ATLAS releases use
 separate `mitre-atlas/<content-version>` coordinates. Their content versions,
 format versions, technique maturity labels, and object identifiers never alter
 or imply a new version of this taxonomy.

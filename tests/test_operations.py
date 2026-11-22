@@ -8,13 +8,13 @@ from urllib.parse import urlunsplit
 
 import pytest
 
-from contingency_atlas.config import Settings
-from contingency_atlas.operations import (
+from workbench_atlas.config import Settings
+from workbench_atlas.operations import (
     JobJournal, OperationsError, create_backup, exclusive_file_lock,
     job_journal_path, readiness, restore_backup, settings_fingerprint,
     verify_backup, worker_lock_path,
 )
-from contingency_atlas.web import runner
+from workbench_atlas.web import runner
 
 
 @pytest.fixture
@@ -272,7 +272,7 @@ def test_readiness_is_read_only_and_reports_corrupt_journal(operational_settings
 
 
 def test_dashboard_analysis_phases_are_recorded_in_run_history(operational_settings, monkeypatch):
-    from contingency_atlas.schema import migrate
+    from workbench_atlas.schema import migrate
 
     operational_settings.scenario_db_path.unlink()
     migrate(str(operational_settings.scenario_db_path))

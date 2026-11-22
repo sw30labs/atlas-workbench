@@ -1,11 +1,11 @@
-# Contingency Atlas — Redesign Pack (v1)
+# Atlas Workbench — Redesign Pack (v1)
 
 **Status:** design and specification only. No implementation commitment.  
 **Audience:** pod lead + engineers; model validation and risk sponsors as secondary readers.  
 **Date:** 2026-08-01  
 **Branch context:** `feature/nc/karpathy-autoresearch-emerging-risks`
 
-This pack redesigns Contingency Atlas from a public-signal research pipeline into an AI-native **operational-risk scenario analysis engine**: combinatorial compound scenarios, hybrid scoring evaluated on public and synthetic signals, multiverse search with checkpoints, policy-controlled model routing, and a falsification harness.
+This pack redesigns Atlas Workbench from a public-signal research pipeline into an AI-native **operational-risk scenario analysis engine**: combinatorial compound scenarios, hybrid scoring evaluated on public and synthetic signals, multiverse search with checkpoints, policy-controlled model routing, and a falsification harness.
 
 ## Documents
 

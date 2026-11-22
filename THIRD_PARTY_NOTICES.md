@@ -1,6 +1,6 @@
 # Third-Party Notices
 
-Contingency Atlas depends on or integrates with third-party software. Those
+Atlas Workbench depends on or integrates with third-party software. Those
 projects remain governed by their own licenses. The project’s Apache License
 2.0 does not replace or narrow third-party terms.
 
@@ -27,7 +27,7 @@ Development dependency:
 
 ## Operator-imported MITRE ATLAS data
 
-Contingency Atlas can import an operator-selected release from the official
+Atlas Workbench can import an operator-selected release from the official
 [MITRE ATLAS data repository](https://github.com/mitre-atlas/atlas-data). The
 upstream data is not bundled with this repository and is not downloaded by the
 application. When an operator imports it, the local database can contain
@@ -42,24 +42,24 @@ The upstream repository states:
 The exact upstream `LICENSE`, release statement, content version, format
 version, operator-asserted source URL, and source-file SHA-256 should travel
 with any copy or redistribution of imported content. The importer records but
-does not fetch or authenticate that URL. The Contingency Atlas license does
+does not fetch or authenticate that URL. The Atlas Workbench license does
 not replace or narrow those terms.
 
 MITRE ATLAS™ is used here only to identify the external knowledge base and
-interoperability target. Contingency Atlas is an independent project; MITRE
+interoperability target. Atlas Workbench is an independent project; MITRE
 has not affiliated with, sponsored, approved, or endorsed it. No MITRE or
 MITRE ATLAS logo is bundled.
 
 ## Optional external integrations
 
 [oMLX](https://github.com/jundot/omlx) is an optional external local-inference
-server licensed under Apache-2.0. It is not bundled with Contingency Atlas.
+server licensed under Apache-2.0. It is not bundled with Atlas Workbench.
 Model weights served through oMLX have their own licenses and acceptable-use
 terms.
 
 [DriftLab](https://github.com/sw30labs/driftlab-dgx) is an optional external
 runtime-governance integration licensed under Apache-2.0. It is not a declared
-Python dependency or bundled with Contingency Atlas; the pipeline detects it
+Python dependency or bundled with Atlas Workbench; the pipeline detects it
 lazily and remains usable when it is absent. The reproducible command in the
 README pins package version 2.1.0 to Git commit
 `9f9281c95156dc0092c4b7e23acb9051638cc4fd`.
@@ -69,9 +69,9 @@ README pins package version 2.1.0 to Git commit
 Links to ORX, regulators, publishers, books, standards, news organizations, or
 other research sources are citations and acknowledgments. Their sites,
 publications, data, logos, and trademarks are not dependencies and are not
-redistributed under the Contingency Atlas license. The optional MITRE ATLAS
+redistributed under the Atlas Workbench license. The optional MITRE ATLAS
 import described above likewise begins with a separately obtained local file;
-it is not part of the Contingency Atlas source distribution.
+it is not part of the Atlas Workbench source distribution.
 
 ## Redistribution obligations
 

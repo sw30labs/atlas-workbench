@@ -5,8 +5,8 @@ from __future__ import annotations
 import inspect
 import json
 
-from contingency_atlas.db import add_evidence_event, list_evidence_events
-from contingency_atlas.phases import phase3_generate, phase5_patterns
+from workbench_atlas.db import add_evidence_event, list_evidence_events
+from workbench_atlas.phases import phase3_generate, phase5_patterns
 
 
 def _add_pending_evidence(db_path: str) -> None:

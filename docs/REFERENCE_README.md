@@ -1,4 +1,4 @@
-# Contingency Atlas
+# Atlas Workbench
 
 > **Reference copy.** This is the original project manual, preserved for its
 > method, safety, and governance detail. Relative links are written for the
@@ -9,7 +9,7 @@
 
 > Map tomorrow’s failure modes before they become today’s losses.
 
-Contingency Atlas turns independently researched public signals into structured
+Atlas Workbench turns independently researched public signals into structured
 operational-risk scenarios. It helps researchers explore how weak signals,
 control failures, dependencies, and external shocks could combine into
 material banking disruptions. A separately governed organization workspace
@@ -29,7 +29,7 @@ never promotes a lead into evidence.
 
 This is an independent personal research project:
 
-- Contingency Atlas is not affiliated with, sponsored, supplied, approved, or
+- Atlas Workbench is not affiliated with, sponsored, supplied, approved, or
   endorsed by the author’s employer or any other organization. No employer
   code, data, internal reports, client information, systems, methods, or other
   confidential or proprietary material is included.
@@ -52,7 +52,7 @@ acceptance gates.
 
 ## What it does
 
-Contingency Atlas runs an eight-phase research workflow:
+Atlas Workbench runs an eight-phase research workflow:
 
 | Phase | Purpose | Typical output |
 |---|---|---|
@@ -122,10 +122,10 @@ must be demonstrated in the deployment where they will be used.
 
 ## Optional MITRE ATLAS overlay
 
-Contingency Atlas can add reviewed AI-adversary context from
+Atlas Workbench can add reviewed AI-adversary context from
 [MITRE ATLAS™](https://atlas.mitre.org/) to a scenario. The integration is an
 optional external-framework overlay; it does not replace the
-[Contingency Atlas Risk Taxonomy](docs/reference/TAXONOMY.md), and it never changes
+[Atlas Workbench Risk Taxonomy](docs/reference/TAXONOMY.md), and it never changes
 likelihood, impact, urgency, compound generation, graduation, or any other
 score.
 
@@ -175,17 +175,17 @@ approval from silently becoming current when text is restored or a scenario ID
 is deleted and recreated. “Applicable” means a reviewer considers the technique
 useful for analyzing the hypothesis; it does not mean the technique was
 observed or attributed. Related MITRE ATLAS case studies are examples linked
-to the technique, not evidence for the Contingency Atlas scenario.
+to the technique, not evidence for the Atlas Workbench scenario.
 
 MITRE ATLAS content retains its upstream copyright and Apache-2.0 terms.
-MITRE has not affiliated with, sponsored, approved, or endorsed Contingency
-Atlas. See [Third-Party Notices](THIRD_PARTY_NOTICES.md),
+MITRE has not affiliated with, sponsored, approved, or endorsed Atlas
+Workbench. See [Third-Party Notices](THIRD_PARTY_NOTICES.md),
 [Data and Documentation License](DATA_LICENSE.md), and
 [ADR-016](docs/decisions/016-mitre-atlas-reviewed-overlay.md).
 
 ## Architecture
 
-![Contingency Atlas architecture: public or synthetic evidence enters a provenance-gated eight-phase workflow, which produces governed research products for a review dashboard](docs/reference/architecture-current.svg)
+![Atlas Workbench architecture: public or synthetic evidence enters a provenance-gated eight-phase workflow, which produces governed research products for a review dashboard](docs/reference/architecture-current.svg)
 
 Text alternative:
 
@@ -315,10 +315,10 @@ reviewer's written reason, pre-filled into the decision panel for editing.
   those fields; rights and factual verification remain pending until a human
   reviewer approves the record.
 - **Taxonomy is project-native.** The compact, reviewable
-  [Contingency Atlas Risk Taxonomy](docs/reference/TAXONOMY.md) is independently authored and
+  [Atlas Workbench Risk Taxonomy](docs/reference/TAXONOMY.md) is independently authored and
   versioned; optional MITRE ATLAS mappings remain a separate external overlay.
 - **Broad drivers stay separate from banking consequences.** The radar overlay
-  records the external change, while the Contingency Atlas Risk Taxonomy and
+  records the external change, while the Atlas Workbench Risk Taxonomy and
   transmission path explain why it matters operationally.
 - **Hypotheses remain hypotheses.** Scores express model assumptions and
   prioritization choices, not calibrated probabilities or forecasts.
@@ -425,7 +425,7 @@ audit blob from `docs/research/redesignv1/algorithm-spec.md` §9 (atom fits, dep
 parameters, MC seed and hit count, uncertainty class), one telemetry event
 per scored pair, and a `run_report.json` cost rollup ($0 on the
 deterministic path). The egress gateway stub
-(`contingency_atlas/scoring/egress.py`) enforces the sensitive→public
+(`workbench_atlas/scoring/egress.py`) enforces the sensitive→public
 allow-list with a hash-chained audit log; red-team tests live in
 `tests/test_scoring_egress.py`.
 
@@ -563,7 +563,7 @@ adapter for operator-supplied event extracts.
 
 The redesign engine extends the original six core phases with a monthly Phase
 7 step: `compound_join`, a node after Phase 6
-(`contingency_atlas/compound_join.py`). On each pipeline run it checks
+(`workbench_atlas/compound_join.py`). On each pipeline run it checks
 whether ≥ 28 days passed since the last successful join, joins the current
 emerging risks into channel-blocked compound pairs, scores them with the
 deterministic engine from the public signal-activation series, and writes
@@ -585,7 +585,7 @@ proposals) additionally scores the pairs that approved channel proposals
 *would* add — into the artifact's `shadow` block only, production tables
 untouched, graduation frozen by construction — shown in Scenarios → Compound
 candidates as the WHAT-IF WATCH strip. Manual run: `python -m
-contingency_atlas.compound_join --force`.
+workbench_atlas.compound_join --force`.
 
 ### Compound graduation (Phase 8)
 
@@ -692,18 +692,18 @@ ATLAS_DB=generated/demo/atlas.db \
 ATLAS_EVIDENCE_DB=generated/demo/event_evidence.db \
 ATLAS_EMERGING_RISKS=generated/demo/emerging_risks.json \
 ATLAS_SCENARIO_EXPORT=generated/demo/scenario_export.json \
-python -m contingency_atlas.web
+python -m workbench_atlas.web
 # then open http://127.0.0.1:8080
 ```
 
 Configuration precedence is:
 
 ```text
-explicit Python arguments -> environment variables -> contingency-atlas.yaml -> defaults
+explicit Python arguments -> environment variables -> workbench-atlas.yaml -> defaults
 ```
 
 Keep secrets in environment variables. Do not commit API keys to
-`contingency-atlas.yaml` or any other repository file.
+`workbench-atlas.yaml` or any other repository file.
 
 For a local OpenAI-compatible endpoint:
 
@@ -732,8 +732,8 @@ The example configuration intentionally contains no API key.
 ### Run the deterministic path
 
 ```python
-from contingency_atlas.config import Settings
-from contingency_atlas.pipeline import run_pipeline
+from workbench_atlas.config import Settings
+from workbench_atlas.pipeline import run_pipeline
 
 result = run_pipeline(Settings(), skip_llm=True)
 print(result.summary())
@@ -787,8 +787,8 @@ extracted text, and keep each `evidence_texts` item positionally aligned with
 its `source_urls` item.
 
 ```python
-from contingency_atlas.config import Settings
-from contingency_atlas.pipeline import run_pipeline
+from workbench_atlas.config import Settings
+from workbench_atlas.pipeline import run_pipeline
 
 result = run_pipeline(
     Settings(),
@@ -847,7 +847,7 @@ recording the decision and updating the scenario projection.
 ### Open the local dashboard
 
 ```bash
-python -m contingency_atlas.web
+python -m workbench_atlas.web
 # then open http://127.0.0.1:8080
 ```
 
@@ -931,14 +931,14 @@ data exposure.
 
 ```text
 .
-├── contingency_atlas/    # pipeline, phases, local dashboard, and baselines
+├── workbench_atlas/    # pipeline, phases, local dashboard, and baselines
 ├── ontology/             # the ontology guard (domain, shapes, validator, fixtures)
 ├── docs/                 # architecture and radar-method documentation
 ├── examples/             # explicitly fictional demonstration fixtures
 ├── scripts/              # verification and maintenance helpers
 ├── tests/                # unit and integration tests
-├── contingency_atlas/web/about.yaml # dashboard About-page content
-├── contingency-atlas.yaml # non-secret local inference configuration
+├── workbench_atlas/web/about.yaml # dashboard About-page content
+├── workbench-atlas.yaml # non-secret local inference configuration
 ├── docs/reference/ONTOLOGY.md    # the two-gate ontology guard: rules, identity, wiring
 ├── docs/reference/TAXONOMY.md           # Atlas categories, radar overlay, and impact bands
 ├── DATA_PROVENANCE.md    # source and record-level provenance requirements
@@ -954,7 +954,7 @@ Data-bearing changes receive additional review.
 
 ## Acknowledgments
 
-Contingency Atlas builds on open-source tooling and published thinking from a
+Atlas Workbench builds on open-source tooling and published thinking from a
 broader community. See [ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md) and
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 

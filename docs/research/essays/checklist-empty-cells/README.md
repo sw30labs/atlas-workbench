@@ -1,7 +1,7 @@
 # Essay: A Checklist Can Hold Any Risk You Can Name
 
 Public-facing long-form essay on operational-risk checklists versus axis
-enumeration, survivorship bias, pre-mortem practice, and Contingency Atlas as
+enumeration, survivorship bias, pre-mortem practice, and Atlas Workbench as
 an independent research project. Companion to the technical scoring white
 paper in [`docs/research/whitepaper/`](../../whitepaper/).
 

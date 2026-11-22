@@ -15,7 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from contingency_atlas.demo import DemoError, seed_into  # noqa: E402
+from workbench_atlas.demo import DemoError, seed_into  # noqa: E402
 
 # Historical name used by automation and tests.
 seed = seed_into

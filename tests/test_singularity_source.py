@@ -4,15 +4,15 @@ from __future__ import annotations
 
 import json
 
-from contingency_atlas.singularity_source import (
+from workbench_atlas.singularity_source import (
     collect_relevant_stories,
     compose_material,
     probe_singularity_atlas,
     record_source_job,
     relevance_for,
 )
-from contingency_atlas.web.intake_flow import prepare_research_material
-from contingency_atlas.web.server import DashboardHandler
+from workbench_atlas.web.intake_flow import prepare_research_material
+from workbench_atlas.web.server import DashboardHandler
 
 
 URL = "https://public.example/compute-outage"
@@ -36,7 +36,7 @@ def _story(**overrides):
 
 
 def test_probe_does_not_raise_when_neo4j_is_missing(monkeypatch):
-    import contingency_atlas.singularity_source as module
+    import workbench_atlas.singularity_source as module
 
     def boom():
         raise RuntimeError("should not connect during import-fail probe")
@@ -116,7 +116,7 @@ def test_prepare_does_not_burn_unsubmitted_or_capped_stories(tmp_path):
 
 
 def test_seen_and_corpus_urls_are_not_processed_twice(tmp_path):
-    from contingency_atlas.singularity_source import record_submitted_stories
+    from workbench_atlas.singularity_source import record_submitted_stories
 
     first = collect_relevant_stories(
         include=True,

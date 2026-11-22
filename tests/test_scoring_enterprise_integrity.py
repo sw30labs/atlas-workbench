@@ -7,18 +7,18 @@ from pathlib import Path
 
 import pytest
 
-from contingency_atlas import compound_join
-from contingency_atlas.compound_graduate import (
+from workbench_atlas import compound_join
+from workbench_atlas.compound_graduate import (
     _build_graduation_prompt,
     eligible_compounds,
     migrate_graduations,
 )
-from contingency_atlas.config import Settings
-from contingency_atlas.scoring.evaluate import evaluation_verdicts
-from contingency_atlas.scoring.models import IncidentEvent, RiskAtom
-from contingency_atlas.scoring.r1 import build_signal_series, run_r1_eval
-from contingency_atlas.scoring.scorer import DetScorer, ScorerConfig
-from contingency_atlas.scoring.synthetic import aggregate_incident_features
+from workbench_atlas.config import Settings
+from workbench_atlas.scoring.evaluate import evaluation_verdicts
+from workbench_atlas.scoring.models import IncidentEvent, RiskAtom
+from workbench_atlas.scoring.r1 import build_signal_series, run_r1_eval
+from workbench_atlas.scoring.scorer import DetScorer, ScorerConfig
+from workbench_atlas.scoring.synthetic import aggregate_incident_features
 
 
 FAST = ScorerConfig(mc_draws=200, interval_draws=100, evt_enabled=False)

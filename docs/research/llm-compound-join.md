@@ -65,12 +65,12 @@ world — every join it returns there is a measured confabulation.
 
 | Piece | Location |
 |---|---|
-| Orchestration + prompt + validation | `contingency_atlas/compound_join_llm.py` |
-| Ledger claim kind `llm_join` + resolution | `contingency_atlas/scoring/judgment_ledger.py` |
-| Review proposals (edge_add, pending) | `contingency_atlas/proposals.py` (unchanged store) |
-| Job wiring (`compound_join_llm` phase) | `contingency_atlas/web/runner.py` |
-| Payload key `llm_join` | `contingency_atlas/web/server.py` |
-| Card + run modal + DARK MATTER WATCH strip | `contingency_atlas/web/static/index.html` |
+| Orchestration + prompt + validation | `workbench_atlas/compound_join_llm.py` |
+| Ledger claim kind `llm_join` + resolution | `workbench_atlas/scoring/judgment_ledger.py` |
+| Review proposals (edge_add, pending) | `workbench_atlas/proposals.py` (unchanged store) |
+| Job wiring (`compound_join_llm` phase) | `workbench_atlas/web/runner.py` |
+| Payload key `llm_join` | `workbench_atlas/web/server.py` |
+| Card + run modal + DARK MATTER WATCH strip | `workbench_atlas/web/static/index.html` |
 | Tests (MockClient, no network) | `tests/test_compound_join_llm.py` |
 
 ---

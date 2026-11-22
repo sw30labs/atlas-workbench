@@ -9,9 +9,9 @@ import json
 import httpx
 import pytest
 
-from contingency_atlas.config import Settings, load_yaml_settings, normalize_llm_provider
-from contingency_atlas.llm import LLMError, OMLXClient
-from contingency_atlas.scoring.telemetry import TelemetryLogger
+from workbench_atlas.config import Settings, load_yaml_settings, normalize_llm_provider
+from workbench_atlas.llm import LLMError, OMLXClient
+from workbench_atlas.scoring.telemetry import TelemetryLogger
 
 _LLM_ENV = [
     "ATLAS_LLM_PROVIDER", "LLM_PROVIDER",
@@ -236,7 +236,7 @@ def test_omlx_responses_truncation_is_loud():
         handler,
         Settings(llm_provider="omlx", omlx_use_responses_api=True),
     )
-    from contingency_atlas.llm import LLMTruncatedError
+    from workbench_atlas.llm import LLMTruncatedError
 
     with pytest.raises(LLMTruncatedError, match="truncated"):
         client.chat([{"role": "user", "content": "hi"}])

@@ -10,7 +10,7 @@ from http.server import ThreadingHTTPServer
 
 import pytest
 
-from contingency_atlas.ingest_artifacts import (
+from workbench_atlas.ingest_artifacts import (
     chunk_markdown,
     convert_to_markdown,
     decode_artifact,
@@ -19,7 +19,7 @@ from contingency_atlas.ingest_artifacts import (
     merge_extractions,
     rubric_check,
 )
-from contingency_atlas.web.server import DashboardHandler
+from workbench_atlas.web.server import DashboardHandler
 
 
 class ExtractMockClient:
@@ -193,7 +193,7 @@ def test_prefill_satisfies_the_real_phase1_validator():
     drives runner._texts and runner._urls — the two functions whose disagreeing
     counts produced "Phase 1 needs one source URL per evidence-text block".
     """
-    from contingency_atlas.web.runner import _texts, _urls
+    from workbench_atlas.web.runner import _texts, _urls
 
     # MULTI-record, and deliberately awkward: a paragraph break inside a
     # record, two records citing the SAME source, and one item with no link.
@@ -241,7 +241,7 @@ def test_a_prefix_of_a_real_url_is_not_accepted_as_provenance():
     domain passes whenever the chunk contains any deeper URL on it — and the
     result resolves, so a reviewer trusts it.
     """
-    from contingency_atlas.ingest_artifacts import _verify_pairing
+    from workbench_atlas.ingest_artifacts import _verify_pairing
 
     chunk = "see https://x.example/status/12345 for details"
     out = _verify_pairing(
@@ -257,7 +257,7 @@ def test_a_private_address_is_refused_even_when_present_in_the_text():
     Previously the only test touching this was satisfied by the earlier
     'not in the chunk' branch, so the private-address guard was never reached.
     """
-    from contingency_atlas.ingest_artifacts import _verify_pairing
+    from workbench_atlas.ingest_artifacts import _verify_pairing
 
     chunk = "internal runbook at http://127.0.0.1/internal explains it"
     out = _verify_pairing(
@@ -273,7 +273,7 @@ def test_a_non_string_url_does_not_discard_the_whole_chunk():
     _verify_pairing runs inside _extract_chunk's try, so an AttributeError on
     .strip() would be charged to the entire chunk and burn a repair attempt.
     """
-    from contingency_atlas.ingest_artifacts import _verify_pairing
+    from workbench_atlas.ingest_artifacts import _verify_pairing
 
     chunk = "text with https://a.example/1 in it"
     out = _verify_pairing([
@@ -292,8 +292,8 @@ def test_a_blank_line_inside_a_record_cannot_split_it():
     whose own text contains a blank line re-breaks it from the inside — one
     URL, two blocks. Models emit paragraph breaks routinely.
     """
-    from contingency_atlas.ingest_artifacts import _verify_pairing
-    from contingency_atlas.web.runner import _texts, _urls
+    from workbench_atlas.ingest_artifacts import _verify_pairing
+    from workbench_atlas.web.runner import _texts, _urls
 
     chunk = "context https://a.example/1 more"
     recs = _verify_pairing(
@@ -311,7 +311,7 @@ def test_a_blank_line_inside_a_record_cannot_split_it():
 def test_more_records_than_phase1_accepts_is_reported(monkeypatch):
     """Both caps truncate to the same number, so the run succeeds having
     silently dropped the overflow. A partial ingest must not look complete."""
-    from contingency_atlas.web import runner
+    from workbench_atlas.web import runner
 
     class ManyRecords:
         def __init__(self, *a, **k):
@@ -329,7 +329,7 @@ def test_more_records_than_phase1_accepts_is_reported(monkeypatch):
             pass
 
     monkeypatch.setattr(runner, "omlx_reachable", lambda *a, **k: True)
-    monkeypatch.setattr("contingency_atlas.llm.OMLXClient", ManyRecords)
+    monkeypatch.setattr("workbench_atlas.llm.OMLXClient", ManyRecords)
     text = " ".join(f"https://a.example/{i}" for i in range(runner.MAX_EVIDENCE_TEXTS + 10))
 
     with _server() as port:
@@ -432,7 +432,7 @@ def _post(port, path, payload, headers=None):
 
 
 def test_convert_endpoint_pasted_text(monkeypatch):
-    from contingency_atlas.web import runner
+    from workbench_atlas.web import runner
 
     monkeypatch.setattr(runner, "omlx_reachable", lambda *a, **k: False)
     with _server() as port:
@@ -453,7 +453,7 @@ def test_offline_convert_still_populates_the_url_lane(monkeypatch):
     body is one block, so N URLs would guarantee the 1:1 rejection. The links
     are still returned, as orphans to pair by hand.
     """
-    from contingency_atlas.web import runner
+    from workbench_atlas.web import runner
 
     monkeypatch.setattr(runner, "omlx_reachable", lambda *a, **k: False)
     with _server() as port:
@@ -466,7 +466,7 @@ def test_offline_convert_still_populates_the_url_lane(monkeypatch):
 
 
 def test_convert_endpoint_file_upload(monkeypatch):
-    from contingency_atlas.web import runner
+    from workbench_atlas.web import runner
 
     monkeypatch.setattr(runner, "omlx_reachable", lambda *a, **k: False)
     content = base64.b64encode(b"transcript text with https://blog.example/talk").decode()
@@ -479,7 +479,7 @@ def test_convert_endpoint_file_upload(monkeypatch):
 
 
 def test_convert_endpoint_bad_payload(monkeypatch):
-    from contingency_atlas.web import runner
+    from workbench_atlas.web import runner
 
     monkeypatch.setattr(runner, "omlx_reachable", lambda *a, **k: False)
     with _server() as port:
@@ -488,7 +488,7 @@ def test_convert_endpoint_bad_payload(monkeypatch):
 
 
 def test_convert_endpoint_rejects_bad_mode(monkeypatch):
-    from contingency_atlas.web import runner
+    from workbench_atlas.web import runner
 
     monkeypatch.setattr(runner, "omlx_reachable", lambda *a, **k: True)
     with _server() as port:
@@ -505,7 +505,7 @@ def test_failed_chunks_reach_the_operator(monkeypatch):
     failed rendered as "1 chunks" with an empty evidence box — identical to a
     document that genuinely contained nothing.
     """
-    from contingency_atlas.web import runner
+    from workbench_atlas.web import runner
 
     class AlwaysWrongShape:
         """Extraction succeeds as JSON but never has the required keys."""
@@ -520,7 +520,7 @@ def test_failed_chunks_reach_the_operator(monkeypatch):
             pass
 
     monkeypatch.setattr(runner, "omlx_reachable", lambda *a, **k: True)
-    monkeypatch.setattr("contingency_atlas.llm.OMLXClient", AlwaysWrongShape)
+    monkeypatch.setattr("workbench_atlas.llm.OMLXClient", AlwaysWrongShape)
 
     with _server() as port:
         status, d = _post(port, "/api/ingest/convert", {"text": "some artifact text"})
@@ -539,8 +539,8 @@ def test_a_failed_rubric_still_returns_the_checks_that_need_no_model():
     itself fail — and the dashboard rendered nothing at all, making a
     four-minute failure look like a clean panel.
     """
-    from contingency_atlas.ingest_artifacts import rubric_check
-    from contingency_atlas.llm import LLMTruncatedError
+    from workbench_atlas.ingest_artifacts import rubric_check
+    from workbench_atlas.llm import LLMTruncatedError
 
     class Dies:
         def chat_json(self, messages, **kwargs):
@@ -562,7 +562,7 @@ def test_the_judges_source_window_is_capped_and_reported():
     """The uncapped half of the payload. artifact_text was always capped and
     the omission reported; the sources list beside it was not, and it is the
     half that grows without bound."""
-    from contingency_atlas.ingest_artifacts import RUBRIC_MAX_SOURCES, rubric_check
+    from workbench_atlas.ingest_artifacts import RUBRIC_MAX_SOURCES, rubric_check
 
     seen = {}
 
@@ -590,7 +590,7 @@ def test_load_bearing_facts_is_reported_but_does_not_gate():
     extraction — and a verdict that fires on evidence it cannot attribute
     would fail every qualitative source until reviewers stopped reading it.
     """
-    from contingency_atlas.ingest_artifacts import rubric_check
+    from workbench_atlas.ingest_artifacts import rubric_check
 
     class Judge:
         def chat_json(self, messages, **kwargs):
@@ -609,7 +609,7 @@ def test_load_bearing_facts_is_reported_but_does_not_gate():
 
 
 def test_modal_has_artifact_wiring_for_phases_1_and_2():
-    html = open("contingency_atlas/web/static/index.html").read()
+    html = open("workbench_atlas/web/static/index.html").read()
     assert "ARTIFACT_TARGETS" in html
     assert 'phase1: { text: "rf-evidence_texts", urls: "rf-source_urls", mode: "evidence" }' in html
     assert 'phase2: { text: "rf-source_text", urls: "rf-risk_source_urls", mode: "intelligence" }' in html
@@ -626,7 +626,7 @@ def test_ingest_extra_pins_every_format_the_converter_offers():
     import tomllib
     from pathlib import Path
 
-    from contingency_atlas.ingest_artifacts import MARKITDOWN_EXTENSIONS
+    from workbench_atlas.ingest_artifacts import MARKITDOWN_EXTENSIONS
 
     root = Path(__file__).resolve().parents[1]
     pyproject = tomllib.loads((root / "pyproject.toml").read_text())

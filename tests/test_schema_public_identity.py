@@ -10,15 +10,15 @@ import json
 import re
 from pathlib import Path
 
-from contingency_atlas.independence_lexicon import (
+from workbench_atlas.independence_lexicon import (
     RESEARCH_HOST_DENY,
     SCHEMA_FORBIDDEN_IDENTIFIERS,
     SCHEMA_FORBIDDEN_PREFIXES,
     forbidden_schema_names,
     host_is_denied,
 )
-from contingency_atlas.schema import EVIDENCE_EVENT_COLUMNS, SCENARIO_COLUMNS
-from contingency_atlas.scoring.models import RiskAtom
+from workbench_atlas.schema import EVIDENCE_EVENT_COLUMNS, SCENARIO_COLUMNS
+from workbench_atlas.scoring.models import RiskAtom
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -87,7 +87,7 @@ def test_demo_fixture_keys_are_canonical():
 def test_lexicon_source_keeps_proper_nouns_fragmented():
     """PAUSE: completed proper nouns and leftover alias keys stay fragmented."""
     source = (
-        ROOT / "contingency_atlas" / "independence_lexicon.py"
+        ROOT / "workbench_atlas" / "independence_lexicon.py"
     ).read_text(encoding="utf-8")
     assert _joined("cm", "db", "_info_") not in source
     employer = _joined("U", "BS")
@@ -114,7 +114,7 @@ def test_excluded_provider_hosts_are_denied():
 
 
 def test_synthetic_scoring_codes_are_project_native():
-    from contingency_atlas.scoring.synthetic_events import (
+    from workbench_atlas.scoring.synthetic_events import (
         SCORING_CELL_CODES,
         SEGMENT_CODES,
     )

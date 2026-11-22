@@ -1,7 +1,7 @@
 # SOTA image-generator prompt — article hero figure
 
 **Decision:** Hero figure = **checklist (memory) vs axis matrix (search)** with one highlighted joint cell.  
-Not a full Contingency Atlas architecture diagram. Not a literal WWII plane (optional inset only).
+Not a full Atlas Workbench architecture diagram. Not a literal WWII plane (optional inset only).
 
 Use this with Midjourney v6+, Flux, Ideogram, GPT-Image, Imagen, SD3, etc. Prefer models good at **text in image**. If text is garbled, use the SVG already generated (`figure_checklist_vs_search.svg`) as the publication asset.
 

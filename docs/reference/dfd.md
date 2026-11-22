@@ -4,7 +4,7 @@
 
 ```mermaid
 flowchart LR
-    PUB[Public sources<br/>reporting · registers] --> ATLAS((Contingency<br/>Atlas))
+    PUB[Public sources<br/>reporting · registers] --> ATLAS((Atlas<br/>Workbench))
     ART[User artifacts<br/>PDF · Office · text · transcripts] --> ATLAS
     ATLAS --> LIB[Scenario library<br/>+ compound register]
     ATLAS --> DASH[Operator dashboard<br/>situation room · costs · compounds]

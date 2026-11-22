@@ -2,7 +2,7 @@
 
 - **Status:** accepted
 - **Date:** 2026-08-30
-- **Tracks:** [Issue #10](https://github.com/sw30labs/contingency-atlas/issues/10)
+- **Tracks:** [Issue #10](https://github.com/sw30labs/atlas-workbench/issues/10)
 
 ## Context
 

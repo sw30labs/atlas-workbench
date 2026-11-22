@@ -49,7 +49,7 @@ keep their layout:
 
 1. `ATLAS_CONFIG` if set.
 2. `$ATLAS_HOME/config.yaml` if it exists.
-3. `contingency-atlas.yaml` in a source checkout.
+3. `workbench-atlas.yaml` in a source checkout.
 
 ---
 

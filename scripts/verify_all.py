@@ -14,17 +14,17 @@ sys.path.insert(0, str(ROOT))
 
 
 def main() -> int:
-    from contingency_atlas.config import Settings
-    from contingency_atlas.db import (
+    from workbench_atlas.config import Settings
+    from workbench_atlas.db import (
         add_evidence_event,
         get_evidence_event_stats,
         get_scenario,
         to_json_str,
         upsert_scenario,
     )
-    from contingency_atlas.pipeline import build_pipeline, run_pipeline
-    from contingency_atlas.scouting import load_registry, registry_summary
-    from contingency_atlas.schema import (
+    from workbench_atlas.pipeline import build_pipeline, run_pipeline
+    from workbench_atlas.scouting import load_registry, registry_summary
+    from workbench_atlas.schema import (
         EVIDENCE_EVENT_COLUMNS,
         SCENARIO_COLUMNS,
         get_schema_info,
@@ -40,7 +40,7 @@ def main() -> int:
         if not condition:
             failures.append(name)
 
-    with tempfile.TemporaryDirectory(prefix="contingency-atlas-verify-") as raw:
+    with tempfile.TemporaryDirectory(prefix="workbench-atlas-verify-") as raw:
         workspace = Path(raw)
         scenario_db = workspace / "scenarios.db"
         evidence_db = workspace / "evidence-events.db"

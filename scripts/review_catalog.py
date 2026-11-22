@@ -16,13 +16,13 @@ sys.path.insert(0, str(ROOT))
 def main() -> int:
     import argparse
 
-    from contingency_atlas.config import get_settings
-    from contingency_atlas.schema import migrate
-    from contingency_atlas.phases.phase4_prioritize import (
+    from workbench_atlas.config import get_settings
+    from workbench_atlas.schema import migrate
+    from workbench_atlas.phases.phase4_prioritize import (
         run_prioritization_cycle,
         get_prioritized_portfolio,
     )
-    from contingency_atlas.phases.category_cleanup import apply_category_cleanup
+    from workbench_atlas.phases.category_cleanup import apply_category_cleanup
 
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(

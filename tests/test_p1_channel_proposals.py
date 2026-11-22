@@ -20,25 +20,25 @@ from pathlib import Path
 
 import pytest
 
-from contingency_atlas.compound_join import run_compound_join
-from contingency_atlas.config import Settings
-from contingency_atlas.proposals import (
+from workbench_atlas.compound_join import run_compound_join
+from workbench_atlas.config import Settings
+from workbench_atlas.proposals import (
     create_channel_proposals,
     get_channel_proposal,
     list_proposals,
     migrate_proposals,
 )
-from contingency_atlas.review import (
+from workbench_atlas.review import (
     ReviewError,
     approve_channel_proposal,
     reject_channel_proposal,
 )
-from contingency_atlas.scoring.elicitation import channel_audit, default_resolver
-from contingency_atlas.scoring.inventory import load_risk_atoms
-from contingency_atlas.scoring.models import RiskAtom, pair_id_for
-from contingency_atlas.scoring.scorer import ScorerConfig
-from contingency_atlas.web import server
-from contingency_atlas.web.server import DashboardHandler
+from workbench_atlas.scoring.elicitation import channel_audit, default_resolver
+from workbench_atlas.scoring.inventory import load_risk_atoms
+from workbench_atlas.scoring.models import RiskAtom, pair_id_for
+from workbench_atlas.scoring.scorer import ScorerConfig
+from workbench_atlas.web import server
+from workbench_atlas.web.server import DashboardHandler
 
 FAST = ScorerConfig(mc_draws=300, interval_draws=300)
 
@@ -356,7 +356,7 @@ def test_shadow_scores_delta_pairs_and_freezes_graduation(tmp_path, monkeypatch)
     settings = _dense_join_fixture(tmp_path)
     telemetry_path = tmp_path / "telemetry.jsonl"
     monkeypatch.setattr(
-        "contingency_atlas.compound_join.TELEMETRY_PATH", telemetry_path
+        "workbench_atlas.compound_join.TELEMETRY_PATH", telemetry_path
     )
 
     base = run_compound_join(settings, force=True, scorer_config=FAST)

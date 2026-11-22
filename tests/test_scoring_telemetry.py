@@ -3,8 +3,8 @@ consistency (telemetry-spec.md section 9)."""
 
 import pytest
 
-from contingency_atlas.scoring.telemetry import TelemetryLogger
-from contingency_atlas.scoring.models import IncidentFeature, RiskAtom
+from workbench_atlas.scoring.telemetry import TelemetryLogger
+from workbench_atlas.scoring.models import IncidentFeature, RiskAtom
 
 
 def _stub_llm(messages, **kwargs):

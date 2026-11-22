@@ -5,8 +5,8 @@ import sqlite3
 
 import pytest
 
-from contingency_atlas.config import Settings
-from contingency_atlas.diagnostics import assess_pilot, evidence_quality, main
+from workbench_atlas.config import Settings
+from workbench_atlas.diagnostics import assess_pilot, evidence_quality, main
 
 
 @pytest.fixture

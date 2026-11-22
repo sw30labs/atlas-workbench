@@ -11,22 +11,22 @@ import random
 
 import pytest
 
-from contingency_atlas.scoring.candidates import (
+from workbench_atlas.scoring.candidates import (
     BASELINES,
     ORACLE_BASELINES,
     all_pairs,
     baseline_scores,
 )
-from contingency_atlas.scoring.evaluate import (
+from workbench_atlas.scoring.evaluate import (
     bootstrap_metric_cis,
     run_evaluation,
     run_r0_multiseed,
 )
-from contingency_atlas.scoring.models import IncidentEvent, RiskAtom
-from contingency_atlas.scoring.scorer import DetScorer, ScorerConfig
-from contingency_atlas.scoring.synthetic import R0Config, generate_r0
-from contingency_atlas.scoring.task_bcal import run_bcal, truth_joint_quarterly
-from contingency_atlas.scoring.task_loss import run_task_loss
+from workbench_atlas.scoring.models import IncidentEvent, RiskAtom
+from workbench_atlas.scoring.scorer import DetScorer, ScorerConfig
+from workbench_atlas.scoring.synthetic import R0Config, generate_r0
+from workbench_atlas.scoring.task_bcal import run_bcal, truth_joint_quarterly
+from workbench_atlas.scoring.task_loss import run_task_loss
 
 FAST = ScorerConfig(mc_draws=300, interval_draws=300)
 
@@ -197,7 +197,7 @@ def test_bootstrap_cis_deterministic_and_cover_points():
     n_total = max(e.period for e in ds.events) + 1
     scorer = DetScorer(FAST).fit(ds.events, ds.atoms, n_total - 8)
     pairs = all_pairs(ds.atoms)
-    from contingency_atlas.scoring.evaluate import pair_labels
+    from workbench_atlas.scoring.evaluate import pair_labels
 
     labels = pair_labels(ds.events, n_total - 8, n_total, pairs)
     scores = {
@@ -209,7 +209,7 @@ def test_bootstrap_cis_deterministic_and_cover_points():
     assert ci1 == ci2  # seeded -> deterministic
     ap_ci = ci1["baselines"]["B3_det_batch"]["average_precision"]
     assert ap_ci[0] <= ap_ci[1]
-    from contingency_atlas.scoring.evaluate import average_precision
+    from workbench_atlas.scoring.evaluate import average_precision
 
     ap_point = average_precision(labels, scores["B3_det_batch"])
     assert ap_ci[0] <= ap_point <= ap_ci[1]

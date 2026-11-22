@@ -7,8 +7,8 @@ import zipfile
 import pytest
 
 from bulk_ingest_helpers import write_actions_docx, write_services_xlsx
-from contingency_atlas.bulk_ingest import coerce
-from contingency_atlas.bulk_ingest.inventory import Limits, build_inventory
+from workbench_atlas.bulk_ingest import coerce
+from workbench_atlas.bulk_ingest.inventory import Limits, build_inventory
 
 
 def entries(manifest):
@@ -116,7 +116,7 @@ def test_duplicates_and_magic_bytes(tmp_path):
 
 
 def test_missing_folder_fails_closed(tmp_path):
-    from contingency_atlas.bulk_ingest.inventory import InventoryError
+    from workbench_atlas.bulk_ingest.inventory import InventoryError
 
     with pytest.raises(InventoryError):
         build_inventory(tmp_path / "nope")

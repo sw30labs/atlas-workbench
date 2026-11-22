@@ -7,12 +7,12 @@ import pytest
 
 class TestBuildPipeline:
     def test_build_pipeline_compiles(self):
-        from contingency_atlas.pipeline import build_pipeline
+        from workbench_atlas.pipeline import build_pipeline
         app = build_pipeline()
         assert app is not None
 
     def test_pipeline_nodes_exist(self):
-        from contingency_atlas.pipeline import (
+        from workbench_atlas.pipeline import (
             node_phase1, node_phase2, node_phase3,
             node_phase4, node_phase5, node_phase6,
         )
@@ -23,8 +23,8 @@ class TestBuildPipeline:
 class TestRunPipelineOffline:
     def test_run_skip_llm(self, tmp_workspace, settings):
         """Full graph runs offline without calling OMLX."""
-        from contingency_atlas.pipeline import run_pipeline
-        from contingency_atlas.config import Settings
+        from workbench_atlas.pipeline import run_pipeline
+        from workbench_atlas.config import Settings
 
         s = Settings(
             scenario_db_path=tmp_workspace / "atlas.db",
@@ -33,7 +33,7 @@ class TestRunPipelineOffline:
             driftlab_enabled=True,
         )
         # Ensure schema
-        from contingency_atlas.schema import migrate
+        from workbench_atlas.schema import migrate
         migrate(str(s.scenario_db_path))
 
         result = run_pipeline(
@@ -54,8 +54,8 @@ class TestRunPipelineOffline:
         assert "errors" in result.summary()
 
     def test_phase4_node_directly(self, tmp_workspace):
-        from contingency_atlas.pipeline import node_phase4
-        from contingency_atlas.schema import migrate
+        from workbench_atlas.pipeline import node_phase4
+        from workbench_atlas.schema import migrate
         migrate(str(tmp_workspace / "atlas.db"))
         state = {
             "run_id": "t1",
@@ -75,8 +75,8 @@ class TestRunPipelineOffline:
         assert any(e.get("node") == "phase4" for e in out["driftlab_events"])
 
     def test_phase4_result_errors_propagate(self, monkeypatch, tmp_workspace):
-        from contingency_atlas import pipeline
-        from contingency_atlas.phases import phase4_prioritize
+        from workbench_atlas import pipeline
+        from workbench_atlas.phases import phase4_prioritize
 
         monkeypatch.setattr(
             phase4_prioritize,
@@ -93,8 +93,8 @@ class TestRunPipelineOffline:
         assert "phase4: score failed" in out["errors"]
 
     def test_phase5_result_errors_propagate(self, monkeypatch, tmp_workspace):
-        from contingency_atlas import pipeline
-        from contingency_atlas.phases import phase5_patterns
+        from workbench_atlas import pipeline
+        from workbench_atlas.phases import phase5_patterns
 
         result = SimpleNamespace(
             temporal_findings=[],
@@ -117,8 +117,8 @@ class TestRunPipelineOffline:
         assert "phase5: analysis failed" in out["errors"]
 
     def test_phase6_result_errors_propagate(self, monkeypatch, tmp_workspace):
-        from contingency_atlas import pipeline
-        from contingency_atlas.phases import phase6_maintain
+        from workbench_atlas import pipeline
+        from workbench_atlas.phases import phase6_maintain
 
         result = SimpleNamespace(
             retired=0,
@@ -140,8 +140,8 @@ class TestRunPipelineOffline:
         monkeypatch,
         tmp_workspace,
     ):
-        from contingency_atlas import pipeline
-        from contingency_atlas.phases import phase6_maintain
+        from workbench_atlas import pipeline
+        from workbench_atlas.phases import phase6_maintain
 
         captured = {}
 
@@ -188,9 +188,9 @@ class TestRunPipelineOffline:
 
     def test_pipeline_state_excludes_api_key(self, tmp_workspace):
         """The graph state must never carry the OMLX API key."""
-        from contingency_atlas.pipeline import run_pipeline
-        from contingency_atlas.config import Settings
-        from contingency_atlas.schema import migrate
+        from workbench_atlas.pipeline import run_pipeline
+        from workbench_atlas.config import Settings
+        from workbench_atlas.schema import migrate
 
         s = Settings(
             scenario_db_path=tmp_workspace / "atlas.db",

@@ -49,7 +49,7 @@ first row, banner line, document properties or `_notice`).
 ## What is real and what is not
 
 - **External loss watchlist (real, public).** The events in `04_external_loss_watchlist/` are real public events about
-  real organisations, re-exported from the approved public evidence corpus of the legacy `contingency-atlas`
+  real organisations, re-exported from the approved public evidence corpus of the legacy `workbench-atlas`
   repository: event id, headline, organisation, country, region, loss amount, source date, Atlas classification,
   source URL, publisher, title and the independently authored summary. No source text is included. They are **not**
   rebranded as ACME. The ACME analyst columns (relevance, linked scenario, owner, comment, date added) are synthetic
@@ -78,8 +78,8 @@ populations, and 8 cross-file value conflicts (listed in `answer_key.json`).
 ## Regenerating
 
 ```bash
-.venv/bin/python scripts/build_acme_pack.py            # legacy repo defaults to ../contingency-atlas
-.venv/bin/python scripts/build_acme_pack.py --legacy /path/to/contingency-atlas
+.venv/bin/python scripts/build_acme_pack.py            # legacy repo defaults to ../workbench-atlas
+.venv/bin/python scripts/build_acme_pack.py --legacy /path/to/workbench-atlas
 ```
 
 The generator is deterministic (seed 20260930, generator version `acme-pack-1`). Document core properties and

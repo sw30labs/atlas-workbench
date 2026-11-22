@@ -1,4 +1,4 @@
-# Architecture — Contingency Atlas Redesign
+# Architecture — Atlas Workbench Redesign
 
 ## 1. Purpose and non-goals
 

@@ -2,7 +2,7 @@
 
 ## 0. Stance
 
-Without this plan, Contingency Atlas is demoware. With it, a failed result is still useful: you stop before an unsupported funding request becomes a governance problem.
+Without this plan, Atlas Workbench is demoware. With it, a failed result is still useful: you stop before an unsupported funding request becomes a governance problem.
 
 **Primary claim under test (Phase 1–2):**
 

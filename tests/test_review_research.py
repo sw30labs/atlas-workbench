@@ -20,8 +20,8 @@ from pathlib import Path
 import httpx
 import pytest
 
-from contingency_atlas.config import Settings
-from contingency_atlas.research import (
+from workbench_atlas.config import Settings
+from workbench_atlas.research import (
     ddg_search,
     fetch_page,
     load_research_memos,
@@ -29,9 +29,9 @@ from contingency_atlas.research import (
     run_deep_research_all,
     store_research_memo,
 )
-from contingency_atlas.schema import migrate, migrate_evidence_events
-from contingency_atlas.web import runner, server
-from contingency_atlas.web.server import DashboardHandler
+from workbench_atlas.schema import migrate, migrate_evidence_events
+from workbench_atlas.web import runner, server
+from workbench_atlas.web.server import DashboardHandler
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -260,7 +260,7 @@ def test_loop_creates_pending_candidate_and_memo(research_settings):
 
 def test_research_candidates_carry_classification_columns(research_settings):
     """Candidate classes are closed-vocabulary values or explicitly absent."""
-    from contingency_atlas.categories import (
+    from workbench_atlas.categories import (
         EVENT_DRIVER_CLASSES,
         PRIMARY_CAUSE_CLASSES,
         REGIONS,
@@ -283,7 +283,7 @@ def test_research_candidates_carry_classification_columns(research_settings):
 def test_research_candidate_rejects_out_of_vocabulary_classification():
     """A value the assessor invents must not reach the store as if it were
     part of the taxonomy."""
-    from contingency_atlas.research import _candidate_event
+    from workbench_atlas.research import _candidate_event
 
     page = {"url": "https://example.gov/a", "title": "T", "text": "x"}
     event = _candidate_event(
@@ -317,7 +317,7 @@ def test_research_candidate_rejects_out_of_vocabulary_classification():
 def test_research_candidate_region_is_normalized_or_dropped():
     """Geography cannot be derived from risk language, so an unrecognized
     region becomes None rather than a confident wrong answer."""
-    from contingency_atlas.research import _candidate_event
+    from workbench_atlas.research import _candidate_event
 
     page = {"url": "https://example.gov/a", "title": "T", "text": "x"}
     base = {
@@ -334,7 +334,7 @@ def test_research_candidate_region_is_normalized_or_dropped():
 
 
 def test_candidate_and_memo_storage_reject_excluded_sources(research_settings):
-    from contingency_atlas.research import _candidate_event
+    from workbench_atlas.research import _candidate_event
 
     excluded_url = f"https://{_excluded_host()}/source"
     page = {"url": excluded_url, "title": "Excluded", "text": "x"}
@@ -368,7 +368,7 @@ def test_candidate_and_memo_storage_reject_excluded_sources(research_settings):
     ),
 )
 def test_candidate_rejects_excluded_host_in_model_authored_fields(field):
-    from contingency_atlas.research import _candidate_event
+    from workbench_atlas.research import _candidate_event
 
     draft = {"independently_authored_summary": "Synthetic safe summary."}
     draft[field] = f"Reported by {_excluded_host()}"
@@ -455,7 +455,7 @@ def test_pending_endpoint_attaches_memo_with_candidate_status(research_settings)
 
 
 def test_clip_reason_never_cuts_mid_sentence():
-    from contingency_atlas.research import _clip_reason
+    from workbench_atlas.research import _clip_reason
     short = "Two sentences. All here."
     assert _clip_reason(short) == short
     long = ("A complete sentence. " * 90) + "an unfinished tail"
@@ -465,7 +465,7 @@ def test_clip_reason_never_cuts_mid_sentence():
 
 
 def _channel_proposal(settings, **overrides) -> str:
-    from contingency_atlas.proposals import create_channel_proposals
+    from workbench_atlas.proposals import create_channel_proposals
     cand = {
         "kind": "edge_add", "risk_ids": ["atom-a", "atom-b"], "channel": "cloud",
         "mechanism": "fixture transmission mechanism",
@@ -478,8 +478,8 @@ def _channel_proposal(settings, **overrides) -> str:
 
 
 def _store_channel_explanation(settings, pid) -> None:
-    from contingency_atlas.proposals import get_channel_proposal
-    from contingency_atlas.review_assist import content_hash, store_suggestion
+    from workbench_atlas.proposals import get_channel_proposal
+    from workbench_atlas.review_assist import content_hash, store_suggestion
     record = get_channel_proposal(settings.scenario_db_path, pid)
     store_suggestion(
         settings.scenario_db_path, "channel", pid,
@@ -555,7 +555,7 @@ def _post(port, path, body, headers=None):
 
 
 def _approve_candidate(settings, event_id):
-    from contingency_atlas.review import approve_evidence
+    from workbench_atlas.review import approve_evidence
 
     conn = sqlite3.connect(settings.evidence_db_path)
     conn.execute(
@@ -635,7 +635,7 @@ def _saved_risk(settings, issue=RISK_ID):
 
 
 def test_detach_refs_removes_stamps_and_is_idempotent(detach_settings):
-    from contingency_atlas.categories import derive_evidence_strength
+    from workbench_atlas.categories import derive_evidence_strength
     with _dashboard() as port:
         status, payload = _post(port, "/api/review/detach-refs", {
             "record_id": RISK_ID,
@@ -688,7 +688,7 @@ def test_review_research_is_a_valid_runner_phase():
 
 
 def test_index_has_research_ui():
-    html = (ROOT / "contingency_atlas/web/static/index.html").read_text()
+    html = (ROOT / "workbench_atlas/web/static/index.html").read_text()
     assert "data-rv-research" in html
     assert "data-rv-adopt" in html
     assert "/api/review/adopt-refs" in html
@@ -700,7 +700,7 @@ def test_index_has_research_ui():
 def test_index_adopt_offer_excludes_attached_refs():
     """Already-adopted candidates must not be re-offered: the endpoint is
     idempotent, so re-offering them makes ADOPT a silent no-op."""
-    html = (ROOT / "contingency_atlas/web/static/index.html").read_text()
+    html = (ROOT / "workbench_atlas/web/static/index.html").read_text()
     assert "!attached.has(String(c.event_id))" in html
     assert 'st-ok">adopted' in html
 
@@ -708,7 +708,7 @@ def test_index_adopt_offer_excludes_attached_refs():
 def test_index_has_detach_refs_ui():
     """Ref removal is a first-class review action: per-ref button plus a
     bulk detach of refs that resolve to no evidence record."""
-    html = (ROOT / "contingency_atlas/web/static/index.html").read_text()
+    html = (ROOT / "workbench_atlas/web/static/index.html").read_text()
     assert "data-rv-detach" in html
     assert "/api/review/detach-refs" in html
     assert "DETACH" in html
@@ -745,8 +745,8 @@ def batch_settings(tmp_path, monkeypatch):
 
 def _store_risk_suggestion(settings, issue, chash=None, **overrides):
     """A pre-analysis row as run_review_analysis would have stored it."""
-    from contingency_atlas.review import list_risks_for_review
-    from contingency_atlas.review_assist import content_hash, store_suggestion
+    from workbench_atlas.review import list_risks_for_review
+    from workbench_atlas.review_assist import content_hash, store_suggestion
     record = next(r for r in list_risks_for_review(settings.emerging_risks_path)
                   if r["issue"] == issue)
     analysis = {"recommendation": "approve", "confidence": 0.7,
@@ -758,8 +758,8 @@ def _store_risk_suggestion(settings, issue, chash=None, **overrides):
 
 
 def _risk_content_hash(settings, issue):
-    from contingency_atlas.review import list_risks_for_review
-    from contingency_atlas.review_assist import content_hash
+    from workbench_atlas.review import list_risks_for_review
+    from workbench_atlas.review_assist import content_hash
     record = next(r for r in list_risks_for_review(settings.emerging_risks_path)
                   if r["issue"] == issue)
     return content_hash("risk", record)
@@ -811,7 +811,7 @@ def test_batch_collects_per_record_failures(batch_settings, monkeypatch):
     _store_risk_suggestion(batch_settings, RISK_ID)
     _store_risk_suggestion(batch_settings, OTHER_RISK_ID)
 
-    from contingency_atlas import research
+    from workbench_atlas import research
 
     def flaky(settings, client, *, kind, record_id, **kwargs):
         if record_id == RISK_ID:

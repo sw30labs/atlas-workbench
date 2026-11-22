@@ -1,16 +1,16 @@
 """Bulk ingest: generic alias, reference, vendor, quantity and date-order resolution (synthetic names)."""
 
-from contingency_atlas.bulk_ingest.extractors import extract_scenario_text, group_date_orders
-from contingency_atlas.bulk_ingest.linker import (
+from workbench_atlas.bulk_ingest.extractors import extract_scenario_text, group_date_orders
+from workbench_atlas.bulk_ingest.linker import (
     Registry, VendorRegistry, abbreviation_cover, apply_reference_aliases, duration_profile, link_batch,
     refs_equivalent, segment_acronyms, vendor_key,
 )
-from contingency_atlas.bulk_ingest.models import (
+from workbench_atlas.bulk_ingest.models import (
     Block, Candidate, Column, Document, DocumentResult, FileEntry, Provenance, Row, Table,
 )
-from contingency_atlas.bulk_ingest.readers import layout_tables
-from contingency_atlas.bulk_ingest.synonyms import field_score
-from contingency_atlas.bulk_ingest.triage import _note_pairs
+from workbench_atlas.bulk_ingest.readers import layout_tables
+from workbench_atlas.bulk_ingest.synonyms import field_score
+from workbench_atlas.bulk_ingest.triage import _note_pairs
 
 
 def registry(*names):

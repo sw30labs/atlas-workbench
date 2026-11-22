@@ -12,15 +12,15 @@ import pytest
 class TestConfig:
     def test_default_config_filename(self, monkeypatch):
         monkeypatch.delenv("ATLAS_CONFIG", raising=False)
-        from contingency_atlas.config import project_root, yaml_config_path
+        from workbench_atlas.config import project_root, yaml_config_path
 
-        assert yaml_config_path() == project_root() / "contingency-atlas.yaml"
+        assert yaml_config_path() == project_root() / "workbench-atlas.yaml"
 
     def test_settings_defaults(self, tmp_path, monkeypatch):
         # Isolate from the project configuration — built-in defaults only.
         monkeypatch.setenv("ATLAS_CONFIG", str(tmp_path / "nope.yaml"))
         monkeypatch.delenv("ATLAS_DRIFTLAB_ENABLED", raising=False)
-        from contingency_atlas.config import Settings, project_root
+        from workbench_atlas.config import Settings, project_root
         s = Settings()
         assert s.omlx_base_url == "http://127.0.0.1:8000/v1"
         assert s.omlx_api_key == "test"
@@ -33,7 +33,7 @@ class TestConfig:
         assert s.scenario_db_path.parent == project_root()
         assert s.auto_retire is False
         assert s.driftlab_enabled is False
-        assert s.driftlab_baseline_path.name == "contingency-atlas-pipeline-baseline.json"
+        assert s.driftlab_baseline_path.name == "workbench-atlas-pipeline-baseline.json"
         assert s.driftlab_baseline_path.is_file()
 
     def test_data_path_env_overrides(self, tmp_path, monkeypatch):
@@ -43,7 +43,7 @@ class TestConfig:
         monkeypatch.setenv(
             "ATLAS_SCENARIO_EXPORT", str(tmp_path / "scenario_export.json")
         )
-        from contingency_atlas.config import Settings
+        from workbench_atlas.config import Settings
 
         settings = Settings()
         assert settings.scenario_db_path == tmp_path / "scenarios.db"
@@ -56,7 +56,7 @@ class TestConfig:
         monkeypatch.setenv("OMLX_MODEL", "custom-model")
         monkeypatch.setenv("ATLAS_AUTO_RETIRE", "1")
         monkeypatch.setenv("ATLAS_DRIFTLAB_ENABLED", "1")
-        from contingency_atlas.config import Settings
+        from workbench_atlas.config import Settings
         s = Settings()
         assert s.omlx_base_url == "http://custom:9999/v1"
         assert s.omlx_api_key == "secret"
@@ -65,7 +65,7 @@ class TestConfig:
         assert s.driftlab_enabled is True
 
     def test_to_safe_dict_excludes_api_key(self):
-        from contingency_atlas.config import Settings
+        from workbench_atlas.config import Settings
         s = Settings(omlx_api_key="super-secret")
         safe = s.to_safe_dict()
         assert "omlx_api_key" not in safe
@@ -89,7 +89,7 @@ class TestConfig:
         monkeypatch.setenv("ATLAS_CONFIG", str(cfg))
         for var in self._OMLX_ENV:
             monkeypatch.delenv(var, raising=False)
-        from contingency_atlas.config import Settings
+        from workbench_atlas.config import Settings
         s = Settings()
         assert s.omlx_base_url == "http://yaml:1234/v1"
         assert s.omlx_model == "yaml-model"
@@ -105,21 +105,21 @@ class TestConfig:
         cfg.write_text("omlx:\n  model: yaml-model\n")
         monkeypatch.setenv("ATLAS_CONFIG", str(cfg))
         monkeypatch.setenv("OMLX_MODEL", "env-model")
-        from contingency_atlas.config import Settings
+        from workbench_atlas.config import Settings
         assert Settings().omlx_model == "env-model"
 
     def test_yaml_explicit_beats_file(self, tmp_path, monkeypatch):
         cfg = tmp_path / "gs.yaml"
         cfg.write_text("omlx:\n  model: yaml-model\n")
         monkeypatch.setenv("ATLAS_CONFIG", str(cfg))
-        from contingency_atlas.config import Settings
+        from workbench_atlas.config import Settings
         assert Settings(omlx_model="explicit-model").omlx_model == "explicit-model"
 
     def test_yaml_unknown_key_rejected(self, tmp_path, monkeypatch):
         cfg = tmp_path / "gs.yaml"
         cfg.write_text("omlx:\n  modle: typo-model\n")
         monkeypatch.setenv("ATLAS_CONFIG", str(cfg))
-        from contingency_atlas.config import Settings
+        from workbench_atlas.config import Settings
         with pytest.raises(Exception, match="unknown omlx key"):
             Settings()
 
@@ -127,13 +127,13 @@ class TestConfig:
         cfg = tmp_path / "gs.yaml"
         cfg.write_text("omlx:\n  timeout: not-a-number\n")
         monkeypatch.setenv("ATLAS_CONFIG", str(cfg))
-        from contingency_atlas.config import Settings
+        from workbench_atlas.config import Settings
         with pytest.raises(Exception, match="omlx.timeout"):
             Settings()
 
     def test_yaml_missing_file_uses_defaults(self, tmp_path, monkeypatch):
         monkeypatch.setenv("ATLAS_CONFIG", str(tmp_path / "nope.yaml"))
-        from contingency_atlas.config import Settings
+        from workbench_atlas.config import Settings
         assert Settings().omlx_model == "DeepSeek-V4-Flash-0731-MXFP4-MLX"
 
     def test_use_responses_api_from_yaml_and_env(self, tmp_path, monkeypatch):
@@ -141,7 +141,7 @@ class TestConfig:
         cfg.write_text("omlx:\n  use_responses_api: true\n")
         monkeypatch.setenv("ATLAS_CONFIG", str(cfg))
         monkeypatch.delenv("OMLX_USE_RESPONSES_API", raising=False)
-        from contingency_atlas.config import Settings
+        from workbench_atlas.config import Settings
         assert Settings().llm_use_responses_api is True
         monkeypatch.setenv("OMLX_USE_RESPONSES_API", "0")
         assert Settings().llm_use_responses_api is False
@@ -155,7 +155,7 @@ class TestConfig:
 
 class TestOMLXClient:
     def test_client_creation(self, settings):
-        from contingency_atlas.llm import OMLXClient
+        from workbench_atlas.llm import OMLXClient
         client = OMLXClient(settings)
         # The client reads the provider-dispatched accessors, not the OMLX
         # fields directly — asserting the latter would still pass on a DGX
@@ -195,7 +195,7 @@ class TestOMLXClient:
 
 class TestSchema:
     def test_migration_adds_columns(self, empty_db):
-        from contingency_atlas.schema import get_schema_info
+        from workbench_atlas.schema import get_schema_info
         info = get_schema_info(empty_db)
         col_names = [c[0] for c in info["scenarios_columns"]]
         assert "scenario_id" in col_names
@@ -219,7 +219,7 @@ class TestSchema:
         assert "pipeline_runs" in info["tables"]
 
     def test_migration_idempotent(self, empty_db):
-        from contingency_atlas.schema import migrate
+        from workbench_atlas.schema import migrate
         # Run migration again — should be no-op
         added = migrate(empty_db)
         assert len(added) == 0
@@ -227,8 +227,8 @@ class TestSchema:
     def test_scenario_origin_is_explicit_and_legacy_safe(self, tmp_path):
         import sqlite3
 
-        from contingency_atlas.db import get_scenario, upsert_scenario
-        from contingency_atlas.schema import migrate
+        from workbench_atlas.db import get_scenario, upsert_scenario
+        from workbench_atlas.schema import migrate
 
         db_path = str(tmp_path / "pre-origin-scenarios.db")
         with sqlite3.connect(db_path) as conn:
@@ -284,14 +284,14 @@ class TestSchema:
     ):
         import json
 
-        from contingency_atlas.db import (
+        from workbench_atlas.db import (
             add_evidence_event,
             get_latest_signpost_assessment,
             get_scenario,
             upsert_scenario,
         )
-        from contingency_atlas.review import approve_signpost_assessment
-        from contingency_atlas.schema import migrate, migrate_evidence_events
+        from workbench_atlas.review import approve_signpost_assessment
+        from workbench_atlas.schema import migrate, migrate_evidence_events
 
         upsert_scenario(empty_db, {
             "scenario_id": "LEGACY-SIGNPOST",
@@ -358,13 +358,13 @@ class TestSchema:
     ):
         import sqlite3
 
-        from contingency_atlas.db import (
+        from workbench_atlas.db import (
             get_latest_signpost_assessment,
             get_scenario,
             record_signpost_assessment,
             upsert_scenario,
         )
-        from contingency_atlas.schema import migrate
+        from workbench_atlas.schema import migrate
 
         upsert_scenario(empty_db, {
             "scenario_id": "LEGACY-SAME-CYCLE-RETIRE",
@@ -414,7 +414,7 @@ class TestSchema:
     def test_pre_origin_history_migration_preserves_uncertainty(self, tmp_path):
         import sqlite3
 
-        from contingency_atlas.schema import migrate
+        from workbench_atlas.schema import migrate
 
         db_path = str(tmp_path / "pre-origin-history.db")
         with sqlite3.connect(db_path) as conn:
@@ -493,12 +493,12 @@ class TestSchema:
     ):
         import sqlite3
 
-        from contingency_atlas.db import (
+        from workbench_atlas.db import (
             get_latest_signpost_assessment,
             record_signpost_assessment,
             upsert_scenario,
         )
-        from contingency_atlas.schema import migrate
+        from workbench_atlas.schema import migrate
 
         upsert_scenario(empty_db, {
             "scenario_id": "CURRENT-MODEL-ASSESSMENT",
@@ -536,7 +536,7 @@ class TestSchema:
     def test_evidence_event_schema_uses_neutral_provenance_fields(self, tmp_path):
         import sqlite3
 
-        from contingency_atlas.schema import EVIDENCE_EVENT_COLUMNS, migrate_evidence_events
+        from workbench_atlas.schema import EVIDENCE_EVENT_COLUMNS, migrate_evidence_events
 
         db_path = str(tmp_path / "evidence.db")
         migrate_evidence_events(db_path)
@@ -565,7 +565,7 @@ class TestSchema:
     def test_evidence_event_migration_is_transactional_and_lossless(self, tmp_path):
         import sqlite3
 
-        from contingency_atlas.schema import migrate_evidence_events
+        from workbench_atlas.schema import migrate_evidence_events
 
         db_path = str(tmp_path / "legacy-evidence.db")
         legacy_table = "ne" + "ws"
@@ -658,7 +658,7 @@ class TestSchema:
     def test_evidence_event_migration_rolls_back_on_column_conflict(self, tmp_path):
         import sqlite3
 
-        from contingency_atlas.schema import migrate_evidence_events
+        from workbench_atlas.schema import migrate_evidence_events
 
         db_path = str(tmp_path / "conflicting-evidence.db")
         legacy_table = "ne" + "ws"
@@ -696,7 +696,7 @@ class TestSchema:
 
 class TestDB:
     def test_upsert_scenario(self, empty_db):
-        from contingency_atlas.db import upsert_scenario, get_scenario
+        from workbench_atlas.db import upsert_scenario, get_scenario
         scenario = {
             "scenario_id": "TEST-001",
             "risk_category": "Digital resilience",
@@ -723,7 +723,7 @@ class TestDB:
         assert got["title"] == "Updated Title"
 
     def test_list_scenarios(self, empty_db):
-        from contingency_atlas.db import upsert_scenario, list_scenarios
+        from workbench_atlas.db import upsert_scenario, list_scenarios
         for i in range(5):
             upsert_scenario(empty_db, {
                 "scenario_id": f"TEST-{i:03d}",
@@ -746,7 +746,7 @@ class TestDB:
         assert drafts[0]["scenario_id"] == "TEST-004"
 
     def test_evidence_event_stats(self, tmp_workspace):
-        from contingency_atlas.db import get_evidence_event_stats
+        from workbench_atlas.db import get_evidence_event_stats
         stats = get_evidence_event_stats(str(tmp_workspace / "event_evidence.db"))
         assert stats["total"] > 0
         assert "categories" in stats
@@ -754,7 +754,7 @@ class TestDB:
         assert "top_organizations" in stats
 
     def test_rejects_unknown_database_fields(self, empty_db, tmp_workspace):
-        from contingency_atlas.db import add_evidence_event, upsert_scenario
+        from workbench_atlas.db import add_evidence_event, upsert_scenario
 
         with pytest.raises(ValueError, match="Unknown scenario"):
             upsert_scenario(
@@ -768,7 +768,7 @@ class TestDB:
             )
 
     def test_qa_log(self, empty_db):
-        from contingency_atlas.db import log_qa
+        from workbench_atlas.db import log_qa
         log_id = log_qa(
             empty_db, "TEST-001", "phase3",
             "DeepSeek-V4", 0.85, "Good scenario", 2, True,
@@ -776,7 +776,7 @@ class TestDB:
         assert log_id > 0
 
     def test_pipeline_run_log(self, empty_db):
-        from contingency_atlas.db import log_pipeline_run
+        from workbench_atlas.db import log_pipeline_run
         run_id = log_pipeline_run(
             empty_db, "run-001", "phase1", "completed",
             "2026-07-24T10:00:00", "2026-07-24T10:05:00",
@@ -789,7 +789,7 @@ class TestDB:
 
 class TestJudge:
     def test_judge_prompt_includes_foresight_and_option_fields(self):
-        from contingency_atlas.judge import build_judge_prompt
+        from workbench_atlas.judge import build_judge_prompt
 
         scenario = {
             "title": "Recovery capacity squeeze",
@@ -818,7 +818,7 @@ class TestJudge:
         assert "Challenged Assumptions: ['Specialists remain available.']" in prompt
 
     def test_judge_with_mock(self, mock_omlox_client):
-        from contingency_atlas.judge import judge_scenario
+        from workbench_atlas.judge import judge_scenario
         scenario = {
             "title": "Cloud Identity Concentration Failure",
             "description": "A shared cloud identity provider outage cascading across hypothetical peer banks.",
@@ -838,7 +838,7 @@ class TestJudge:
 
 class TestRalphLoop:
     def test_ralph_loop_passes(self, mock_omlox_client):
-        from contingency_atlas.loops import ralph_loop
+        from workbench_atlas.loops import ralph_loop
         scenario = {
             "title": "Test Scenario",
             "description": "A well-described scenario with clear evidence.",
@@ -854,7 +854,7 @@ class TestRalphLoop:
         assert len(result.history) >= 1
 
     def test_ralph_loop_max_iterations(self, mock_omlox_client):
-        from contingency_atlas.loops import ralph_loop
+        from workbench_atlas.loops import ralph_loop
         # Mock that always fails
         mock_omlox_client.chat = lambda *a, **k: '{"score": 0.3, "criteria": {}, "feedback": "Needs work", "passed": false}'
         mock_omlox_client.chat_json = lambda *a, **k: json.loads(mock_omlox_client.chat())
@@ -865,7 +865,7 @@ class TestRalphLoop:
 
     def test_ralph_loop_final_judge_model(self, mock_omlox_client):
         """Final judge should be invoked with the requested model."""
-        from contingency_atlas.loops import ralph_loop
+        from workbench_atlas.loops import ralph_loop
 
         calls = []
 
@@ -887,7 +887,7 @@ class TestRalphLoop:
 
     def test_ralph_loop_forwards_scenario_id(self, mock_omlox_client):
         """Judge + improve calls tag telemetry with the scenario under judgment."""
-        from contingency_atlas.loops import ralph_loop
+        from workbench_atlas.loops import ralph_loop
 
         calls = []
 
@@ -907,13 +907,13 @@ class TestRalphLoop:
 
 class TestDriftLabHooks:
     def test_create_trace_handler(self):
-        from contingency_atlas.driftlab_hooks import create_trace_handler
+        from workbench_atlas.driftlab_hooks import create_trace_handler
         handler = create_trace_handler(agent="test", run_id="test-001")
         # May be None if driftlab not available, but shouldn't crash
         assert handler is not None or handler is None  # Just verify no crash
 
     def test_minimal_governance_check(self):
-        from contingency_atlas.driftlab_hooks import _minimal_governance_check
+        from workbench_atlas.driftlab_hooks import _minimal_governance_check
         events = [
             {"kind": "route", "node": "phase1"},
             {"kind": "tool_call", "node": "phase1", "tool": "scrape"},
@@ -925,6 +925,6 @@ class TestDriftLabHooks:
         assert "anomalies" in result
 
     def test_record_phase_events(self):
-        from contingency_atlas.driftlab_hooks import record_phase_events
+        from workbench_atlas.driftlab_hooks import record_phase_events
         # Should not crash even with None handler
         record_phase_events(None, "test", ["tool1"])

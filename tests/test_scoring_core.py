@@ -5,14 +5,14 @@ from pathlib import Path
 
 import pytest
 
-from contingency_atlas.scoring.channels import (
+from workbench_atlas.scoring.channels import (
     build_channel_graph,
     cooccurrence_counts,
     occurrence_series,
     recover_empirical_edges,
 )
-from contingency_atlas.scoring.inventory import load_risk_atoms, tag_channels
-from contingency_atlas.scoring.models import (
+from workbench_atlas.scoring.inventory import load_risk_atoms, tag_channels
+from workbench_atlas.scoring.models import (
     IncidentEvent,
     RiskAtom,
     canonical_json,

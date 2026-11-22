@@ -6,8 +6,8 @@ from datetime import date, timedelta
 
 import pytest
 
-from contingency_atlas.config import Settings, load_yaml_settings
-from contingency_atlas.context import (
+from workbench_atlas.config import Settings, load_yaml_settings
+from workbench_atlas.context import (
     ContextConflict, ContextError, archive_record, compare_baseline,
     context_payload, create_baseline, export_context, import_records,
     save_record, validate_record,
@@ -372,7 +372,7 @@ def test_default_research_scope_follows_new_current_scenarios_and_retains_retire
 
 
 def test_watchlist_scope_validation_and_capacity_fail_closed(settings, monkeypatch):
-    import contingency_atlas.context as module
+    import workbench_atlas.context as module
     for ids in ([], "scn-one", [None], [""], ["missing"]):
         with pytest.raises(ContextError):
             create_baseline(settings, "Invalid watchlist", actor=ACTOR, scenario_ids=ids)
@@ -384,7 +384,7 @@ def test_watchlist_scope_validation_and_capacity_fail_closed(settings, monkeypat
 
 
 def test_legacy_baseline_integrity_and_context_diff_survive_without_research_capture(settings):
-    import contingency_atlas.context as module
+    import workbench_atlas.context as module
     service = _service(settings)
     with sqlite3.connect(settings.context_db_path) as conn:
         conn.row_factory = sqlite3.Row

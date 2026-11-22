@@ -3,7 +3,7 @@
 # This script is kept because release automation and the ontology tests rely
 # on its explicit migrate-then-export ordering.
 #
-# Set up Contingency Atlas from a source checkout and start the local
+# Set up Atlas Workbench from a source checkout and start the local
 # dashboard. Demo data is NOT seeded into operator-managed stores; for the
 # fictional demo corpus run
 # `python scripts/seed_demo.py` (writes to generated/demo) explicitly.
@@ -59,7 +59,7 @@ PORT="${ATLAS_PORT:-8080}"
 # whose command line merely mentions the module must never be a kill target.
 dashboard_pids() {
     local pid comm
-    for pid in $(pgrep -f ' -m contingency_atlas\.web' 2>/dev/null || true); do
+    for pid in $(pgrep -f ' -m workbench_atlas\.web' 2>/dev/null || true); do
         [ "$pid" = "$$" ] && continue
         comm="$(ps -o comm= -p "$pid" 2>/dev/null || true)"
         case "${comm##*/}" in
@@ -145,14 +145,14 @@ if [ "$PROVIDER" = "auto" ]; then
     echo "==> Detecting LLM backend"
     # stdout carries the answer and is captured; -v explains on stderr, which
     # flows to the terminal so a wrong-model endpoint names what it does serve.
-    if DETECTED="$(python -m contingency_atlas.provider_detect -v)" \
+    if DETECTED="$(python -m workbench_atlas.provider_detect -v)" \
        && [ -n "$DETECTED" ]; then
         PROVIDER="$DETECTED"
         echo "    detected: $PROVIDER (its model is the one being served)"
     elif [ "$PLATFORM_DEFAULT" = "dgx" ] && [ -n "$SERVE" ] && [ -x "$SERVE" ]; then
         echo "    nothing served yet — starting the local backend, then retrying"
         bring_up_vllm
-        PROVIDER="$(python -m contingency_atlas.provider_detect || true)"
+        PROVIDER="$(python -m workbench_atlas.provider_detect || true)"
         PROVIDER="${PROVIDER:-$PLATFORM_DEFAULT}"
         echo "    using: $PROVIDER"
     else
@@ -192,4 +192,4 @@ if [ "$PROVIDER" = "dgx" ]; then
 fi
 
 echo "==> Starting local dashboard at http://127.0.0.1:$PORT (provider=$PROVIDER, Ctrl+C to stop)"
-python -m contingency_atlas.web --port "$PORT"
+python -m workbench_atlas.web --port "$PORT"

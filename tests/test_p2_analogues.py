@@ -20,22 +20,22 @@ from http.server import ThreadingHTTPServer
 
 import pytest
 
-from contingency_atlas.compound_join import migrate_compound
-from contingency_atlas.config import Settings
-from contingency_atlas.proposals import (
+from workbench_atlas.compound_join import migrate_compound
+from workbench_atlas.config import Settings
+from workbench_atlas.proposals import (
     create_analogues,
     get_analogue,
     list_analogues,
     migrate_proposals,
 )
-from contingency_atlas.review import ReviewError, approve_analogue, reject_analogue
-from contingency_atlas.scoring.elicitation import (
+from workbench_atlas.review import ReviewError, approve_analogue, reject_analogue
+from workbench_atlas.scoring.elicitation import (
     contamination_canary,
     elicit_analogues,
 )
-from contingency_atlas.scoring.models import RiskAtom, pair_id_for
-from contingency_atlas.web import server
-from contingency_atlas.web.server import DashboardHandler
+from workbench_atlas.scoring.models import RiskAtom, pair_id_for
+from workbench_atlas.web import server
+from workbench_atlas.web.server import DashboardHandler
 
 
 @pytest.fixture

@@ -10,14 +10,14 @@ stays "shrunk_empirical".
 
 import pytest
 
-from contingency_atlas.scoring.ablations import run_sensitivity
-from contingency_atlas.scoring.models import IncidentEvent, RiskAtom
-from contingency_atlas.scoring.scorer import (
+from workbench_atlas.scoring.ablations import run_sensitivity
+from workbench_atlas.scoring.models import IncidentEvent, RiskAtom
+from workbench_atlas.scoring.scorer import (
     DetScorer,
     ScorerConfig,
     mixture_posterior,
 )
-from contingency_atlas.scoring.synthetic import R0Config, generate_r0
+from workbench_atlas.scoring.synthetic import R0Config, generate_r0
 
 FAST = ScorerConfig(mc_draws=300, interval_draws=300)
 T = 32

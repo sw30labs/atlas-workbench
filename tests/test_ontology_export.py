@@ -95,10 +95,10 @@ def test_startup_migration_precedes_snapshot_and_preserves_legacy_rows(tmp_path)
     export_existing(root=tmp_path, out=output)
     graph = rdflib.Graph().parse(output)
     event = rdflib.URIRef(
-        "https://contingency-atlas.local/id/SYN-MIGRATION-EVT-1"
+        "https://workbench-atlas.local/id/SYN-MIGRATION-EVT-1"
     )
     event_type = rdflib.URIRef(
-        "https://contingency-atlas.local/ontology#EvidenceEvent"
+        "https://workbench-atlas.local/ontology#EvidenceEvent"
     )
     assert (event, rdflib.RDF.type, event_type) in graph
 

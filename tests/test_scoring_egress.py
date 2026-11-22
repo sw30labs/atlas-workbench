@@ -8,7 +8,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 import pytest
 
-from contingency_atlas.scoring.egress import (
+from workbench_atlas.scoring.egress import (
     EgressGateway,
     verify_audit_chain,
 )

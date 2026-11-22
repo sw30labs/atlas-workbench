@@ -3,7 +3,7 @@ end-to-end Task B / Task C run (the Phase 1 go/no-go)."""
 
 import pytest
 
-from contingency_atlas.scoring.evaluate import (
+from workbench_atlas.scoring.evaluate import (
     average_precision,
     auroc,
     pair_labels,
@@ -11,9 +11,9 @@ from contingency_atlas.scoring.evaluate import (
     topk_precision,
     write_eval_outputs,
 )
-from contingency_atlas.scoring.models import IncidentEvent
-from contingency_atlas.scoring.scorer import ScorerConfig
-from contingency_atlas.scoring.synthetic import R0Config, generate_r0
+from workbench_atlas.scoring.models import IncidentEvent
+from workbench_atlas.scoring.scorer import ScorerConfig
+from workbench_atlas.scoring.synthetic import R0Config, generate_r0
 
 
 def _labels_scores():
@@ -110,9 +110,9 @@ def test_label_shuffle_null_control(r0_eval):
     import random
 
     ds, result = r0_eval
-    from contingency_atlas.scoring.candidates import all_pairs, baseline_scores
-    from contingency_atlas.scoring.channels import build_channel_graph
-    from contingency_atlas.scoring.scorer import DetScorer
+    from workbench_atlas.scoring.candidates import all_pairs, baseline_scores
+    from workbench_atlas.scoring.channels import build_channel_graph
+    from workbench_atlas.scoring.scorer import DetScorer
 
     pairs = all_pairs(ds.atoms)
     labels = pair_labels(ds.events, 32, 40, pairs)

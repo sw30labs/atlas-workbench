@@ -5,15 +5,15 @@ import sqlite3
 
 import pytest
 
-from contingency_atlas.compound_graduate import (
+from workbench_atlas.compound_graduate import (
     eligible_compounds,
     migrate_graduations,
     run_compound_graduation,
 )
-from contingency_atlas.compound_join import migrate_compound
-from contingency_atlas.config import Settings
-from contingency_atlas.schema import migrate
-from contingency_atlas.scoring.models import pair_id_for
+from workbench_atlas.compound_join import migrate_compound
+from workbench_atlas.config import Settings
+from workbench_atlas.schema import migrate
+from workbench_atlas.scoring.models import pair_id_for
 
 
 def _make_settings(tmp_path, risks, evidence_rows):
@@ -181,8 +181,8 @@ def test_no_client_is_recorded_error(settings_with_compound):
 
 
 def test_pipeline_graduate_skips_without_llm(tmp_workspace):
-    from contingency_atlas.pipeline import run_pipeline
-    from contingency_atlas.config import Settings
+    from workbench_atlas.pipeline import run_pipeline
+    from workbench_atlas.config import Settings
 
     settings = Settings(
         scenario_db_path=tmp_workspace / "atlas.db",

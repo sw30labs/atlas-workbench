@@ -132,7 +132,7 @@ unambiguous and preserved in exports.
 
 ### 4. Classify
 
-- Apply only the independently documented Contingency Atlas taxonomy or a
+- Apply only the independently documented Atlas Workbench taxonomy or a
   public standard whose source and terms are recorded.
 - Record the taxonomy version.
 - Do not infer that resemblance to an external taxonomy grants permission to
@@ -167,7 +167,7 @@ first enter Phase 1 or Phase 2 and complete review before a later generation
 run can use it.
 
 The optional Singularity Atlas pull is an adjacent local graph, not a
-Contingency Atlas store. It may contribute public-feed story text and URLs
+Atlas Workbench store. It may contribute public-feed story text and URLs
 into a draft-only intake prepare when the operator opts in. Loop archive /
 Innermost Loop editions are excluded (all-rights-reserved). A missing Neo4j
 driver or an unreachable database is a skip, not a write. Selected stories

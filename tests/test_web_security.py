@@ -8,8 +8,8 @@ import threading
 from contextlib import contextmanager
 from http.server import ThreadingHTTPServer
 
-from contingency_atlas.web import runner
-from contingency_atlas.web.server import (
+from workbench_atlas.web import runner
+from workbench_atlas.web.server import (
     MAX_REQUEST_BYTES,
     DashboardHandler,
     _is_loopback_bind_host,

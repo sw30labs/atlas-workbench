@@ -1,10 +1,10 @@
-# Research model inventory entry — Contingency Atlas scenario scoring engine
+# Research model inventory entry — Atlas Workbench scenario scoring engine
 # Phase 3 scaffold (roadmap: "Model inventory / research model registration
 # as required"). Research tier: outputs are workshop inputs, never automated
 # risk decisions. Update owners/status through the project governance process.
 
 model_id: atlas-scenario-scorer
-name: Contingency Atlas compound scenario scorer (deterministic hybrid)
+name: Atlas Workbench compound scenario scorer (deterministic hybrid)
 version: "0.2.0"
 tier: research            # research | challenger | production
 status: registered-research
@@ -23,7 +23,7 @@ purpose: >
 algorithm:
   type: deterministic hybrid (Poisson/lognormal marginals, shrunk-empirical
     dependence, Monte Carlo propagation, two-level Fréchet-clipped intervals)
-  algorithm_version_source: contingency_atlas/scoring/__init__.py
+  algorithm_version_source: workbench_atlas/scoring/__init__.py
   challenger_estimator: 'spike-and-slab mixture dependence (dependence_mode
     "mixture"; measured by Task B-cal, NOT promoted — primary unchanged)'
   judgment_channel: none (the optional LLM coherence-critique channel was
@@ -43,7 +43,7 @@ data:
     R1: public evidence store (evidence events, public)
     synthetic_cell_demo: fictional grouped events for boundary testing
   confidentiality:
-    egress_gateway: contingency_atlas/scoring/egress.py
+    egress_gateway: workbench_atlas/scoring/egress.py
     rule: no local-detail content leaves local processing; allow-list schemas only
 
 restrictions:

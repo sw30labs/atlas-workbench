@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from contingency_atlas.provenance import canonical_public_url, is_public_http_url
+from workbench_atlas.provenance import canonical_public_url, is_public_http_url
 
 
 def _joined(*parts: str) -> str:

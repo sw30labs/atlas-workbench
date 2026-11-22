@@ -17,8 +17,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from contingency_atlas.config import get_settings  # noqa: E402
-from contingency_atlas.schema import migrate, migrate_evidence_events  # noqa: E402
+from workbench_atlas.config import get_settings  # noqa: E402
+from workbench_atlas.schema import migrate, migrate_evidence_events  # noqa: E402
 
 
 def migrate_existing_runtime_stores(

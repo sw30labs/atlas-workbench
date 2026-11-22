@@ -19,8 +19,8 @@ from pathlib import Path
 
 import pytest
 
-from contingency_atlas.config import Settings
-from contingency_atlas.review import (
+from workbench_atlas.config import Settings
+from workbench_atlas.review import (
     ReviewError,
     evidence_validation_report,
     register_lock,
@@ -28,15 +28,15 @@ from contingency_atlas.review import (
     validate_evidence_for_approval,
     validate_risk_for_approval,
 )
-from contingency_atlas.review_assist import (
+from workbench_atlas.review_assist import (
     agreement_stats,
     content_hash,
     load_suggestions,
     run_review_analysis,
 )
-from contingency_atlas.schema import migrate, migrate_evidence_events
-from contingency_atlas.web import runner, server
-from contingency_atlas.web.server import DashboardHandler
+from workbench_atlas.schema import migrate, migrate_evidence_events
+from workbench_atlas.web import runner, server
+from workbench_atlas.web.server import DashboardHandler
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -564,7 +564,7 @@ def test_decide_batch_cross_origin_is_blocked(review_settings):
 
 
 def test_decide_locked_register_returns_409(review_settings, monkeypatch):
-    import contingency_atlas.review as review_module
+    import workbench_atlas.review as review_module
 
     original = review_module.register_lock
     # keep the suite fast: the handler's lock attempt gives up in 0.3 s
@@ -669,7 +669,7 @@ def _channel_candidate(**overrides):
 
 
 def _add_channel_proposal(settings, **overrides) -> str:
-    from contingency_atlas.proposals import create_channel_proposals
+    from workbench_atlas.proposals import create_channel_proposals
     result = create_channel_proposals(
         settings.scenario_db_path, [_channel_candidate(**overrides)]
     )
@@ -693,7 +693,7 @@ class BoomClient:
     settings = _FakeJudgeSettings()
 
     def chat_json(self, messages, model=None, temperature=0.0):
-        from contingency_atlas.llm import LLMError
+        from workbench_atlas.llm import LLMError
         raise LLMError("model offline")
 
 
@@ -754,7 +754,7 @@ def test_channel_suggestion_attaches_and_goes_stale(review_settings):
 
 
 def test_agreement_stats_ignores_explanations(review_settings):
-    from contingency_atlas.review_assist import record_decision
+    from workbench_atlas.review_assist import record_decision
     pid = _add_channel_proposal(review_settings)
     run_review_analysis(review_settings, ExplainClient())
     record_decision(review_settings.scenario_db_path, "channel", pid, "approve")
@@ -771,8 +771,8 @@ def test_channel_content_hash_is_field_sensitive():
 
 
 def test_nav_badge_counts_every_reviewable_kind(review_settings):
-    from contingency_atlas.frameworks.mappings import migrate_mapping_proposals
-    from contingency_atlas.proposals import (
+    from workbench_atlas.frameworks.mappings import migrate_mapping_proposals
+    from workbench_atlas.proposals import (
         create_analogues,
         create_merge_proposals,
     )
@@ -845,7 +845,7 @@ def test_nav_badge_counts_every_reviewable_kind(review_settings):
 
 
 def test_channel_explanation_uses_research_digest(review_settings):
-    from contingency_atlas.research import store_research_memo
+    from workbench_atlas.research import store_research_memo
     pid = _add_channel_proposal(review_settings)
     store_research_memo(
         review_settings.scenario_db_path, "channel", pid, "fake-judge",
@@ -885,7 +885,7 @@ def test_review_analyze_is_a_valid_runner_phase():
 
 
 def test_index_has_review_view():
-    html = (ROOT / "contingency_atlas/web/static/index.html").read_text()
+    html = (ROOT / "workbench_atlas/web/static/index.html").read_text()
     assert 'id="view-review"' in html
     assert 'data-view="review"' in html
     assert "/api/review/pending" in html
@@ -893,7 +893,7 @@ def test_index_has_review_view():
 
 
 def test_index_has_batch_review_selection_controls_and_partial_result_wiring():
-    html = (ROOT / "contingency_atlas/web/static/index.html").read_text()
+    html = (ROOT / "workbench_atlas/web/static/index.html").read_text()
     controls = (
         "review-select-all",
         "review-batch-panel",
@@ -948,7 +948,7 @@ def test_index_has_batch_review_selection_controls_and_partial_result_wiring():
 
 
 def test_index_has_findings_panel():
-    html = (ROOT / "contingency_atlas/web/static/index.html").read_text()
+    html = (ROOT / "workbench_atlas/web/static/index.html").read_text()
     assert 'id="findings-list"' in html
     assert "DATA.patterns" in html and "DATA.causal" in html
     # long mechanism prose renders as collapsed per-sentence blocks
@@ -959,7 +959,7 @@ def test_index_has_findings_panel():
 
 
 def test_eval_reports_reads_artifacts_and_tolerates_absence(tmp_path, monkeypatch):
-    from contingency_atlas.web import server as srv
+    from workbench_atlas.web import server as srv
     art = tmp_path / "eval_report.json"
     art.write_text(json.dumps({"recommendation": "go", "task_b": {"pass": True}}))
     monkeypatch.setattr(srv, "EVAL_ARTIFACTS", {
@@ -976,7 +976,7 @@ def test_eval_reports_reads_artifacts_and_tolerates_absence(tmp_path, monkeypatc
 
 
 def test_index_has_eval_reports_panel():
-    html = (ROOT / "contingency_atlas/web/static/index.html").read_text()
+    html = (ROOT / "workbench_atlas/web/static/index.html").read_text()
     assert 'id="eval-reports-list"' in html
     assert "/api/eval/reports" in html
     assert "ADVISORY" in html.upper()
@@ -998,7 +998,7 @@ def test_index_inline_scripts_parse_with_node(tmp_path):
     node = shutil.which("node")
     if node is None:
         pytest.skip("node not available for JS syntax check")
-    html = (ROOT / "contingency_atlas/web/static/index.html").read_text()
+    html = (ROOT / "workbench_atlas/web/static/index.html").read_text()
     scripts = re.findall(r"<script>(.*?)</script>", html, re.S)
     assert scripts, "expected inline <script> blocks in index.html"
     for i, body in enumerate(scripts):

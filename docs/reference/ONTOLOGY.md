@@ -1,6 +1,6 @@
 # Ontology Guard
 
-Contingency Atlas combines probabilistic producers with a deterministic
+Atlas Workbench combines probabilistic producers with a deterministic
 admission boundary: **the pipeline proposes; the ontology permits**. Every
 machine-produced write is checked before it reaches a governed store.
 
@@ -37,7 +37,7 @@ leave the prior state intact.
 
 ## Pipeline Wiring
 
-`contingency_atlas/guard_hook.py` adapts application rows to ontology records.
+`workbench_atlas/guard_hook.py` adapts application rows to ontology records.
 The write seams cover evidence ingestion, register saves, scenario upserts,
 compound persistence, and machine-generated proposals. Human review actions
 carry their own attestations; their resulting register writes still pass the
@@ -53,7 +53,7 @@ Validate the self-contained synthetic fixture without reading runtime stores:
 
 ```bash
 .venv/bin/python ontology/guard.py ontology/fixtures/candidates.json \
-  --out /tmp/contingency-atlas-ontology
+  --out /tmp/workbench-atlas-ontology
 ```
 
 Regenerate a local store projection when required for operator diagnostics:
@@ -71,7 +71,7 @@ artifacts. They are never release fixtures or sources for checked-in mappings.
 For seam details and failure handling, see `ontology/WIRING.md`.
 
 Wheel installs place the same tracked validator bundle under
-`share/contingency-atlas/ontology` in the active Python environment.
+`share/workbench-atlas/ontology` in the active Python environment.
 `guard_hook.py` resolves that location automatically. If the guard is enabled
 and any required script or TTL is missing, validation raises `GuardError`
 instead of admitting the write.

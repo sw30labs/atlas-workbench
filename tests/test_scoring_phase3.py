@@ -9,21 +9,21 @@ from pathlib import Path
 import pytest
 import yaml
 
-from contingency_atlas.scoring.calibration import (
+from workbench_atlas.scoring.calibration import (
     _poisson_cdf,
     _poisson_quantile,
     calibrate_atoms,
 )
-from contingency_atlas.provenance import is_approved_record
-from contingency_atlas.scoring.channels import build_channel_graph
-from contingency_atlas.scoring.models import IncidentEvent
-from contingency_atlas.scoring.r1 import (
+from workbench_atlas.provenance import is_approved_record
+from workbench_atlas.scoring.channels import build_channel_graph
+from workbench_atlas.scoring.models import IncidentEvent
+from workbench_atlas.scoring.r1 import (
     SMALL_SAMPLE_MAX_POSITIVES,
     build_signal_series,
     run_r1_eval,
 )
-from contingency_atlas.scoring.scorer import DetScorer, ScorerConfig
-from contingency_atlas.scoring.synthetic import R0Config, generate_r0
+from workbench_atlas.scoring.scorer import DetScorer, ScorerConfig
+from workbench_atlas.scoring.synthetic import R0Config, generate_r0
 
 FAST = ScorerConfig(mc_draws=300, interval_draws=300)
 REPO = Path(__file__).resolve().parents[1]

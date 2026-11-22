@@ -6,7 +6,7 @@ import pytest
 from openpyxl import Workbook
 
 from bulk_ingest_helpers import doc, private_settings, records, run, write_services_xlsx
-from contingency_atlas.bulk_ingest import coerce
+from workbench_atlas.bulk_ingest import coerce
 
 
 @pytest.fixture

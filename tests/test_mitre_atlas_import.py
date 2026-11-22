@@ -11,7 +11,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from contingency_atlas.frameworks import (
+from workbench_atlas.frameworks import (
     FrameworkImportError,
     ImportSizeError,
     ReleaseCollisionError,
@@ -22,8 +22,8 @@ from contingency_atlas.frameworks import (
     search_techniques,
     technique_context,
 )
-from contingency_atlas.frameworks.cli import main as framework_main
-from contingency_atlas.frameworks.mitre_atlas import parse_mitre_atlas
+from workbench_atlas.frameworks.cli import main as framework_main
+from workbench_atlas.frameworks.mitre_atlas import parse_mitre_atlas
 
 
 def _document(version: str = "2026.07") -> dict:
@@ -385,7 +385,7 @@ def test_size_limit_is_checked_before_yaml_parse(tmp_path, monkeypatch):
         raise AssertionError("safe_load must not run for oversized input")
 
     monkeypatch.setattr(
-        "contingency_atlas.frameworks.mitre_atlas.yaml.load", must_not_parse
+        "workbench_atlas.frameworks.mitre_atlas.yaml.load", must_not_parse
     )
     with pytest.raises(ImportSizeError, match="limit is 64"):
         import_mitre_atlas(
@@ -500,7 +500,7 @@ def test_expected_sha256_mismatch_fails_before_yaml_or_database(
         raise AssertionError("I must compare the exact bytes before YAML parsing")
 
     monkeypatch.setattr(
-        "contingency_atlas.frameworks.mitre_atlas.yaml.load",
+        "workbench_atlas.frameworks.mitre_atlas.yaml.load",
         must_not_parse,
     )
     with pytest.raises(FrameworkImportError, match="does not match expected_sha256"):
@@ -560,7 +560,7 @@ def test_yaml_structure_bounds_fail_before_schema_validation(
     source = tmp_path / f"{constant}.yaml"
     source.write_text(content)
     monkeypatch.setattr(
-        f"contingency_atlas.frameworks.mitre_atlas.{constant}",
+        f"workbench_atlas.frameworks.mitre_atlas.{constant}",
         limit,
     )
 

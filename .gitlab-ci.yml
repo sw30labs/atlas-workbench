@@ -24,7 +24,7 @@ pytest:
 ruff:
   stage: test
   script:
-    - python -m ruff check --select F821,F811,F402,E9,F841 contingency_atlas scripts tests
+    - python -m ruff check --select F821,F811,F402,E9,F841 workbench_atlas scripts tests
 
 release-gate:
   stage: test

@@ -5,7 +5,7 @@
 
 ## Context
 
-Contingency Atlas has a compact project-native banking operational-risk
+Atlas Workbench has a compact project-native banking operational-risk
 taxonomy, an external-driver overlay, and a governed scenario workflow. It
 recognizes AI and model risk in broad operational terms, but it does not carry
 the adversary-behavior vocabulary, technique identifiers, mitigations, or case
@@ -19,7 +19,7 @@ mixing ATLAS fields into scenario scores would turn a qualitative mapping into
 unsupported quantitative evidence.
 
 The two products also share the word “Atlas.” Without an explicit boundary,
-users could mistake the independently authored Contingency Atlas taxonomy for
+users could mistake the independently authored Atlas Workbench taxonomy for
 MITRE content, infer compatibility that has not been reviewed, or treat an
 ATLAS case study as evidence that a hypothetical banking scenario occurred.
 
@@ -51,14 +51,14 @@ the following invariants:
    but are excluded from current coverage until re-reviewed. Applicability is
    labeled hypothesized rather than observed or attributed. Related ATLAS case
    studies are examples associated with a technique, not evidence for the
-   Contingency Atlas scenario.
+   Atlas Workbench scenario.
 6. Imported ATLAS content and mapping state never enter likelihood, impact,
    urgency, compound generation, graduation, or any scoring path. Imported
    descriptions are untrusted display data, are escaped in the browser, and
    are not inserted into LLM prompts.
-7. `atlas-1.0` remains the stable identifier for the **Contingency Atlas Risk
+7. `atlas-1.0` remains the stable identifier for the **Atlas Workbench Risk
    Taxonomy**. External coordinates use `mitre-atlas/<content-version>`; ATLAS
-   technique maturity is never conflated with Contingency Atlas signal
+   technique maturity is never conflated with Atlas Workbench signal
    maturity.
 8. The product preserves upstream copyright and Apache-2.0 terms, identifies
    MITRE ATLAS™ only to describe interoperability, and states that MITRE has

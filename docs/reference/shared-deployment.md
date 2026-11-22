@@ -1,6 +1,6 @@
 # Single-tenant shared deployment
 
-Contingency Atlas supports a shared workspace behind an **authenticating TLS
+Atlas Workbench supports a shared workspace behind an **authenticating TLS
 reverse proxy with a server-side signing adapter**. The backend continues to
 bind only to loopback. Default `local` mode is for one trusted local operator;
 do not expose that mode through a network proxy.
@@ -120,7 +120,7 @@ The proxy's authenticated server code can call the tested adapter helper:
 
 ```python
 import os
-from contingency_atlas.web.access import proxy_adapter_headers
+from workbench_atlas.web.access import proxy_adapter_headers
 
 # These identity values MUST come from the proxy's validated IdP session.
 # request_target and raw_body are the exact bytes/target forwarded downstream.

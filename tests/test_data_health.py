@@ -1,6 +1,6 @@
 import json
 
-from contingency_atlas.web.health import data_health
+from workbench_atlas.web.health import data_health
 
 
 def test_malformed_register_is_unavailable_not_empty(settings):

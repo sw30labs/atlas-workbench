@@ -1,6 +1,6 @@
 # Essays
 
-Public long-form writing related to Contingency Atlas (not the technical white paper).
+Public long-form writing related to Atlas Workbench (not the technical white paper).
 
 | Essay | Path |
 |-------|------|

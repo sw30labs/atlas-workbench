@@ -10,10 +10,10 @@ from concurrent.futures import ThreadPoolExecutor
 import pytest
 from pypdf import PdfReader
 
-from contingency_atlas import assessment_reports as reports
-from contingency_atlas.config import Settings
-from contingency_atlas.context import create_baseline, save_record
-from contingency_atlas.exports import ExportError, _json_bytes, render_snapshot
+from workbench_atlas import assessment_reports as reports
+from workbench_atlas.config import Settings
+from workbench_atlas.context import create_baseline, save_record
+from workbench_atlas.exports import ExportError, _json_bytes, render_snapshot
 
 
 @pytest.fixture

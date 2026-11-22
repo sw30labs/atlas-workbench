@@ -30,7 +30,7 @@ change an organization assessment or overwrite a source record.
 
 ServiceNow's Import Set API uses a staging table and its configured transform maps;
 the response includes transform results for destination records. The default
-`u_contingency_atlas_import` is a suggested customer-created staging table, not a
+`u_workbench_atlas_import` is a suggested customer-created staging table, not a
 table Atlas creates or assumes exists. [ServiceNow Import Set API](https://www.servicenow.com/docs/r/api-reference/rest-apis/c_ImportSetAPI.html)
 
 Configure coalescing for the stable Atlas source identity. ServiceNow documents
@@ -81,7 +81,7 @@ canonical research export when complete research history is required.
 ```json
 {
   "source_system": "example-atlas-production",
-  "staging_table": "u_contingency_atlas_import",
+  "staging_table": "u_workbench_atlas_import",
   "fields": {
     "source_system": "u_source_system",
     "external_id": "u_external_id",
@@ -127,7 +127,7 @@ or migrate absent stores. Unrecognized schemas or payload-integrity failures sto
 the operation. The outbox is limited to 300 packages, with 2,000 rows and 20 MB per
 package; it never silently evicts audit history.
 
-Python entry points in `contingency_atlas.integrations`:
+Python entry points in `workbench_atlas.integrations`:
 
 ```python
 preview_integration(settings, *, actor, selection, adapter="servicenow", mapping=None)

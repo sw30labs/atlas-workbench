@@ -4,7 +4,7 @@ Keep the repository private until every item below is complete. Changing
 visibility is an administrative release action, not a substitute for review.
 
 Items checked below were verified on 2026-08-29 against a separately created,
-one-commit clean export. Public package metadata names “Contingency Atlas
+one-commit clean export. Public package metadata names “Atlas Workbench
 contributors.” Named authorship is deliberately retained only where normal
 scholarly attribution requires it (the authored white paper and citations);
 personal contact data is not published. External URL availability, tagging,

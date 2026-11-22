@@ -20,11 +20,11 @@ sys.path.insert(0, str(ROOT))
 
 # Residue terms live in the independence lexicon so planted-identity tests
 # and this scanner cannot drift. Path allowlists stay here.
-from contingency_atlas.independence_lexicon import (
+from workbench_atlas.independence_lexicon import (
     DISCLOSURE_ONLY,
     scan_identifier_residue,
 )
-from contingency_atlas.independence_lexicon import (
+from workbench_atlas.independence_lexicon import (
     STRING_FORBIDDEN as GLOBAL_FORBIDDEN,
 )
 
@@ -46,7 +46,7 @@ REQUIRED_FILES = {
     "SECURITY.md",
     "docs/reference/TAXONOMY.md",
     "THIRD_PARTY_NOTICES.md",
-    "contingency_atlas/source_registry.yaml",
+    "workbench_atlas/source_registry.yaml",
     "docs/reference/RADAR_AND_BRIEFS.md",
     "examples/demo_emerging_risks.json",
     "examples/demo_evidence.json",
@@ -69,7 +69,7 @@ DISCLOSURE_EXEMPTIONS: dict[str, frozenset[str]] = {
             "docs/release/PUBLIC_RELEASE_CHECKLIST.md",
             "README.md",
             "THIRD_PARTY_NOTICES.md",
-            "contingency_atlas/web/about.yaml",
+            "workbench_atlas/web/about.yaml",
             "docs/research/essays/checklist-empty-cells/article.md",
             "docs/deck/index.html",
         }
@@ -82,7 +82,7 @@ DISCLOSURE_EXEMPTIONS: dict[str, frozenset[str]] = {
             "DISCLAIMER.md",
             "docs/release/PUBLIC_RELEASE_CHECKLIST.md",
             "README.md",
-            "contingency_atlas/web/about.yaml",
+            "workbench_atlas/web/about.yaml",
             "docs/deck/index.html",
         }
     ),
@@ -114,35 +114,44 @@ REVIEWED_BINARY_SHA256 = {
     "docs/research/whitepaper/figures/figure2_pit_calibration.png": "05efa4e487324a570e0784a64b145b9d1062f71a33dc9af889a5e62af7cdf4dc",
     "docs/research/whitepaper/figures/figure3_rare_pair_markdown.png": "fcfd684ac4b772781daf12231cae5b6a37adb50767fb767f8b804a9d78b88610",
     "docs/research/whitepaper/figures/figure4_interval_violations.png": "6a247f265a3f69de987d3781dc823c81a446c8825a6343a8f2e6e006b42765f3",
-    # Built manuscript reviewed 2026-08-29: no embedded local path or username,
-    # document metadata empty (/Author, /Title, /Subject, /Keywords), producer
-    # pdfTeX. The manuscript contains attribution but no personal contact data.
-    "docs/research/whitepaper/manuscript/contingency_atlas_whitepaper.pdf": "dd4f314682630d07cbea8fa2472e0bdb8fc4db8deac668c27ec9fb47e93384f3",
+    # Rebuilt 2026-11-21 from the manuscript. No embedded local path or
+    # username, document metadata empty (/Author, /Title, /Subject, /Keywords),
+    # producer pdfTeX. The manuscript contains attribution but no personal
+    # contact data.
+    "docs/research/whitepaper/manuscript/workbench_atlas_whitepaper.pdf": "aa815b158d0556ede80e1d1ba4c9252d2bfd918a05c5206bd19ba7df70cca158",
     # Essay hero figure reviewed 2026-08-09: a hand-authored conceptual diagram
     # (checklist rows vs an axis matrix) built from the generic taxonomy labels
     # already in the essay. No institution, person, path or dataset appears;
     # the vector source sits beside it as checklist_vs_search.svg.
     "docs/research/essays/checklist-empty-cells/figures/checklist_vs_search.png": "0e164c5415c7162d4ab2653ebf6432249783171b977601711d3c4929351da0a2",
     # Deck frames reviewed 2026-11-21: loopback screenshots of the fictional
-    # demo. 14c-draft-open.png shows one held intake draft about a public
-    # BIS page. The draft was not sent, not approved, and is not a finding.
-    "docs/deck/frames/01-briefing.png": "342eee701e8a26d5a715f81b58014d1a04988d333c47f6b3013b1e60529b8c4d",
-    "docs/deck/frames/02-constellation.png": "a60106f6f0c59938d4a7d61990ada207dfb31117c732f43057f15dcdf91b39cb",
-    "docs/deck/frames/05-library.png": "290a94a755bfb09ab5445d7f615a740fe10cd4a133d0bf6f333d0e1d55395971",
-    "docs/deck/frames/06-brief.png": "636a28bf7121113ece5ca2bf1ff8c7b60706e8d1d1a0404bf9819a169284dc05",
-    "docs/deck/frames/08-signals.png": "82eb7cd36576d4ae2c3ad55b13109af42aee08e6d26d00759029e035adfdf696",
-    "docs/deck/frames/10-review.png": "6539ca433a43751f4e04780dbd5a8f4458575ed1926ee6c6202141053918f4d0",
-    "docs/deck/frames/11-analyze.png": "ac2c49bf8f1721fdb93b80a31bfde6fdeb5ece4924cc5ad0c97ded1abd3a09be",
-    "docs/deck/frames/12-organization.png": "6fae289f2f00096fa92ad25ce1c40487973dee8288fcb9eae54578eec2a3fabe",
-    "docs/deck/frames/14-add-research.png": "54c6b20903dbfd3b7706c55139d5aa1b29f5604e0fb79bc1a8f8b35b9a977daf",
-    "docs/deck/frames/14b-preparing.png": "1df09e16937be6214d6d84a3138c2def270e373644de3298a4c78e77f2937fe1",
-    "docs/deck/frames/14c-draft-open.png": "e209ca49d003cb5b3093d68a66d7a07b8f6d8193b99a38be4020e0f097c9e605",
-    "docs/deck/frames/15b-export-preview.png": "201935ccc04e8cae088204ea448486e0b87c016208f8c51b903855068ca4ea3d",
+    # demo from a clean install. The header reads ATLAS WORKBENCH.
+    # 14c-draft-open.png is a completed intake of a public BIS page that
+    # returned no candidates. Send stayed disabled. Nothing was sent,
+    # approved, or saved.
+    "docs/deck/frames/01-briefing.png": "f25ba45729e37cf792c7717aed642f0bb5e3900ef5e519e4cff765b23d16e881",
+    "docs/deck/frames/02-constellation.png": "a781eb2504370926e63a8f9998cd8dba123b72de000c3fcfd71a3c77d919a15b",
+    "docs/deck/frames/05-library.png": "0d4308d00d15b0415c5edb7ee2516df27295f9c8899be39dfbe226872260e859",
+    "docs/deck/frames/06-brief.png": "e6c77a962de56156edab642fefd302b2ccdc1761938e1045a3020c262dc5bdd4",
+    "docs/deck/frames/08-signals.png": "f343c6de41490cea8c154930dc7333d2460fdb33e3f4059925ce0250b2356dc3",
+    "docs/deck/frames/10-review.png": "1bd7ee11c4e307327fe82a07c880fb1f461b67c1d9f49c4f25c571bab35c515a",
+    "docs/deck/frames/11-analyze.png": "d125f36e085dabf01b9734dc528150bfedbf120fe1d193185a72ef45e3d4788d",
+    "docs/deck/frames/12-organization.png": "2b20d29a354ea39d1481a9efe65fa5052ae14ee4d56434e83ef363dacf3b912f",
+    "docs/deck/frames/14-add-research.png": "150563569f564ac9a8f46187ba1fe4e99664a092b2d9289dc7e101b3f2a4a6c7",
+    "docs/deck/frames/14b-preparing.png": "c59d93f3c520d658901c2ee255a4960a33009bd0da349a8221a31a6f7c32b934",
+    "docs/deck/frames/14c-draft-open.png": "e6b4e307954f6125eaa9928aef97a27c4d4e56ca83d7fdb8df5c4568d38e0fbc",
+    "docs/deck/frames/15b-export-preview.png": "393eade804ec15d515635898c178559cf2f24097a3be84ec1b9e593cca5e1728",
 }
 REVIEWED_BINARY_PATHS = frozenset(REVIEWED_BINARY_SHA256)
-# Older commits store these same bytes at docs/whitepaper/ and docs/essays/.
+# Older commits store these same figure bytes at docs/whitepaper/ and
+# docs/essays/. The 2026-08-29 manuscript digest stays valid after the rebuild.
 # A historical blob is reviewed when its digest matches, even after the move.
-REVIEWED_BINARY_DIGESTS = frozenset(REVIEWED_BINARY_SHA256.values())
+_HISTORICAL_REVIEWED_DIGESTS = frozenset({
+    "dd4f314682630d07cbea8fa2472e0bdb8fc4db8deac668c27ec9fb47e93384f3",
+})
+REVIEWED_BINARY_DIGESTS = (
+    frozenset(REVIEWED_BINARY_SHA256.values()) | _HISTORICAL_REVIEWED_DIGESTS
+)
 
 
 def historical_binary_failure(path_label: str, data: bytes) -> str | None:
@@ -424,7 +433,7 @@ def _archive_prefix(names: Iterable[str]) -> str:
 
 def _packaged_ontology_source(path_label: str) -> str | None:
     match = re.fullmatch(
-        r"[^/]+\.data/data/share/contingency-atlas/(ontology/.+)",
+        r"[^/]+\.data/data/share/workbench-atlas/(ontology/.+)",
         path_label,
     )
     return match.group(1) if match else None
@@ -551,7 +560,7 @@ def _load_json(relative: str) -> list[dict[str, object]]:
 def validate_fixtures() -> list[str]:
     failures: list[str] = []
     try:
-        from contingency_atlas.categories import (
+        from workbench_atlas.categories import (
             derive_financial_impact_band,
             derive_impact_band,
         )
@@ -774,7 +783,7 @@ def validate_fixtures() -> list[str]:
 def validate_prompts() -> list[str]:
     """Dynamically discover prompt constants and enforce residue/version rules."""
     try:
-        from contingency_atlas.prompt_registry import inspect_prompt_registry
+        from workbench_atlas.prompt_registry import inspect_prompt_registry
 
         return inspect_prompt_registry()
     except (ImportError, OSError, SyntaxError, ValueError) as exc:
@@ -888,7 +897,7 @@ def scan_history() -> list[str]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Validate Contingency Atlas public-release boundaries."
+        description="Validate Atlas Workbench public-release boundaries."
     )
     parser.add_argument(
         "--history",

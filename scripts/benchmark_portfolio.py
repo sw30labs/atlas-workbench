@@ -18,9 +18,9 @@ import tracemalloc
 from contextlib import closing
 from pathlib import Path
 
-from contingency_atlas.config import Settings
-from contingency_atlas.schema import migrate
-from contingency_atlas.web.portfolio import build_scenario_page
+from workbench_atlas.config import Settings
+from workbench_atlas.schema import migrate
+from workbench_atlas.web.portfolio import build_scenario_page
 
 
 def _measure(call, repeats):

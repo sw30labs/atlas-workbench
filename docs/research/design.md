@@ -1,6 +1,6 @@
 # Design — the deterministic scoring engine
 
-Package: `contingency_atlas/scoring/`. Algorithm version: `0.2.0`
+Package: `workbench_atlas/scoring/`. Algorithm version: `0.2.0`
 (`scoring/__init__.py::ALGORITHM_VERSION`; breaking change = score
 components change meaning). 0.1.0 → 0.2.0: two-level posterior
 intervals, realization identity (`data_hash`, `judgment_version`),

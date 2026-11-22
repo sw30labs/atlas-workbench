@@ -4,7 +4,7 @@
 
 | Field | Value |
 |---|---|
-| Document owner | Contingency Atlas maintainer |
+| Document owner | Atlas Workbench maintainer |
 | Status | Implemented |
 | Version | 1.1 |
 | Effective date | 2026-08-12 |
@@ -16,7 +16,7 @@
 ## Decision
 
 I will add MITRE ATLAS as a versioned, human-reviewed, display-only overlay on
-Contingency Atlas scenarios. I will not replace the project-native banking
+Atlas Workbench scenarios. I will not replace the project-native banking
 operational-risk taxonomy, alter scores, or claim that a hypothesized technique
 was observed in an incident.
 
@@ -35,7 +35,7 @@ I consider the minimum integration complete when I can:
 ## Architectural boundary
 
 ```text
-Contingency Atlas scenario
+Atlas Workbench scenario
         |
         | reviewed applicability mapping
         v
@@ -47,7 +47,7 @@ MITRE ATLAS technique
 
 I will preserve these semantic boundaries:
 
-- `atlas-1.0` continues to identify the Contingency Atlas banking-risk
+- `atlas-1.0` continues to identify the Atlas Workbench banking-risk
   taxonomy.
 - `mitre-atlas/<content-version>` identifies the external framework release.
 - `signal_maturity` remains the maturity of a banking weak signal.
@@ -334,5 +334,5 @@ I will not include these in the minimum:
 
 | Version | Date | Author | Change |
 |---|---|---|---|
-| 1.1 | 2026-08-12 | Contingency Atlas maintainer | I recorded the implemented digest pin, sealed release snapshot, monotonic scenario revision, and restoration-safe staleness controls. |
-| 1.0 | 2026-08-12 | Contingency Atlas maintainer | I approved the minimum MITRE ATLAS integration plan for implementation. |
+| 1.1 | 2026-08-12 | Atlas Workbench maintainer | I recorded the implemented digest pin, sealed release snapshot, monotonic scenario revision, and restoration-safe staleness controls. |
+| 1.0 | 2026-08-12 | Atlas Workbench maintainer | I approved the minimum MITRE ATLAS integration plan for implementation. |

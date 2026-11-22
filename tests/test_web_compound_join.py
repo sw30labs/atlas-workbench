@@ -6,8 +6,8 @@ import time
 
 import pytest
 
-from contingency_atlas.config import Settings
-from contingency_atlas.web import runner
+from workbench_atlas.config import Settings
+from workbench_atlas.web import runner
 
 
 @pytest.fixture()
@@ -80,7 +80,7 @@ def test_start_job_compound_join_completes(dense_settings):
 
 
 def test_index_page_has_phase7_card():
-    html = open("contingency_atlas/web/static/index.html").read()
+    html = open("workbench_atlas/web/static/index.html").read()
     assert "COMPOUND JOIN" in html
     assert 'data-phase="${p.id || "phase" + p.n}"' in html
     assert 'compound_join: { name: "Phase 7 · Compound Join"' in html

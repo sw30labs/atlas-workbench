@@ -6,8 +6,8 @@ import json
 import httpx
 import pytest
 
-from contingency_atlas.llm import LLMError, OMLXClient
-from contingency_atlas.scoring.telemetry import TelemetryLogger
+from workbench_atlas.llm import LLMError, OMLXClient
+from workbench_atlas.scoring.telemetry import TelemetryLogger
 
 
 def _client_with(handler, telemetry=None, node="test-node"):

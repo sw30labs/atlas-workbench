@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from contingency_atlas.config import Settings
-from contingency_atlas.provider_detect import detect_provider, main
+from workbench_atlas.config import Settings
+from workbench_atlas.provider_detect import detect_provider, main
 
 
 @pytest.fixture
@@ -17,7 +17,7 @@ def served(monkeypatch):
         return listing.get(settings.llm_base_url, [])
 
     monkeypatch.setattr(
-        "contingency_atlas.provider_detect._probe", fake_probe
+        "workbench_atlas.provider_detect._probe", fake_probe
     )
     return listing
 
@@ -106,7 +106,7 @@ def test_cli_verbose_explains_on_stderr_only(served, capsys):
 def test_detection_makes_no_network_call_during_settings_construction():
     """Config resolution must stay pure: a probe inside Settings would make
     every test that builds one non-deterministic and slow."""
-    import contingency_atlas.provider_detect as mod
+    import workbench_atlas.provider_detect as mod
 
     calls = []
     original = mod._probe

@@ -5,7 +5,7 @@ from types import SimpleNamespace
 import pytest
 import yaml
 
-from contingency_atlas.web import context_setup
+from workbench_atlas.web import context_setup
 
 
 @pytest.fixture

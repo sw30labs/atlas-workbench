@@ -1,6 +1,6 @@
 # Acknowledgments
 
-Contingency Atlas exists at the intersection of operational-risk practice,
+Atlas Workbench exists at the intersection of operational-risk practice,
 uncertainty research, and open-source agent engineering. Acknowledgment means
 influence or technical reliance; it does not imply affiliation, approval, or
 endorsement.
@@ -19,7 +19,7 @@ attempt to imitate Taleb, write in his style, or create a Taleb persona.
 The radar extension is informed by general horizon-scanning and
 strategic-imagination practice, including the publicly described work of
 [TomorrowToday Global](https://tomorrowtodayglobal.com/imaginethefuture/).
-Contingency Atlas uses independently authored terminology, software, prompts,
+Atlas Workbench uses independently authored terminology, software, prompts,
 and synthetic examples. It does not incorporate TomorrowToday scenarios,
 toolkit content, or proprietary material. No affiliation or endorsement is
 implied.
@@ -41,7 +41,7 @@ contributors make this project possible.
 
 [ORX](https://orx.org/) is acknowledged as an established external industry
 resource for practitioners seeking curated operational-risk news, scenario,
-and related offerings. Contingency Atlas does not use or redistribute ORX
+and related offerings. Atlas Workbench does not use or redistribute ORX
 member, subscription, loss-event, news, scenario, taxonomy, schema, or other
 proprietary content. No affiliation or endorsement is implied.
 
@@ -69,7 +69,7 @@ lead to the primary record whenever practical and must respect each source’s
 access and reuse terms.
 
 Inclusion in this list does not mean that an organization supplies data to,
-participates in, or endorses Contingency Atlas.
+participates in, or endorses Atlas Workbench.
 
 ## Domain focus
 

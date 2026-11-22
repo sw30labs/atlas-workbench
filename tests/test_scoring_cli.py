@@ -2,7 +2,7 @@
 
 import json
 
-from contingency_atlas.scoring.cli import eval_main, score_main
+from workbench_atlas.scoring.cli import eval_main, score_main
 
 
 def test_r0_generate_then_eval_demo(tmp_path):

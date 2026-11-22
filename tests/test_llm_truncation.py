@@ -21,7 +21,7 @@ import logging
 import httpx
 import pytest
 
-from contingency_atlas.llm import (
+from workbench_atlas.llm import (
     LLMError,
     LLMTruncatedError,
     OMLXClient,
@@ -157,7 +157,7 @@ def test_truncated_call_is_billed_for_the_tokens_it_burned(tmp_path):
     already parsed when it raises — recording zeros would make the ledger
     understate cost precisely where it is highest.
     """
-    from contingency_atlas.scoring.telemetry import TelemetryLogger
+    from workbench_atlas.scoring.telemetry import TelemetryLogger
 
     def handler(request):
         return httpx.Response(200, json={
@@ -199,7 +199,7 @@ def test_the_judge_does_not_share_the_extractor_budget():
     """
     import inspect
 
-    from contingency_atlas.ingest_artifacts import (
+    from workbench_atlas.ingest_artifacts import (
         EXTRACT_MAX_TOKENS,
         RUBRIC_MAX_TOKENS,
         _extract_chunk,

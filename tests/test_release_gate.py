@@ -73,7 +73,7 @@ def test_credentials_in_urls_are_still_read():
 
 def test_personal_contact_is_not_exempted_from_manuscript():
     """Public attribution does not create a blanket personal-contact exception."""
-    manuscript = "docs/research/whitepaper/manuscript/contingency_atlas_whitepaper.tex"
+    manuscript = "docs/research/whitepaper/manuscript/workbench_atlas_whitepaper.tex"
     address = f"someone{AT}example.org"
     assert [
         f for f in gate._scan_text(manuscript, address) if "email address" in f
@@ -161,7 +161,7 @@ def test_planted_schema_forbidden_column_fails():
 
 def test_planted_prompt_alias_key_fails():
     """A retired inventory substitution key is residue, not a reader alias."""
-    from contingency_atlas.independence_lexicon import scan_prompt_residue
+    from workbench_atlas.independence_lexicon import scan_prompt_residue
 
     planted = "{" + _joined("cm", "db", "_info_", "CM", "DBID") + "}"
     hits = scan_prompt_residue(planted)
@@ -169,7 +169,7 @@ def test_planted_prompt_alias_key_fails():
 
 
 def test_canonical_prompt_json_is_not_an_alias_hit():
-    from contingency_atlas.independence_lexicon import scan_prompt_residue
+    from workbench_atlas.independence_lexicon import scan_prompt_residue
 
     assert not scan_prompt_residue(
         '{"event_driver_class": "x", "primary_cause_class": "y"}'
@@ -177,7 +177,7 @@ def test_canonical_prompt_json_is_not_an_alias_hit():
 
 
 def test_gate_terms_come_from_the_lexicon():
-    from contingency_atlas.independence_lexicon import (
+    from workbench_atlas.independence_lexicon import (
         DISCLOSURE_ONLY,
         STRING_FORBIDDEN,
     )
@@ -230,13 +230,13 @@ def test_staging_rejects_untracked_files(tmp_path, monkeypatch):
 def test_wheel_inspection_rejects_nontracked_payload(tmp_path, monkeypatch):
     artifact = tmp_path / "package-1-py3-none-any.whl"
     with zipfile.ZipFile(artifact, "w") as archive:
-        archive.writestr("contingency_atlas/__init__.py", "__version__ = '1'")
+        archive.writestr("workbench_atlas/__init__.py", "__version__ = '1'")
         archive.writestr("package-1.dist-info/METADATA", "Name: package\n")
         archive.writestr("private-export.json", "{}")
     monkeypatch.setattr(
         gate,
         "tracked_file_labels",
-        lambda: frozenset({"contingency_atlas/__init__.py"}),
+        lambda: frozenset({"workbench_atlas/__init__.py"}),
     )
 
     findings = gate.scan_release_artifact(artifact)
@@ -253,7 +253,7 @@ def test_wheel_inspection_maps_installed_ontology_data_to_tracked_source(
     monkeypatch,
 ):
     artifact = tmp_path / "package-1-py3-none-any.whl"
-    member = "package-1.data/data/share/contingency-atlas/ontology/guard.py"
+    member = "package-1.data/data/share/workbench-atlas/ontology/guard.py"
     with zipfile.ZipFile(artifact, "w") as archive:
         archive.writestr(member, (ROOT / "ontology" / "guard.py").read_bytes())
         archive.writestr("package-1.dist-info/METADATA", "Name: package\n")
@@ -274,7 +274,7 @@ def test_wheel_inspection_rejects_modified_ontology_data_file(
     monkeypatch,
 ):
     artifact = tmp_path / "package-1-py3-none-any.whl"
-    member = "package-1.data/data/share/contingency-atlas/ontology/guard.py"
+    member = "package-1.data/data/share/workbench-atlas/ontology/guard.py"
     with zipfile.ZipFile(artifact, "w") as archive:
         archive.writestr(member, "# modified after packaging\n")
         archive.writestr("package-1.dist-info/METADATA", "Name: package\n")

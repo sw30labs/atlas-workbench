@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import json
 
-from contingency_atlas.db import add_evidence_event, list_evidence_events
-from contingency_atlas.intake import build_intake_graph, prepare_intake
-from contingency_atlas.schema import migrate_evidence_events
+from workbench_atlas.db import add_evidence_event, list_evidence_events
+from workbench_atlas.intake import build_intake_graph, prepare_intake
+from workbench_atlas.schema import migrate_evidence_events
 
 
 URL = "https://public.example/report-1"

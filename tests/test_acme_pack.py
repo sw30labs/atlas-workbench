@@ -235,7 +235,7 @@ def test_external_watchlist_exports_only_approved_public_records():
 
 
 def test_no_secrets_private_terms_or_real_emails():
-    from contingency_atlas.independence_lexicon import (
+    from workbench_atlas.independence_lexicon import (
         DISCLOSURE_ONLY,
         STRING_FORBIDDEN,
         scan_identifier_residue,

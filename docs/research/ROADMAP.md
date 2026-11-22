@@ -1,10 +1,10 @@
-# Contingency Atlas Product Roadmap
+# Atlas Workbench Product Roadmap
 
 ## Document control
 
 | Field | Value |
 |---|---|
-| Document owner | Contingency Atlas maintainer |
+| Document owner | Atlas Workbench maintainer |
 | Status | Active |
 | Version | 1.1 |
 | Effective date | 2026-08-12 |
@@ -17,7 +17,7 @@
 
 ## Purpose and status language
 
-This is the controlling product roadmap for Contingency Atlas. I use it to
+This is the controlling product roadmap for Atlas Workbench. I use it to
 record what the product already does, what I have committed to deliver next,
 and the evidence required before I call a milestone complete. Detailed design
 packs and experimental decision logs remain authoritative for their narrower
@@ -33,7 +33,7 @@ Status values have these meanings:
 
 ## Current product state
 
-As of 2026-08-12, Contingency Atlas is a local-first banking
+As of 2026-08-12, Atlas Workbench is a local-first banking
 operational-risk foresight and scenario-analysis system with:
 
 - a provenance-gated, human-reviewed evidence and emerging-risk workflow;
@@ -67,7 +67,7 @@ from public releases.
 
 I added MITRE ATLAS as an optional, versioned, human-reviewed,
 display-only overlay on scenarios. It is not a replacement for the
-Contingency Atlas Risk Taxonomy. An approved mapping means only that a
+Atlas Workbench Risk Taxonomy. An approved mapping means only that a
 reviewer judged an ATLAS technique useful for analyzing the scenario; it is
 not an assertion that an adversary used the technique or that a related ATLAS
 case study is evidence for the scenario.

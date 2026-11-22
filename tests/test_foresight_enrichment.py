@@ -7,7 +7,7 @@ import pytest
 
 
 def test_project_native_radar_normalization():
-    from contingency_atlas.categories import (
+    from workbench_atlas.categories import (
         derive_evidence_strength,
         normalize_external_drivers,
         normalize_momentum,
@@ -38,7 +38,7 @@ def test_project_native_radar_normalization():
 
 
 def test_legacy_risk_records_gain_compatible_radar_fields(tmp_path):
-    from contingency_atlas.phases.phase2_risks import load_emerging_risks
+    from workbench_atlas.phases.phase2_risks import load_emerging_risks
 
     path = tmp_path / "risks.json"
     path.write_text(json.dumps([{
@@ -63,7 +63,7 @@ def test_legacy_risk_records_gain_compatible_radar_fields(tmp_path):
 
 
 def test_identified_risk_has_derived_evidence_strength(mock_omlox_client):
-    from contingency_atlas.phases.phase2_risks import identify_new_risks
+    from workbench_atlas.phases.phase2_risks import identify_new_risks
 
     mock_omlox_client.chat_json = lambda *args, **kwargs: {
         "new_risks": [{
@@ -100,7 +100,7 @@ def test_identified_risk_has_derived_evidence_strength(mock_omlox_client):
 
 
 def test_scenario_conversion_persists_full_transmission_path():
-    from contingency_atlas.phases.phase3_generate import convert_to_db_row
+    from workbench_atlas.phases.phase3_generate import convert_to_db_row
 
     scenario = {
         "core_risks": ["Cloud concentration", "Workforce skills shortage"],
@@ -168,7 +168,7 @@ def test_scenario_conversion_persists_full_transmission_path():
 
 
 def test_structured_signposts_increase_foresight_value():
-    from contingency_atlas.phases.phase4_prioritize import (
+    from workbench_atlas.phases.phase4_prioritize import (
         _infer_foresight_value,
     )
 
@@ -193,9 +193,9 @@ def test_signpost_cycle_uses_only_approved_evidence(
     mock_omlox_client,
     tmp_path,
 ):
-    from contingency_atlas.db import add_evidence_event, get_scenario, upsert_scenario
-    from contingency_atlas.phases.phase6_maintain import run_maintenance_cycle
-    from contingency_atlas.schema import migrate_evidence_events
+    from workbench_atlas.db import add_evidence_event, get_scenario, upsert_scenario
+    from workbench_atlas.phases.phase6_maintain import run_maintenance_cycle
+    from workbench_atlas.schema import migrate_evidence_events
 
     evidence_db = str(tmp_path / "evidence.db")
     migrate_evidence_events(evidence_db)
@@ -298,16 +298,16 @@ def test_signpost_history_preserves_multiple_review_cycles(
     mock_omlox_client,
     tmp_path,
 ):
-    from contingency_atlas.db import (
+    from workbench_atlas.db import (
         add_evidence_event,
         get_scenario,
         list_signpost_assessments,
         update_evidence_event_fields,
         upsert_scenario,
     )
-    from contingency_atlas.phases.phase6_maintain import run_maintenance_cycle
-    from contingency_atlas.review import approve_signpost_assessment
-    from contingency_atlas.schema import migrate_evidence_events
+    from workbench_atlas.phases.phase6_maintain import run_maintenance_cycle
+    from workbench_atlas.review import approve_signpost_assessment
+    from workbench_atlas.schema import migrate_evidence_events
 
     evidence_db = str(tmp_path / "history-evidence.db")
     migrate_evidence_events(evidence_db)
@@ -421,14 +421,14 @@ def test_signpost_evaluation_excludes_draft_and_retired_scenarios(
     mock_omlox_client,
     tmp_path,
 ):
-    from contingency_atlas.db import (
+    from workbench_atlas.db import (
         add_evidence_event,
         get_scenario,
         list_signpost_assessments,
         upsert_scenario,
     )
-    from contingency_atlas.phases.phase6_maintain import run_maintenance_cycle
-    from contingency_atlas.schema import migrate_evidence_events
+    from workbench_atlas.phases.phase6_maintain import run_maintenance_cycle
+    from workbench_atlas.schema import migrate_evidence_events
 
     evidence_db = str(tmp_path / "active-only-evidence.db")
     migrate_evidence_events(evidence_db)
@@ -509,19 +509,19 @@ def test_same_cycle_retirement_supersedes_pending_signpost_review(
     mock_omlox_client,
     tmp_path,
 ):
-    from contingency_atlas.db import (
+    from workbench_atlas.db import (
         add_evidence_event,
         get_scenario,
         list_signpost_assessments,
         upsert_scenario,
     )
-    from contingency_atlas.phases.phase6_maintain import run_maintenance_cycle
-    from contingency_atlas.review import (
+    from workbench_atlas.phases.phase6_maintain import run_maintenance_cycle
+    from workbench_atlas.review import (
         ReviewError,
         approve_signpost_assessment,
         list_signpost_assessments_for_review,
     )
-    from contingency_atlas.schema import migrate_evidence_events
+    from workbench_atlas.schema import migrate_evidence_events
 
     evidence_db = str(tmp_path / "retirement-evidence.db")
     migrate_evidence_events(evidence_db)

@@ -7,8 +7,8 @@ import pytest
 from bulk_ingest_helpers import (
     write_actions_docx, write_board_pptx, write_eml, write_pdf, write_services_xlsx,
 )
-from contingency_atlas.bulk_ingest.inventory import build_inventory
-from contingency_atlas.bulk_ingest.readers import ReaderError, read_document
+from workbench_atlas.bulk_ingest.inventory import build_inventory
+from workbench_atlas.bulk_ingest.readers import ReaderError, read_document
 
 
 def read(root, name):

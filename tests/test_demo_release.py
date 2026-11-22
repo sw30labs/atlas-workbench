@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_demo_fixtures_are_explicitly_synthetic():
-    from contingency_atlas.categories import (
+    from workbench_atlas.categories import (
         derive_financial_impact_band,
         derive_impact_band,
     )
@@ -88,7 +88,7 @@ def test_demo_fixtures_are_explicitly_synthetic():
 
 
 def test_demo_seed_is_valid_and_idempotent(tmp_path):
-    from contingency_atlas.db import list_evidence_events, list_scenarios
+    from workbench_atlas.db import list_evidence_events, list_scenarios
     from scripts.seed_demo import seed
 
     first = seed(tmp_path)

@@ -11,7 +11,7 @@ import pytest
 
 class TestPhase1Ingestion:
     def test_extract_event_from_text(self, mock_omlox_client):
-        from contingency_atlas.phases.phase1_ingest import extract_event_from_text
+        from workbench_atlas.phases.phase1_ingest import extract_event_from_text
         # Set up mock to return an extraction response
         mock_omlox_client.chat_json = lambda *a, **k: {
             "headline": "Northstar Bank cloud identity outage",
@@ -49,7 +49,7 @@ class TestPhase1Ingestion:
         assert len(event["content_fingerprint"]) == 64
 
     def test_extract_returns_none_on_failure(self, mock_omlox_client):
-        from contingency_atlas.phases.phase1_ingest import extract_event_from_text
+        from workbench_atlas.phases.phase1_ingest import extract_event_from_text
         # Mock that returns empty
         mock_omlox_client.chat_json = lambda *a, **k: {}
         event = extract_event_from_text(
@@ -58,7 +58,7 @@ class TestPhase1Ingestion:
         assert event is None
 
     def test_extract_requires_public_source_url(self, mock_omlox_client):
-        from contingency_atlas.phases.phase1_ingest import extract_event_from_text
+        from workbench_atlas.phases.phase1_ingest import extract_event_from_text
 
         assert extract_event_from_text("text", mock_omlox_client) is None
         assert (
@@ -72,7 +72,7 @@ class TestPhase1Ingestion:
     def test_extract_requires_valid_publication_date(
         self, mock_omlox_client, source_date
     ):
-        from contingency_atlas.phases.phase1_ingest import extract_event_from_text
+        from workbench_atlas.phases.phase1_ingest import extract_event_from_text
 
         mock_omlox_client.chat_json = lambda *a, **k: {
             "headline": "Synthetic dated notice",
@@ -92,7 +92,7 @@ class TestPhase1Ingestion:
         )
 
     def test_ingest_text_to_db(self, mock_omlox_client, tmp_workspace):
-        from contingency_atlas.phases.phase1_ingest import ingest_text
+        from workbench_atlas.phases.phase1_ingest import ingest_text
 
         mock_omlox_client.chat_json = lambda *a, **k: {
             "headline": "Synthetic control notice",
@@ -128,8 +128,8 @@ class TestPhase1Ingestion:
         empty, so an unclassifiable event still got a confident label. It now
         records NULL instead; risk_category keeps its deriver because
         downstream consumers read it."""
-        from contingency_atlas.categories import RISK_CATEGORIES
-        from contingency_atlas.phases.phase1_ingest import extract_event_from_text
+        from workbench_atlas.categories import RISK_CATEGORIES
+        from workbench_atlas.phases.phase1_ingest import extract_event_from_text
 
         mock_omlox_client.chat_json = lambda *a, **k: {
             "headline": "Synthetic notice",
@@ -155,7 +155,7 @@ class TestPhase1Ingestion:
         assert event["risk_category"] in RISK_CATEGORIES
 
     def test_valid_classification_is_preserved(self, mock_omlox_client):
-        from contingency_atlas.phases.phase1_ingest import extract_event_from_text
+        from workbench_atlas.phases.phase1_ingest import extract_event_from_text
 
         mock_omlox_client.chat_json = lambda *a, **k: {
             "headline": "Synthetic notice",
@@ -182,7 +182,7 @@ class TestPhase1Ingestion:
         """"Global" is the honest answer for an event with no single region,
         and rows already carry it. Closing the vocabulary must not rewrite it
         to unclassified — that would erase the distinction the chart shows."""
-        from contingency_atlas.phases.phase1_ingest import extract_event_from_text
+        from workbench_atlas.phases.phase1_ingest import extract_event_from_text
 
         mock_omlox_client.chat_json = lambda *a, **k: {
             "headline": "Synthetic notice",
@@ -208,7 +208,7 @@ class TestPhase1Ingestion:
         is computed over the canonical form so it reproduces from the record."""
         import hashlib
 
-        from contingency_atlas.phases.phase1_ingest import extract_event_from_text
+        from workbench_atlas.phases.phase1_ingest import extract_event_from_text
 
         mock_omlox_client.chat_json = lambda *a, **k: {
             "headline": "Synthetic assessment notice",
@@ -244,7 +244,7 @@ class TestPhase1Ingestion:
     def test_add_evidence_event_dedups_raw_against_canonical_url(self, tmp_workspace):
         """A legacy row stored with a raw URL must still block a re-ingest of
         the same document under its canonical form."""
-        from contingency_atlas.db import add_evidence_event
+        from workbench_atlas.db import add_evidence_event
 
         db_path = str(tmp_workspace / "event_evidence.db")
         raw = "https://example.com/files/A B assessment.pdf"
@@ -289,7 +289,7 @@ class TestPhase1Ingestion:
         )
 
     def test_ingest_batch(self, mock_omlox_client, tmp_workspace):
-        from contingency_atlas.phases.phase1_ingest import ingest_batch
+        from workbench_atlas.phases.phase1_ingest import ingest_batch
         texts = [
             "Bank fined for AML violation.",
             "Cloud outage disrupts trading.",
@@ -307,7 +307,7 @@ class TestPhase1Ingestion:
     def test_ingest_batch_requires_aligned_urls(
         self, mock_omlox_client, tmp_workspace
     ):
-        from contingency_atlas.phases.phase1_ingest import ingest_batch
+        from workbench_atlas.phases.phase1_ingest import ingest_batch
 
         result = ingest_batch(
             ["First source", "Second source"],
@@ -320,14 +320,14 @@ class TestPhase1Ingestion:
         assert result.errors
 
     def test_parse_rss_item(self):
-        from contingency_atlas.phases.phase1_ingest import parse_rss_item
+        from workbench_atlas.phases.phase1_ingest import parse_rss_item
         item = {"title": "Test", "summary": "Summary text"}
         text = parse_rss_item(item)
         assert "Test" in text
         assert "Summary" in text
 
     def test_parse_enforcement_action(self):
-        from contingency_atlas.phases.phase1_ingest import parse_enforcement_action
+        from workbench_atlas.phases.phase1_ingest import parse_enforcement_action
         text = parse_enforcement_action(
             "Example Regulator",
             "Northstar Bank (fictional) received a synthetic $1.3M penalty",
@@ -339,7 +339,7 @@ class TestPhase1Ingestion:
         """Test extraction with the real OMLX service (may skip)."""
         if not omlox_client.is_available():
             pytest.skip("OMLX not reachable")
-        from contingency_atlas.phases.phase1_ingest import extract_event_from_text
+        from workbench_atlas.phases.phase1_ingest import extract_event_from_text
         text = (
             "In July 2024, Northstar Bank (a fictional institution) experienced "
             "a synthetic cloud identity disruption affecting test trading "
@@ -364,19 +364,19 @@ class TestPhase1Ingestion:
 
 class TestPhase2RiskMonitoring:
     def test_load_emerging_risks(self, tmp_workspace):
-        from contingency_atlas.phases.phase2_risks import load_emerging_risks
+        from workbench_atlas.phases.phase2_risks import load_emerging_risks
         risks = load_emerging_risks(tmp_workspace / "emerging_risks.json")
         assert isinstance(risks, list)
         assert len(risks) > 0
         assert "issue" in risks[0]
 
     def test_load_missing_file(self, tmp_path):
-        from contingency_atlas.phases.phase2_risks import load_emerging_risks
+        from workbench_atlas.phases.phase2_risks import load_emerging_risks
         risks = load_emerging_risks(tmp_path / "nonexistent.json")
         assert risks == []
 
     def test_save_emerging_risks(self, tmp_path):
-        from contingency_atlas.phases.phase2_risks import save_emerging_risks, load_emerging_risks
+        from workbench_atlas.phases.phase2_risks import save_emerging_risks, load_emerging_risks
         risks = [{"issue": "Test Risk", "description": "Test desc"}]
         path = tmp_path / "test_risks.json"
         save_emerging_risks(path, risks)
@@ -385,7 +385,7 @@ class TestPhase2RiskMonitoring:
         assert loaded[0]["issue"] == "Test Risk"
 
     def test_identify_new_risks(self, mock_omlox_client):
-        from contingency_atlas.phases.phase2_risks import identify_new_risks
+        from workbench_atlas.phases.phase2_risks import identify_new_risks
         # Mock returns new risks
         mock_omlox_client.chat_json = lambda *a, **k: {
             "new_risks": [
@@ -404,7 +404,7 @@ class TestPhase2RiskMonitoring:
         assert new[0].issue == "Quantum Computing Risk"
 
     def test_assess_existing_risks(self, mock_omlox_client):
-        from contingency_atlas.phases.phase2_risks import assess_existing_risks
+        from workbench_atlas.phases.phase2_risks import assess_existing_risks
         risks = [
             {"issue": "Climate Risk", "description": "Climate change impact", "status": "active"},
             {"issue": "AI Risk", "description": "AI bias risk", "status": "active"},
@@ -428,7 +428,7 @@ class TestPhase2RiskMonitoring:
     def test_assess_preserves_human_review_decisions(self, mock_omlox_client):
         """Regression: a monitoring cycle must not wipe human review decisions
         (the 2026-08-04 incident: approvals erased by assess_risks)."""
-        from contingency_atlas.phases.phase2_risks import assess_existing_risks
+        from workbench_atlas.phases.phase2_risks import assess_existing_risks
         risks = [
             {"issue": "Approved Risk", "description": "d", "status": "active",
              "review_status": "approved", "evidence_refs": ["EVT-DR-approved1"],
@@ -462,7 +462,7 @@ class TestPhase2RiskMonitoring:
         assert by_issue["Approved Risk"]["evidence_refs"] == ["EVT-DR-approved1"]
 
     def test_run_monitoring_cycle(self, mock_omlox_client, tmp_workspace):
-        from contingency_atlas.phases.phase2_risks import run_monitoring_cycle
+        from workbench_atlas.phases.phase2_risks import run_monitoring_cycle
         # Mock: first call identifies new risk, second assesses existing
         call_count = [0]
 
@@ -484,7 +484,7 @@ class TestPhase2RiskMonitoring:
     def test_monitoring_requires_cited_sources(
         self, mock_omlox_client, tmp_workspace
     ):
-        from contingency_atlas.phases.phase2_risks import run_monitoring_cycle
+        from workbench_atlas.phases.phase2_risks import run_monitoring_cycle
 
         result = run_monitoring_cycle(
             "Uncited source text",
@@ -498,7 +498,7 @@ class TestPhase2RiskMonitoring:
         """Test with real OMLX (may skip)."""
         if not omlox_client.is_available():
             pytest.skip("OMLX not reachable")
-        from contingency_atlas.phases.phase2_risks import identify_new_risks
+        from workbench_atlas.phases.phase2_risks import identify_new_risks
         new = identify_new_risks(
             "Emerging threats from AI-powered cyber attacks",
             ["Existing Risk 1", "Existing Risk 2"],

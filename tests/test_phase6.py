@@ -5,7 +5,7 @@ import pytest
 
 class TestMaintenanceHeuristics:
     def test_find_stale_drafts(self):
-        from contingency_atlas.phases.phase6_maintain import find_stale_scenarios
+        from workbench_atlas.phases.phase6_maintain import find_stale_scenarios
         scenarios = [
             {"scenario_id": "D1", "status": "draft", "judge_score": None, "created_year": 2026},
             {"scenario_id": "A1", "status": "active", "judge_score": 0.9, "created_year": 2026, "last_scored": "2026-01-01"},
@@ -17,7 +17,7 @@ class TestMaintenanceHeuristics:
         assert "R1" not in ids
 
     def test_find_duplicates(self):
-        from contingency_atlas.phases.phase6_maintain import find_duplicate_candidates
+        from workbench_atlas.phases.phase6_maintain import find_duplicate_candidates
         scenarios = [
             {
                 "scenario_id": "FIXTURE-OPERATOR",
@@ -52,8 +52,8 @@ class TestMaintenanceHeuristics:
         assert not any("FIXTURE-UNRELATED" in pair[:2] for pair in pairs)
 
     def test_merge_scenario(self, empty_db):
-        from contingency_atlas.db import upsert_scenario, get_scenario
-        from contingency_atlas.phases.phase6_maintain import merge_scenario
+        from workbench_atlas.db import upsert_scenario, get_scenario
+        from workbench_atlas.phases.phase6_maintain import merge_scenario
 
         upsert_scenario(empty_db, {
             "scenario_id": "KEEP-1",
@@ -78,8 +78,8 @@ class TestMaintenanceHeuristics:
 
 class TestMaintenanceCycle:
     def test_run_without_llm(self, empty_db):
-        from contingency_atlas.db import upsert_scenario
-        from contingency_atlas.phases.phase6_maintain import run_maintenance_cycle
+        from workbench_atlas.db import upsert_scenario
+        from workbench_atlas.phases.phase6_maintain import run_maintenance_cycle
 
         upsert_scenario(empty_db, {
             "scenario_id": "MAINT-001",
@@ -95,8 +95,8 @@ class TestMaintenanceCycle:
         assert isinstance(result.actions, list)
 
     def test_retire_via_llm_mock(self, mock_omlox_client, empty_db):
-        from contingency_atlas.db import upsert_scenario, get_scenario
-        from contingency_atlas.phases.phase6_maintain import run_maintenance_cycle
+        from workbench_atlas.db import upsert_scenario, get_scenario
+        from workbench_atlas.phases.phase6_maintain import run_maintenance_cycle
 
         upsert_scenario(empty_db, {
             "scenario_id": "MAINT-RETIRE",

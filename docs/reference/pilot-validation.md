@@ -116,7 +116,7 @@ The pure function `assess_pilot(records)` accepts a list of reviewer records.
 The command below reads a supplied JSON list and writes a report to stdout:
 
 ```bash
-python -m contingency_atlas.diagnostics pilot --input pilot-observations.json
+python -m workbench_atlas.diagnostics pilot --input pilot-observations.json
 ```
 
 Required record fields are `case_id`, `candidate_id`, `arm` (`baseline` or

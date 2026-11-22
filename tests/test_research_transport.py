@@ -13,9 +13,9 @@ from contextlib import contextmanager
 import httpx
 import pytest
 
-from contingency_atlas import research
-from contingency_atlas import research_transport as transport_module
-from contingency_atlas.research_transport import PinnedPublicTransport, fetch_public
+from workbench_atlas import research
+from workbench_atlas import research_transport as transport_module
+from workbench_atlas.research_transport import PinnedPublicTransport, fetch_public
 
 
 class CountingBody(httpx.SyncByteStream):

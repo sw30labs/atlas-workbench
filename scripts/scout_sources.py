@@ -78,7 +78,7 @@ def _write_json_atomic(path: Path, value: object) -> None:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
-    from contingency_atlas.scouting import (
+    from workbench_atlas.scouting import (
         NetworkOptInRequired,
         RegistryValidationError,
         ScoutingError,

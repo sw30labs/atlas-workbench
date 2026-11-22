@@ -6,13 +6,13 @@ import threading
 
 import pytest
 
-from contingency_atlas.context import context_payload
-from contingency_atlas.imports import ImportError, preview_import, submit_import
+from workbench_atlas.context import context_payload
+from workbench_atlas.imports import ImportError, preview_import, submit_import
 
 
 @pytest.fixture(autouse=True)
 def clear_previews():
-    from contingency_atlas import imports
+    from workbench_atlas import imports
     imports._PREVIEWS.clear()
     yield
     imports._PREVIEWS.clear()
@@ -115,7 +115,7 @@ def test_returned_preview_cannot_change_frozen_candidate(private_settings):
 
 
 def test_tokens_are_bound_to_actor_workspace_and_expiry(private_settings, tmp_path, monkeypatch):
-    from contingency_atlas import imports
+    from workbench_atlas import imports
 
     result = preview(private_settings, [service()])
     with pytest.raises(ImportError, match="unavailable"):
@@ -132,14 +132,14 @@ def test_tokens_are_bound_to_actor_workspace_and_expiry(private_settings, tmp_pa
 def test_duplicate_selection_replay_and_simultaneous_submit_are_rejected(private_settings, monkeypatch):
     result = preview(private_settings, [service()])
     entered, release = threading.Event(), threading.Event()
-    from contingency_atlas.context import import_records
+    from workbench_atlas.context import import_records
 
     def blocked_import(*args, **kwargs):
         entered.set()
         assert release.wait(5)
         return import_records(*args, **kwargs)
 
-    monkeypatch.setattr("contingency_atlas.context.import_records", blocked_import)
+    monkeypatch.setattr("workbench_atlas.context.import_records", blocked_import)
     results = []
     worker = threading.Thread(target=lambda: results.append(submit(private_settings, result)))
     worker.start()

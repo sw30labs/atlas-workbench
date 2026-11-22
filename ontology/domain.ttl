@@ -1,10 +1,10 @@
-# domain.ttl — Contingency Atlas ontology (v0.1)
-# Ratified constraints C-01..C-10: see ontology-proposals/contingency-atlas.md.
+# domain.ttl — Atlas Workbench ontology (v0.1)
+# Ratified constraints C-01..C-10: see ontology-proposals/workbench-atlas.md.
 # OWL lives here and only INFERS (identity via IFP, property-chain shortcut).
 # All enforcement is in shapes.ttl (SHACL is the only layer that says no).
 
-@prefix atlas:   <https://contingency-atlas.local/ontology#> .
-@prefix cat:     <https://contingency-atlas.local/ontology/cat/> .
+@prefix atlas:   <https://workbench-atlas.local/ontology#> .
+@prefix cat:     <https://workbench-atlas.local/ontology/cat/> .
 @prefix schema:  <https://schema.org/> .
 @prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
 @prefix prov:    <http://www.w3.org/ns/prov#> .
@@ -13,8 +13,8 @@
 @prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
 
-<https://contingency-atlas.local/ontology> a owl:Ontology ;
-    rdfs:label "Contingency Atlas ontology v0.1" ;
+<https://workbench-atlas.local/ontology> a owl:Ontology ;
+    rdfs:label "Atlas Workbench ontology v0.1" ;
     rdfs:comment "Guardrail ontology for the Atlas write path. Inference: IFP identity + one property chain. Enforcement: shapes.ttl." .
 
 # ===========================================================================

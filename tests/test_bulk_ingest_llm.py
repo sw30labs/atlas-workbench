@@ -5,9 +5,9 @@ import json
 import pytest
 
 from bulk_ingest_helpers import FakeClient, doc, private_settings, records, run, write_services_xlsx
-from contingency_atlas.bulk_ingest.llm_lane import LLMLane
-from contingency_atlas.bulk_ingest.models import Route
-from contingency_atlas.bulk_ingest.triage import _choose
+from workbench_atlas.bulk_ingest.llm_lane import LLMLane
+from workbench_atlas.bulk_ingest.models import Route
+from workbench_atlas.bulk_ingest.triage import _choose
 
 REPORT = (
     "# Tabletop exercise report (synthetic)\n\n"
@@ -146,7 +146,7 @@ def test_injection_echoed_by_the_model_changes_nothing(psettings, tmp_path):
                    for c in result.candidates)
     from pathlib import Path
 
-    from contingency_atlas.bulk_ingest import plan_submission
+    from workbench_atlas.bulk_ingest import plan_submission
 
     plan = plan_submission(json.loads(Path(result.batch_path).read_text()), "all")
     planned = {r["id"] for step in plan["payloads"] for r in step["records"]}

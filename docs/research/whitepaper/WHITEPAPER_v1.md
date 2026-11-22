@@ -2,13 +2,13 @@
 
 ## A deterministic hybrid scoring algorithm with pre-registered falsification
 
-**Contingency Atlas white paper — scoring engine (`algorithm_version` 0.1.0)**
+**Atlas Workbench white paper — scoring engine (`algorithm_version` 0.1.0)**
 
 | | |
 |---|---|
 | Status | Implemented and evaluated on the synthetic R0 regime; research-tier per the model inventory |
 | Specification | [`docs/research/redesignv1/algorithm-spec.md`](../redesignv1/algorithm-spec.md) |
-| Implementation | [`contingency_atlas/scoring/`](../../../contingency_atlas/scoring/) |
+| Implementation | [`workbench_atlas/scoring/`](../../../workbench_atlas/scoring/) |
 | Evaluation | [`generated/redesign/`](../../../generated/redesign/) (reproducible via `atlas-eval demo`) |
 | Date | 2026-08-03 |
 
@@ -24,7 +24,7 @@
 
 Banks are not surprised by single risks; they are surprised by *combinations* —
 a control failure, a third-party concentration, and an external shock that
-materialize together. Contingency Atlas rates such **compound scenarios** with
+materialize together. Atlas Workbench rates such **compound scenarios** with
 a deliberately conservative algorithm: standard frequency × severity
 decomposition per risk atom, a shrunk-empirical dependence estimator, Monte
 Carlo propagation under an explicit occurrence definition, and a peaks-over-
@@ -467,7 +467,7 @@ atlas-eval demo            # generate R0, score all pairs, run Task B + C
                            # generated/redesign/phase1/r0/eval_report.{json,md}
 atlas-eval calibrate ...   # Task A calibration harness
 atlas-eval ablations ...   # runnable pre-registered ablation matrix
-python -m contingency_atlas.compound_join --force   # production monthly join
+python -m workbench_atlas.compound_join --force   # production monthly join
 ```
 
 ## Appendix C — Evidence map: working papers, artifacts, code
@@ -510,10 +510,10 @@ Phase 3 — harness and boundary runs (`phase3/`):
 
 ### C.3 Implementation and tests
 
-- `contingency_atlas/scoring/scorer.py` — Layers 1–4 (frequency, severity, dependence, Monte Carlo)
-- `contingency_atlas/scoring/evt.py` — Layer 5 (GPD overlay with threshold-sensitivity falsification)
-- `contingency_atlas/scoring/calibration.py`, `evaluate.py`, `ablations.py` — the harness that produced C.2
-- `contingency_atlas/scoring/ext_features.py` — the §6.5 FDR screen
-- `contingency_atlas/scoring/egress.py` — local-to-external gateway with hash-chained audit log
-- `contingency_atlas/compound_join.py`, `compound_graduate.py` — production monthly join and graduation (§4)
+- `workbench_atlas/scoring/scorer.py` — Layers 1–4 (frequency, severity, dependence, Monte Carlo)
+- `workbench_atlas/scoring/evt.py` — Layer 5 (GPD overlay with threshold-sensitivity falsification)
+- `workbench_atlas/scoring/calibration.py`, `evaluate.py`, `ablations.py` — the harness that produced C.2
+- `workbench_atlas/scoring/ext_features.py` — the §6.5 FDR screen
+- `workbench_atlas/scoring/egress.py` — local-to-external gateway with hash-chained audit log
+- `workbench_atlas/compound_join.py`, `compound_graduate.py` — production monthly join and graduation (§4)
 - `tests/test_scoring_*.py` — unit and integration coverage, including egress red-team tests and the runnable ablations

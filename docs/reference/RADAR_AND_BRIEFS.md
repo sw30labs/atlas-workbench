@@ -1,6 +1,6 @@
 # Radar, Signposts, and Atlas Briefs
 
-Contingency Atlas includes an optional horizon-scanning layer around its
+Atlas Workbench includes an optional horizon-scanning layer around its
 existing banking operational-risk workflow. The extension helps researchers
 notice broad external change, describe how it could reach a banking capability,
 and revisit a scenario when observable evidence changes.
@@ -37,7 +37,7 @@ existing provenance-gated eight-phase workflow
 
 ## External-driver overlay
 
-The Contingency Atlas Risk Taxonomy answers, “What banking risk domain is
+The Atlas Workbench Risk Taxonomy answers, “What banking risk domain is
 affected?” The external-driver overlay answers, “What kind of change is
 applying pressure?” This project-native taxonomy is separate from the optional
 MITRE ATLAS external-framework overlay.
@@ -203,7 +203,7 @@ The dashboard radar uses:
 
 - radial ring: signal maturity;
 - angular segment: external driver;
-- color: Contingency Atlas banking risk category; and
+- color: Atlas Workbench banking risk category; and
 - marker size: evidence strength or related scenario urgency.
 
 Legacy records without these fields are shown with conservative defaults rather
@@ -215,7 +215,7 @@ The separation between broad external drivers and domain-specific consequences
 is informed by common horizon-scanning practice, including the publicly
 described future-scenarios and strategic-imagination work of
 [TomorrowToday Global](https://tomorrowtodayglobal.com/imaginethefuture/).
-Contingency Atlas uses independently authored labels, schemas, prompts, code,
+Atlas Workbench uses independently authored labels, schemas, prompts, code,
 and synthetic examples. It does not incorporate TomorrowToday scenarios,
 toolkit content, or proprietary material, and no affiliation or endorsement is
 implied.

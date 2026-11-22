@@ -31,7 +31,7 @@ batch rather than one decision per field.
   paragraph locator, the extracting pod, the method (`deterministic` or
   `llm`), and a quoted source span for each LLM-extracted field.
 - Deterministic first. Tabular files are mapped by header synonyms and value
-  rules. The LLM lane (local OMLX through `contingency_atlas.llm`) is optional.
+  rules. The LLM lane (local OMLX through `workbench_atlas.llm`) is optional.
   It handles narrative documents and unmapped columns, and the full flow runs
   offline without it, so the tests do too.
 - No new runtime dependencies. Readers use what the base install already has:
@@ -95,7 +95,7 @@ a fictional bank (profile from the legacy repo's
 `docs/business/acme-bank-pitch.md`: about 40 markets, a ServiceNow GRC
 estate, around 30 board-visible scenarios refreshed annually).
 
-Data reuse from the legacy `contingency-atlas` repo:
+Data reuse from the legacy `workbench-atlas` repo:
 
 - External public loss events: approved `public_primary` and
   `public_secondary` records only, with their citations and independently

@@ -1,18 +1,18 @@
 cff-version: 1.2.0
 message: >-
-  If you use Contingency Atlas in research, please cite the software using this
+  If you use Atlas Workbench in research, please cite the software using this
   metadata and the specific release or commit you used.
-title: Contingency Atlas
+title: Atlas Workbench
 abstract: >-
   An evidence-grounded banking operational-risk foresight and scenario engine
   for organizing public-source signals into challengeable scenario hypotheses.
 type: software
 authors:
-  - name: Contingency Atlas contributors
+  - name: Atlas Workbench contributors
 version: 0.1.0
 license: Apache-2.0
-repository-code: https://github.com/sw30labs/contingency-atlas
-url: https://github.com/sw30labs/contingency-atlas
+repository-code: https://github.com/sw30labs/atlas-workbench
+url: https://github.com/sw30labs/atlas-workbench
 keywords:
   - banking
   - operational risk

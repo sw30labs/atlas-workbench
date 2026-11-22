@@ -1,4 +1,4 @@
-# Contingency Atlas Workbench — everyday commands.
+# Atlas Workbench Workbench — everyday commands.
 .DEFAULT_GOAL := help
 
 PY := .venv/bin/python
@@ -34,7 +34,7 @@ test:  ## Run the test suite
 	$(PY) -m pytest -q
 
 lint:  ## Run the CI lint gate
-	$(PY) -m ruff check --select F821,F811,F402,E9,F841 contingency_atlas scripts tests
+	$(PY) -m ruff check --select F821,F811,F402,E9,F841 workbench_atlas scripts tests
 
 check: lint test  ## Lint and test
 

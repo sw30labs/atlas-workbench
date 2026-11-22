@@ -10,7 +10,7 @@ readme = "README.md"
 license = "Apache-2.0"
 license-files = ["LICENSE"]
 authors = [
-    {name = "Contingency Atlas contributors"},
+    {name = "Atlas Workbench contributors"},
 ]
 requires-python = ">=3.12,<3.14"
 keywords = [
@@ -50,22 +50,22 @@ dependencies = [
 ]
 
 [project.scripts]
-atlas = "contingency_atlas.cli.main:main"
-atlas-score = "contingency_atlas.scoring.cli:score_main"
-atlas-eval = "contingency_atlas.scoring.cli:eval_main"
-atlas-framework = "contingency_atlas.frameworks.cli:main"
-atlas-export = "contingency_atlas.exports:main"
+atlas = "workbench_atlas.cli.main:main"
+atlas-score = "workbench_atlas.scoring.cli:score_main"
+atlas-eval = "workbench_atlas.scoring.cli:eval_main"
+atlas-framework = "workbench_atlas.frameworks.cli:main"
+atlas-export = "workbench_atlas.exports:main"
 
 [project.urls]
-Repository = "https://github.com/sw30labs/contingency-atlas"
-Issues = "https://github.com/sw30labs/contingency-atlas/issues"
+Repository = "https://github.com/sw30labs/atlas-workbench"
+Issues = "https://github.com/sw30labs/atlas-workbench/issues"
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0", "ruff>=0.6"]
 # markitdown gates each format behind its own extra, so bare "markitdown"
 # installs a converter that refuses every type the dashboard offers — and the
 # failure message points back at this extra, which is a loop. Keep this list in
-# step with MARKITDOWN_EXTENSIONS in contingency_atlas/ingest_artifacts.py.
+# step with MARKITDOWN_EXTENSIONS in workbench_atlas/ingest_artifacts.py.
 ingest = ["markitdown[docx,pdf,pptx,xlsx]"]
 # Kept as an alias so existing install lines (`.[ontology]`) keep working;
 # these dependencies are now part of the base install.
@@ -74,11 +74,11 @@ singularity = ["neo4j>=5.0"]
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["contingency_atlas*"]
+include = ["workbench_atlas*"]
 exclude = ["tests*", "scripts*"]
 
 [tool.setuptools.package-data]
-contingency_atlas = [
+workbench_atlas = [
     "baselines/*.json",
     "cli/*.yaml",
     "fixtures/*.json",
@@ -95,7 +95,7 @@ contingency_atlas = [
 # also run from a source checkout and in release automation.  Install the same
 # tracked files at a stable, environment-relative data path for wheel users.
 [tool.setuptools.data-files]
-"share/contingency-atlas/ontology" = [
+"share/workbench-atlas/ontology" = [
     "ontology/WIRING.md",
     "ontology/category-map.json",
     "ontology/domain.ttl",
@@ -103,7 +103,7 @@ contingency_atlas = [
     "ontology/guard.py",
     "ontology/shapes.ttl",
 ]
-"share/contingency-atlas/ontology/fixtures" = [
+"share/workbench-atlas/ontology/fixtures" = [
     "ontology/fixtures/candidates.json",
     "ontology/fixtures/expected.json",
 ]

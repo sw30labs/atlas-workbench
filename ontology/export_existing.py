@@ -29,10 +29,10 @@ sys.path.insert(0, str(Path(__file__).parent))
 from guard import DATA, NS, EvidenceEventRec, RiskRec, _normalized_category, project  # noqa: E402
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from contingency_atlas.categories import RISK_CATEGORIES  # noqa: E402
-from contingency_atlas.guard_hook import mint_risk_id  # noqa: E402
+from workbench_atlas.categories import RISK_CATEGORIES  # noqa: E402
+from workbench_atlas.guard_hook import mint_risk_id  # noqa: E402
 
-CAT = Namespace("https://contingency-atlas.local/ontology/cat/")
+CAT = Namespace("https://workbench-atlas.local/ontology/cat/")
 SKOS_NS = Namespace("http://www.w3.org/2004/02/skos/core#")
 _LEGACY_EVIDENCE_TABLE = "ne" + "ws"
 

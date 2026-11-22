@@ -17,7 +17,7 @@ OpenAI-compatible endpoint for LLM phases — local
 default, or an NVIDIA DGX vLLM server with `provider: dgx`. No endpoint
 is required for deterministic phases (4–7).
 
-Configuration (precedence: explicit args → env → `contingency-atlas.yaml`
+Configuration (precedence: explicit args → env → `workbench-atlas.yaml`
 → defaults): `provider` selects the backend (`omlx` | `dgx`; env
 `ATLAS_LLM_PROVIDER`). OMLX keys: `omlx.base_url`, `omlx.model`,
 `omlx.model_judge`, `omlx.model_final_judge`, `omlx.timeout`,
@@ -37,7 +37,7 @@ asks the endpoint for its model list and picks the provider whose configured
 model is actually served:
 
 ```bash
-python -m contingency_atlas.provider_detect -v   # prints omlx|dgx, explains on stderr
+python -m workbench_atlas.provider_detect -v   # prints omlx|dgx, explains on stderr
 ```
 
 Exit 1 with no provider means undecided, and the reason says which: nothing
@@ -51,8 +51,8 @@ offline and deterministic.
 ## 2. Run the dashboard
 
 ```bash
-python -m contingency_atlas.web            # http://127.0.0.1:8080
-python -m contingency_atlas.web --port 9000
+python -m workbench_atlas.web            # http://127.0.0.1:8080
+python -m workbench_atlas.web --port 9000
 ```
 
 Loopback-only by design (the `--host` must be loopback; APIs verify
@@ -103,10 +103,10 @@ explicitly refused. The runner does not claim that cancelling a request undoes
 its effects.
 
 ```bash
-python -m contingency_atlas.operations jobs
-python -m contingency_atlas.operations cancel-job JOB_ID --actor "Operator name"
-python -m contingency_atlas.operations retry-job JOB_ID --actor "Operator name"
-python -m contingency_atlas.operations recover-jobs --no-resume
+python -m workbench_atlas.operations jobs
+python -m workbench_atlas.operations cancel-job JOB_ID --actor "Operator name"
+python -m workbench_atlas.operations retry-job JOB_ID --actor "Operator name"
+python -m workbench_atlas.operations recover-jobs --no-resume
 ```
 
 Job arguments are retained locally so explicit retries can reproduce the
@@ -286,7 +286,7 @@ candidates land as pending merge proposals in the same queue.
 
 ## 5. Monthly compound flow
 
-1. `python -m contingency_atlas.compound_join` (due-gated; `--force` to
+1. `python -m workbench_atlas.compound_join` (due-gated; `--force` to
    override) — writes `compound_scenarios` (table + JSON artifact) and
    telemetry to `generated/telemetry/compound-join.jsonl`.
 2. **Scenarios → Compound candidates** shows the register with
@@ -360,11 +360,11 @@ research inputs, private frozen integration snapshots and reviewer names remain 
 the complete bundle outside the public code repository.
 
 ```bash
-python -m contingency_atlas.operations backup \
+python -m workbench_atlas.operations backup \
   ~/atlas-private-backups/example-snapshot --actor "Operator name"
-python -m contingency_atlas.operations verify \
+python -m workbench_atlas.operations verify \
   ~/atlas-private-backups/example-snapshot
-python -m contingency_atlas.operations restore \
+python -m workbench_atlas.operations restore \
   ~/atlas-private-backups/example-snapshot ~/atlas-restore-review \
   --actor "Operator name" --confirm-restore
 ```
@@ -400,7 +400,7 @@ useful for local diffs, but it is not a substitute for this configured-store
 backup/restore path or protection against loss of the local disk.
 
 ```bash
-python -m contingency_atlas.operations readiness
+python -m workbench_atlas.operations readiness
 ```
 
 Readiness performs no network requests. It reports primary-store availability,

@@ -33,7 +33,7 @@ release inputs, and must never be used as fixture sources.
 6. `frameworks/mappings.py:create_mapping_proposal` validates a pending public
    framework mapping before insertion.
 
-The adapter is `contingency_atlas/guard_hook.py`. For an upsert, it removes the
+The adapter is `workbench_atlas/guard_hook.py`. For an upsert, it removes the
 existing triples for the same record identity from the in-memory snapshot,
 then validates the proposed replacement. This avoids a stale value blocking
 its own repair while preserving fail-closed storage behavior.

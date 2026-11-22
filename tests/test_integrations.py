@@ -9,8 +9,8 @@ import zipfile
 
 import pytest
 
-from contingency_atlas import integrations as integration
-from contingency_atlas.context import save_record
+from workbench_atlas import integrations as integration
+from workbench_atlas.context import save_record
 
 
 ACTOR = "Synthetic integration operator"

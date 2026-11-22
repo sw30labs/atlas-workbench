@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from contingency_atlas.scoring.ext_features import (
+from workbench_atlas.scoring.ext_features import (
     FeatureEntry,
     FeatureRegistry,
     benjamini_hochberg,
@@ -15,13 +15,13 @@ from contingency_atlas.scoring.ext_features import (
     run_screen,
     time_shift_null,
 )
-from contingency_atlas.scoring.ext_features import (
+from workbench_atlas.scoring.ext_features import (
     test_associations as screen_associations,
 )
-from contingency_atlas.scoring.models import IncidentEvent
-from contingency_atlas.scoring.synth_ext import generate_ext_series
-from contingency_atlas.scoring.synthetic import R0Config, generate_r0
-from contingency_atlas.scoring.telemetry import TelemetryLogger
+from workbench_atlas.scoring.models import IncidentEvent
+from workbench_atlas.scoring.synth_ext import generate_ext_series
+from workbench_atlas.scoring.synthetic import R0Config, generate_r0
+from workbench_atlas.scoring.telemetry import TelemetryLogger
 
 
 def _events_from_grid(grid: dict[str, list[int]], n_periods: int) -> list[IncidentEvent]:
@@ -268,7 +268,7 @@ def test_run_screen_llm_null_fail_closed_on_client_error(tmp_path):
 def test_ext_demo_default_attempts_llm_null(tmp_path, monkeypatch):
     """CLI default: an OMLX client is constructed and consulted even
     without --with-llm-null (the flag is now a deprecated no-op)."""
-    from contingency_atlas.scoring.cli import eval_main, score_main
+    from workbench_atlas.scoring.cli import eval_main, score_main
 
     r0 = tmp_path / "r0"
     assert score_main(["r0-generate", "--out", str(r0)]) == 0
@@ -286,7 +286,7 @@ def test_ext_demo_default_attempts_llm_null(tmp_path, monkeypatch):
         def close(self):
             pass
 
-    monkeypatch.setattr("contingency_atlas.llm.OMLXClient", AcceptingClient)
+    monkeypatch.setattr("workbench_atlas.llm.OMLXClient", AcceptingClient)
     out = tmp_path / "ext"
     rc = eval_main([
         "ext-demo",
@@ -306,7 +306,7 @@ def test_ext_demo_default_attempts_llm_null(tmp_path, monkeypatch):
 def test_ext_demo_no_llm_null_disables(tmp_path, monkeypatch):
     """--no-llm-null restores the deterministic-only screen: no client is
     constructed and no pair carries an LLM verdict."""
-    from contingency_atlas.scoring.cli import eval_main, score_main
+    from workbench_atlas.scoring.cli import eval_main, score_main
 
     r0 = tmp_path / "r0"
     assert score_main(["r0-generate", "--out", str(r0)]) == 0
@@ -317,7 +317,7 @@ def test_ext_demo_no_llm_null_disables(tmp_path, monkeypatch):
         def __init__(self, settings):
             type(self).constructed += 1
 
-    monkeypatch.setattr("contingency_atlas.llm.OMLXClient", GuardClient)
+    monkeypatch.setattr("workbench_atlas.llm.OMLXClient", GuardClient)
     out = tmp_path / "ext"
     rc = eval_main([
         "ext-demo",
@@ -339,11 +339,11 @@ def test_ext_demo_no_llm_null_disables(tmp_path, monkeypatch):
 def test_ext_demo_offline_default_is_fail_closed(tmp_path, monkeypatch):
     """Default behavior with a dead endpoint: every FDR survivor is kept
     out, the report records why, and the run still completes."""
-    from contingency_atlas.scoring.cli import eval_main, score_main
+    from workbench_atlas.scoring.cli import eval_main, score_main
 
     r0 = tmp_path / "r0"
     assert score_main(["r0-generate", "--out", str(r0)]) == 0
-    monkeypatch.setattr("contingency_atlas.llm.OMLXClient", _BrokenClient)
+    monkeypatch.setattr("workbench_atlas.llm.OMLXClient", _BrokenClient)
     out = tmp_path / "ext"
     rc = eval_main([
         "ext-demo",

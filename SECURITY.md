@@ -77,7 +77,7 @@ issue and follow [DATA_PROVENANCE.md](DATA_PROVENANCE.md).
 
 ## Deployment responsibility
 
-Contingency Atlas is a research prototype. Operators are responsible for
+Atlas Workbench is a research prototype. Operators are responsible for
 authentication, transport security, endpoint exposure, model and dependency
 patching, backups, least privilege, secrets management, source authorization,
 and monitoring in their environment.

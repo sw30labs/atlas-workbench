@@ -6,8 +6,8 @@ import json
 
 import pytest
 
-from contingency_atlas.phases.phase2_risks import save_emerging_risks
-from contingency_atlas.snapshots import (
+from workbench_atlas.phases.phase2_risks import save_emerging_risks
+from workbench_atlas.snapshots import (
     snapshot_before_write,
     snapshot_dir_for,
 )
@@ -70,7 +70,7 @@ def test_snapshot_failure_never_blocks_the_write(tmp_path, monkeypatch):
     def _explode(*args, **kwargs):
         raise OSError("disk full")
 
-    monkeypatch.setattr("contingency_atlas.snapshots.shutil.copy2", _explode)
+    monkeypatch.setattr("workbench_atlas.snapshots.shutil.copy2", _explode)
     save_emerging_risks(register, _risk("pending"))
     assert json.loads(register.read_text())[0]["review_status"] == "pending"
 

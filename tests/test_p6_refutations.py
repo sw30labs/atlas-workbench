@@ -19,10 +19,10 @@ from http.server import ThreadingHTTPServer
 
 import pytest
 
-from contingency_atlas.compound_graduate import migrate_graduations
-from contingency_atlas.compound_join import migrate_compound
-from contingency_atlas.config import Settings
-from contingency_atlas.refutations import (
+from workbench_atlas.compound_graduate import migrate_graduations
+from workbench_atlas.compound_join import migrate_compound
+from workbench_atlas.config import Settings
+from workbench_atlas.refutations import (
     BOILERPLATE_KILL_SHARE,
     definition_stress,
     generate_refutation_memo,
@@ -34,11 +34,11 @@ from contingency_atlas.refutations import (
     store_memo,
     windowed_support,
 )
-from contingency_atlas.schema import migrate, migrate_evidence_events
-from contingency_atlas.scoring.models import IncidentEvent, RiskAtom
-from contingency_atlas.scoring.scorer import DetScorer, ScorerConfig
-from contingency_atlas.web import server
-from contingency_atlas.web.server import DashboardHandler
+from workbench_atlas.schema import migrate, migrate_evidence_events
+from workbench_atlas.scoring.models import IncidentEvent, RiskAtom
+from workbench_atlas.scoring.scorer import DetScorer, ScorerConfig
+from workbench_atlas.web import server
+from workbench_atlas.web.server import DashboardHandler
 
 
 # ── definition stress (deterministic, hand-verified) ─────────────────────
@@ -507,7 +507,7 @@ def test_window_flag_actually_reaches_definition_stress(monkeypatch, compound_ro
     success while changing nothing is worse than no knob, and the gap was in
     the plumbing, which is where this test now sits.
     """
-    import contingency_atlas.refutations as R
+    import workbench_atlas.refutations as R
 
     seen: list[int] = []
 

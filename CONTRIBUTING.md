@@ -1,6 +1,6 @@
 # Contributing
 
-Thank you for helping improve Contingency Atlas. Contributions are welcome when
+Thank you for helping improve Atlas Workbench. Contributions are welcome when
 they preserve evidence quality, independent provenance, and the project’s
 non-affiliation boundaries.
 
@@ -33,7 +33,7 @@ python -m pytest
 ```
 
 Keep credentials in environment variables. The committed
-`contingency-atlas.yaml` file is non-secret configuration only.
+`workbench-atlas.yaml` file is non-secret configuration only.
 
 ## Contribution workflow
 
@@ -113,7 +113,7 @@ hypothetical.
 
 ## Documentation and naming
 
-Use the public brand **Contingency Atlas** and the subtitle:
+Use the public brand **Atlas Workbench** and the subtitle:
 
 > An evidence-grounded banking operational-risk foresight and scenario engine
 

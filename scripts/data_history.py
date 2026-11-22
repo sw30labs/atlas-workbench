@@ -18,7 +18,7 @@ named here. The code repository never sees it, and it never sees the code.
     python scripts/data_history.py log
     python scripts/data_history.py git -- diff HEAD~1 -- emerging_risks.json
 
-The git directory defaults to ~/.contingency-atlas-data.git and is overridden
+The git directory defaults to ~/.workbench-atlas-data.git and is overridden
 with ATLAS_DATA_GIT_DIR. Keep it outside the working tree so `generated/`
 cleanups cannot delete your history.
 
@@ -59,7 +59,7 @@ def git_dir() -> Path:
     override = os.environ.get("ATLAS_DATA_GIT_DIR")
     if override:
         return Path(override).expanduser()
-    return Path.home() / ".contingency-atlas-data.git"
+    return Path.home() / ".workbench-atlas-data.git"
 
 
 def _git(*args: str, check: bool = True) -> subprocess.CompletedProcess:

@@ -100,7 +100,7 @@ scorer docstring).
 
 ## Other changes not tied to a single finding
 
-- **Links repaired:** v1's relative links (`redesign/…`, `../contingency_atlas/…`,
+- **Links repaired:** v1's relative links (`redesign/…`, `../workbench_atlas/…`,
   `../DISCLAIMER.md`) resolved to nonexistent paths from `docs/research/whitepaper/`
   and predate the `docs/redesign` → `docs/redesignv1` rename; v2 links
   resolve (`../redesignv1/…`, `../../…`).
@@ -134,7 +134,7 @@ re-emission (with D5); cross-platform CI job; semantic identity (§P8).
 ## Formatted edition (added after the critic pass)
 
 A LaTeX/PDF edition of this revision now exists in the tslit-dspy
-whitepaper format: `manuscript/contingency_atlas_whitepaper.tex` (+
+whitepaper format: `manuscript/workbench_atlas_whitepaper.tex` (+
 compiled PDF), `Makefile` (`make all` = figures + latexmk), and
 `scripts/generate_figures.py`, which draws four figures from the real
 evaluation artifacts (Task B baselines; R0-vs-R0′ PIT histograms; the T1

@@ -20,16 +20,16 @@ from types import SimpleNamespace
 
 import pytest
 
-from contingency_atlas.compound_join import migrate_compound
-from contingency_atlas.config import Settings
-from contingency_atlas.proposals import (
+from workbench_atlas.compound_join import migrate_compound
+from workbench_atlas.config import Settings
+from workbench_atlas.proposals import (
     create_analogues,
     decide_analogue,
     list_proposals,
 )
-from contingency_atlas.schema import migrate, migrate_evidence_events
-from contingency_atlas.web import runner, server
-from contingency_atlas.web.server import DashboardHandler
+from workbench_atlas.schema import migrate, migrate_evidence_events
+from workbench_atlas.web import runner, server
+from workbench_atlas.web.server import DashboardHandler
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -118,7 +118,7 @@ def test_eval_r0_multiseed_phase(web_settings):
 def test_eval_ablations_phase(web_settings, monkeypatch):
     """Wiring-level: params reach run_ablations, the report maps to the job
     result, and outputs land on disk. The live ~50s run stays a UI job."""
-    from contingency_atlas.scoring import ablations
+    from workbench_atlas.scoring import ablations
 
     fake_report = {
         "summary": {
@@ -232,7 +232,7 @@ def test_omlx_gated_phases_record_offline(web_settings, monkeypatch):
         def __init__(self, *a, **k):
             raise AssertionError("LLM client built while OMLX is offline")
 
-    monkeypatch.setattr("contingency_atlas.llm.OMLXClient", _NoClient)
+    monkeypatch.setattr("workbench_atlas.llm.OMLXClient", _NoClient)
 
     audit = runner.execute_phase("channel_audit", {})
     assert audit["status"] == "omlx_offline"
@@ -391,11 +391,11 @@ def test_graduate_with_refutations_param_wiring(web_settings, monkeypatch):
             pass
 
     monkeypatch.setattr(
-        "contingency_atlas.llm.OMLXClient", lambda *a, **k: FakeClient()
+        "workbench_atlas.llm.OMLXClient", lambda *a, **k: FakeClient()
     )
 
-    import contingency_atlas.compound_graduate as graduate_module
-    import contingency_atlas.refutations as refutations_module
+    import workbench_atlas.compound_graduate as graduate_module
+    import workbench_atlas.refutations as refutations_module
 
     monkeypatch.setattr(
         graduate_module,
@@ -425,7 +425,7 @@ def test_graduate_with_refutations_param_wiring(web_settings, monkeypatch):
 
 
 def test_index_has_eval_trigger_cards():
-    html = (ROOT / "contingency_atlas/web/static/index.html").read_text()
+    html = (ROOT / "workbench_atlas/web/static/index.html").read_text()
     for name in (
         "CRASH TEST", "MULTIVERSE", "WHAT BREAKS FIRST?",
         "REALITY CHECK", "HIDDEN CONNECTIONS", "PRECEDENT",
@@ -444,21 +444,21 @@ def test_index_has_eval_trigger_cards():
 
 
 def test_index_has_graduate_refutation_checkbox():
-    html = (ROOT / "contingency_atlas/web/static/index.html").read_text()
+    html = (ROOT / "workbench_atlas/web/static/index.html").read_text()
     assert "with_refutations" in html
     assert "Add devil&#39;s advocate memos (display only)" in html or \
            "Add devil's advocate memos (display only)" in html
 
 
 def test_index_has_scan_duplicates_button():
-    html = (ROOT / "contingency_atlas/web/static/index.html").read_text()
+    html = (ROOT / "workbench_atlas/web/static/index.html").read_text()
     assert 'id="review-scan-dupes"' in html
     assert "FIND LOOKALIKE RISKS" in html
     assert "/api/review/scan-duplicates" in html
 
 
 def test_index_has_compounds_shadow_and_trail():
-    html = (ROOT / "contingency_atlas/web/static/index.html").read_text()
+    html = (ROOT / "workbench_atlas/web/static/index.html").read_text()
     assert 'id="cmp-shadow"' in html
     assert "WHAT-IF WATCH" in html
     assert "graduation frozen" in html
@@ -467,7 +467,7 @@ def test_index_has_compounds_shadow_and_trail():
 
 
 def test_index_has_playground_view_hosting_eval_elicit_cards():
-    html = (ROOT / "contingency_atlas/web/static/index.html").read_text()
+    html = (ROOT / "workbench_atlas/web/static/index.html").read_text()
     # nav option, view section, router entry
     assert 'data-view="playground"' in html
     assert 'id="view-playground"' in html

@@ -13,11 +13,11 @@ from pathlib import Path
 
 import yaml
 
-from contingency_atlas.config import Settings, load_yaml_settings
-from contingency_atlas.schema import migrate, migrate_evidence_events
-from contingency_atlas.web import server
-from contingency_atlas.web.server import DashboardHandler
-from contingency_atlas.web.settings import (
+from workbench_atlas.config import Settings, load_yaml_settings
+from workbench_atlas.schema import migrate, migrate_evidence_events
+from workbench_atlas.web import server
+from workbench_atlas.web.server import DashboardHandler
+from workbench_atlas.web.settings import (
     PINNED_ATLAS_RELEASE,
     apply_model_settings,
     update_yaml_model_settings,
@@ -66,7 +66,7 @@ def _operator_settings(tmp_path, monkeypatch):
     migrate(str(scenario_db))
     migrate_evidence_events(str(evidence_db))
     risks_path.write_text("[]")
-    cfg = tmp_path / "contingency-atlas.yaml"
+    cfg = tmp_path / "workbench-atlas.yaml"
     cfg.write_text(
         "# keep this comment\n"
         "provider: omlx\n"
@@ -99,7 +99,7 @@ def _operator_settings(tmp_path, monkeypatch):
     )
     monkeypatch.setattr(server, "get_settings", lambda: settings)
     monkeypatch.setattr(
-        "contingency_atlas.web.settings._served_models",
+        "workbench_atlas.web.settings._served_models",
         lambda _settings: (False, [], "offline in tests", False, "offline in tests"),
     )
     return settings, cfg
@@ -312,7 +312,7 @@ def test_yaml_model_write_blocked_by_env(tmp_path, monkeypatch):
 def test_settings_view_is_wired_in_the_deck():
     html = (
         Path(__file__).resolve().parents[1]
-        / "contingency_atlas"
+        / "workbench_atlas"
         / "web"
         / "static"
         / "index.html"

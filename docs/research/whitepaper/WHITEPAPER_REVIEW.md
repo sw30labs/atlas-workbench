@@ -1,7 +1,7 @@
 # Review of "Rating Compound Operational-Risk Scenarios" (WHITEPAPER.md)
 
 **Reviewer:** full-repo review — paper cross-checked against
-`contingency_atlas/`, `docs/research/redesignv1/`, `docs/reference/`, the on-disk
+`workbench_atlas/`, `docs/research/redesignv1/`, `docs/reference/`, the on-disk
 `generated/redesign/` evidence pack (note: gitignored — see D10), and the
 test suite. Every checkable number in the paper was verified against those
 artifacts; the calibration harness and the full `atlas-eval demo` were

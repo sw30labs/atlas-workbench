@@ -2,7 +2,7 @@
 
 ## A deterministic scoring algorithm with pre-registered falsification
 
-**Contingency Atlas white paper — scoring engine (`algorithm_version` 0.1.0)**
+**Atlas Workbench white paper — scoring engine (`algorithm_version` 0.1.0)**
 
 | | |
 |---|---|
@@ -10,7 +10,7 @@
 | Revision | **2** — amended after an adversarial full-repo review ([`WHITEPAPER_REVIEW.md`](WHITEPAPER_REVIEW.md)); change map in [`WHITEPAPER_v2_REVISION_LOG.md`](WHITEPAPER_v2_REVISION_LOG.md); v1 preserved unchanged as the reviewed artifact |
 | Companion | [`HYBRID_SCORING_PROPOSAL.md`](HYBRID_SCORING_PROPOSAL.md) — the algorithm fixes and judgment-channel design this revision cites as scheduled work |
 | Specification | [`docs/research/redesignv1/algorithm-spec.md`](../redesignv1/algorithm-spec.md) |
-| Implementation | [`contingency_atlas/scoring/`](../../../contingency_atlas/scoring/) |
+| Implementation | [`workbench_atlas/scoring/`](../../../workbench_atlas/scoring/) |
 | Evaluation | `generated/redesign/` — reproducible via Appendix B; **not under version control** (Appendix C) |
 | Date | 2026-08-03 |
 
@@ -100,7 +100,7 @@ capital or business input.
 
 Banks are not surprised by single risks; they are surprised by *combinations* —
 a control failure, a third-party concentration, and an external shock that
-materialize together. Contingency Atlas rates such **compound scenarios** with
+materialize together. Atlas Workbench rates such **compound scenarios** with
 a deliberately conservative algorithm: standard frequency × severity
 decomposition per risk atom, a shrunk-empirical dependence estimator, Monte
 Carlo propagation under an explicit occurrence definition, and a peaks-over-
@@ -1065,7 +1065,7 @@ atlas-eval calibrate --risks generated/redesign/phase1/r0/r0_risks.json \
 # R0' count regime: regenerate the dataset, then calibrate — exits 0 (PASS)
 python -c "
 import json; from pathlib import Path
-from contingency_atlas.scoring.synthetic import R0Config, generate_r0
+from workbench_atlas.scoring.synthetic import R0Config, generate_r0
 out = Path('generated/redesign/phase3/calibration-r0prime'); out.mkdir(parents=True, exist_ok=True)
 ds = generate_r0(R0Config(count_model='poisson_counts'))
 (out/'r0prime_risks.json').write_text(json.dumps([a.to_dict() for a in ds.atoms], indent=2, sort_keys=True))
@@ -1080,7 +1080,7 @@ atlas-eval calibrate --risks generated/redesign/phase3/calibration-r0prime/r0pri
 #   (wins), coverage 0.9167 in band, NB family for 15/15 atoms
 
 atlas-eval ablations --risks ... --events ... --truth ...   # pre-registered ablation matrix
-python -m contingency_atlas.compound_join --force           # production monthly join
+python -m workbench_atlas.compound_join --force           # production monthly join
 ```
 
 Two caveats a reproducing validator must know (both §5.5):
@@ -1155,12 +1155,12 @@ Phase 3 — harness and boundary runs (`phase3/`):
 
 ### C.3 Implementation and tests
 
-- `contingency_atlas/scoring/scorer.py` — Layers 1–4 (frequency, severity, dependence, Monte Carlo; module docstring carries the stale EVT line noted in §3.5)
-- `contingency_atlas/scoring/evt.py` — Layer 5 (GPD overlay with threshold-sensitivity falsification)
-- `contingency_atlas/scoring/calibration.py`, `evaluate.py`, `ablations.py` — the harness that produced C.2
-- `contingency_atlas/scoring/ext_features.py` — the §6.5 FDR screen (imports PyYAML — outside the score path, §5.3)
-- `contingency_atlas/scoring/egress.py` — local-to-external gateway with hash-chained audit log
-- `contingency_atlas/compound_join.py`, `compound_graduate.py` — production monthly join and graduation (§4; trimmed persistence per §5.5)
+- `workbench_atlas/scoring/scorer.py` — Layers 1–4 (frequency, severity, dependence, Monte Carlo; module docstring carries the stale EVT line noted in §3.5)
+- `workbench_atlas/scoring/evt.py` — Layer 5 (GPD overlay with threshold-sensitivity falsification)
+- `workbench_atlas/scoring/calibration.py`, `evaluate.py`, `ablations.py` — the harness that produced C.2
+- `workbench_atlas/scoring/ext_features.py` — the §6.5 FDR screen (imports PyYAML — outside the score path, §5.3)
+- `workbench_atlas/scoring/egress.py` — local-to-external gateway with hash-chained audit log
+- `workbench_atlas/compound_join.py`, `compound_graduate.py` — production monthly join and graduation (§4; trimmed persistence per §5.5)
 - `tests/test_scoring_*.py` — unit and integration coverage, including egress red-team tests, the runnable ablations, and the hardening tests that assert the R0′-only NLL win §6.3 now states
 
 ## Appendix D — Boundary map: where LLMs touch the wider system

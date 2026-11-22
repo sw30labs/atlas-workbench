@@ -1,8 +1,8 @@
 """Tests for the deterministic scorer."""
 
-from contingency_atlas.scoring.channels import build_channel_graph
-from contingency_atlas.scoring.scorer import DetScorer, ScorerConfig
-from contingency_atlas.scoring.synthetic import R0Config, generate_r0
+from workbench_atlas.scoring.channels import build_channel_graph
+from workbench_atlas.scoring.scorer import DetScorer, ScorerConfig
+from workbench_atlas.scoring.synthetic import R0Config, generate_r0
 
 FAST = ScorerConfig(mc_draws=500, interval_draws=500)
 

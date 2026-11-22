@@ -134,7 +134,7 @@ Reposition as qualitative scenario library (current Atlas) or stop AI-scoring cl
 
 ## Monday morning start (Phase 1 checklist)
 
-1. Create package `contingency_atlas/scoring/` skeleton (det only).  
+1. Create package `workbench_atlas/scoring/` skeleton (det only).  
 2. Synthetic event generator with 3 channels, 15 atoms, 40 quarters.
 3. Fit marginals; score all channel-blocked pairs; dump components JSON.  
 4. Implement independence baseline; compute AP on held-out last 8 quarters.  

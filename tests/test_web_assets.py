@@ -20,7 +20,7 @@ import pytest
 
 INDEX = (
     Path(__file__).resolve().parents[1]
-    / "contingency_atlas" / "web" / "static" / "index.html"
+    / "workbench_atlas" / "web" / "static" / "index.html"
 )
 
 

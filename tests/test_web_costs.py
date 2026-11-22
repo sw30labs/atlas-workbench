@@ -9,12 +9,12 @@ from http.server import ThreadingHTTPServer
 
 import pytest
 
-from contingency_atlas.compound_join import migrate_compound
-from contingency_atlas.config import Settings
-from contingency_atlas.schema import migrate
-from contingency_atlas.scoring.telemetry import TelemetryLogger
-from contingency_atlas.web import server
-from contingency_atlas.web.server import DashboardHandler, build_cost_summary
+from workbench_atlas.compound_join import migrate_compound
+from workbench_atlas.config import Settings
+from workbench_atlas.schema import migrate
+from workbench_atlas.scoring.telemetry import TelemetryLogger
+from workbench_atlas.web import server
+from workbench_atlas.web.server import DashboardHandler, build_cost_summary
 
 
 @contextmanager

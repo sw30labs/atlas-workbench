@@ -1,6 +1,6 @@
 # API Reference
 
-The dashboard server (`python -m contingency_atlas.web`, default
+The dashboard server (`python -m workbench_atlas.web`, default
 `http://127.0.0.1:8080`) is loopback-only: API paths require a loopback
 peer **and** a loopback Host header; mutation requests additionally
 require a loopback Origin. Bodies are JSON with size caps.
@@ -221,7 +221,7 @@ Activate an already imported content version. Older releases stay readable.
 
 ### `POST /api/settings/models`
 
-Write generation / judge / final-judge ids into `contingency-atlas.yaml`
+Write generation / judge / final-judge ids into `workbench-atlas.yaml`
 (or `ATLAS_CONFIG`). Comments are preserved. The running process is not
 live-mutated; restart the dashboard. Environment overrides (`OMLX_MODEL`,
 …) return 409.
@@ -449,5 +449,5 @@ or the selection is no longer available.
 | `atlas-framework mitre-import --input F --source-url U [--expected-sha256 H] [--activate] [--db DB]` | Validate and transactionally import one operator-supplied local ATLAS v6 YAML; record operator-asserted provenance, verify an optional exact-byte digest, and optionally activate the sealed snapshot |
 | `atlas-framework status [--db DB]` | Show installed releases, provenance, sealed/active state, and object counts |
 | `atlas-framework activate VERSION [--db DB]` | Activate a sealed imported content version without deleting older releases |
-| `python -m contingency_atlas.compound_join [--force]` | Monthly join (due-gated; force overrides) |
-| `python -m contingency_atlas.web [--host H] [--port N]` | Dashboard (loopback hosts only) |
+| `python -m workbench_atlas.compound_join [--force]` | Monthly join (due-gated; force overrides) |
+| `python -m workbench_atlas.web [--host H] [--port N]` | Dashboard (loopback hosts only) |

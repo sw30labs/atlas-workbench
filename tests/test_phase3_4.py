@@ -10,7 +10,7 @@ import pytest
 
 class TestPhase3Generation:
     def test_convert_to_db_row(self):
-        from contingency_atlas.phases.phase3_generate import convert_to_db_row
+        from workbench_atlas.phases.phase3_generate import convert_to_db_row
         scenario = {
             "core_risks": ["Cloud Identity Risk", "AI-Enabled Phishing"],
             "scenario_event": {
@@ -56,7 +56,7 @@ class TestPhase3Generation:
         assert json.loads(row["evidence_refs"]) == []
 
     def test_derive_category(self):
-        from contingency_atlas.categories import derive_category
+        from workbench_atlas.categories import derive_category
         assert (
             derive_category({"core_risks": ["Cyber Risk"], "theme_tags": ["cyber"]})
             == "Digital resilience"
@@ -74,14 +74,14 @@ class TestPhase3Generation:
         assert derive_category({"core_risks": ["Unknown"]}) == "Multi-risk convergence"
 
     def test_derive_financial_impact_band(self):
-        from contingency_atlas.categories import derive_financial_impact_band
+        from workbench_atlas.categories import derive_financial_impact_band
         assert derive_financial_impact_band("$10-30B in losses") == "Extreme"
         assert derive_financial_impact_band("$1.5B estimated") == "Major"
         assert derive_financial_impact_band("Material impact") == "Major"
         assert derive_financial_impact_band("Low impact") == "Limited"
 
     def test_generate_scenario(self, mock_omlox_client):
-        from contingency_atlas.phases.phase3_generate import generate_scenario
+        from workbench_atlas.phases.phase3_generate import generate_scenario
         # Mock returns a valid scenario
         mock_omlox_client.chat_json = lambda *a, **k: {
             "core_risks": ["Cyber", "Cloud"],
@@ -105,8 +105,8 @@ class TestPhase3Generation:
         assert "core_risks" in result
 
     def test_run_generation_cycle(self, mock_omlox_client, tmp_workspace):
-        from contingency_atlas.phases.phase3_generate import run_generation_cycle
-        from contingency_atlas import loops as loops_module
+        from workbench_atlas.phases.phase3_generate import run_generation_cycle
+        from workbench_atlas import loops as loops_module
         # Mock: generation returns valid scenario
         mock_omlox_client.chat_json = lambda *a, **k: {
             "core_risks": ["Cyber", "Cloud"],
@@ -137,7 +137,7 @@ class TestPhase3Generation:
                 use_ralph_loop=True,
             )
             assert result.inserted >= 1
-            from contingency_atlas.db import list_scenarios
+            from workbench_atlas.db import list_scenarios
 
             stored = list_scenarios(
                 str(tmp_workspace / "atlas.db"), status=None
@@ -151,21 +151,21 @@ class TestPhase3Generation:
 
 class TestPhase4Prioritization:
     def test_numeric_likelihood(self):
-        from contingency_atlas.phases.phase4_prioritize import _numeric_likelihood
+        from workbench_atlas.phases.phase4_prioritize import _numeric_likelihood
         assert _numeric_likelihood("Very High") == 1.0
         assert _numeric_likelihood("Moderate") == 0.5
         assert _numeric_likelihood("Low to Moderate") == 0.3
         assert _numeric_likelihood("") == 0.5
 
     def test_numeric_financial(self):
-        from contingency_atlas.phases.phase4_prioritize import _numeric_financial
+        from workbench_atlas.phases.phase4_prioritize import _numeric_financial
         assert _numeric_financial("Extreme") == 1.0
         assert _numeric_financial("Major") == 0.8
         assert _numeric_financial("Significant") == 0.6
         assert _numeric_financial("") == 0.45
 
     def test_infer_time_horizon(self):
-        from contingency_atlas.phases.phase4_prioritize import _infer_time_horizon
+        from workbench_atlas.phases.phase4_prioritize import _infer_time_horizon
         from datetime import datetime
         current = datetime.now().year
         assert _infer_time_horizon(f"{current+1}-{current+2}") in ("1y", "2y")
@@ -173,7 +173,7 @@ class TestPhase4Prioritization:
         assert _infer_time_horizon("") == ""
 
     def test_infer_controllability(self):
-        from contingency_atlas.phases.phase4_prioritize import _infer_controllability
+        from workbench_atlas.phases.phase4_prioritize import _infer_controllability
         ext = {
             "risk_category": "Geopolitical",
             "description": "Sanctions and supply-chain disruption affect banks",
@@ -186,7 +186,7 @@ class TestPhase4Prioritization:
         assert _infer_controllability(internal) == "internal"
 
     def test_compute_urgency(self):
-        from contingency_atlas.phases.phase4_prioritize import compute_urgency
+        from workbench_atlas.phases.phase4_prioritize import compute_urgency
         scenario = {
             "scenario_id": "TEST-001",
             "likelihood": "High",
@@ -205,9 +205,9 @@ class TestPhase4Prioritization:
         assert result.controllability in ("external", "internal", "mixed")
 
     def test_run_prioritization_cycle(self, mock_omlox_client, tmp_workspace):
-        from contingency_atlas.phases.phase4_prioritize import run_prioritization_cycle
+        from workbench_atlas.phases.phase4_prioritize import run_prioritization_cycle
         # First insert some scenarios to score
-        from contingency_atlas.phases.phase3_generate import convert_to_db_row, upsert_scenario
+        from workbench_atlas.phases.phase3_generate import convert_to_db_row, upsert_scenario
         scenarios = [
             {
                 "core_risks": ["Cyber", "Cloud"],
@@ -234,10 +234,10 @@ class TestPhase4Prioritization:
         assert result.updated >= 1
 
     def test_get_prioritized_portfolio(self, mock_omlox_client, tmp_workspace):
-        from contingency_atlas.phases.phase4_prioritize import (
+        from workbench_atlas.phases.phase4_prioritize import (
             run_prioritization_cycle, get_prioritized_portfolio
         )
-        from contingency_atlas.phases.phase3_generate import convert_to_db_row, upsert_scenario
+        from workbench_atlas.phases.phase3_generate import convert_to_db_row, upsert_scenario
         scenarios = [
             {
                 "core_risks": ["Cyber"],

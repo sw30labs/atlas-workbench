@@ -13,7 +13,7 @@ has passed both gates.
 
 TEMPLATE STRUCTURE — two blocks:
   GENERATED: namespaces, record models, projection. Regenerate per project.
-             The shipped block is the Contingency Atlas implementation.
+             The shipped block is the Atlas Workbench implementation.
   FIXED:     orchestration, inference harvest, SHACL runner, verdicts, outputs.
              Do not modify. If a project seems to need changes here, the need
              is almost always expressible in the GENERATED block or the TTLs.
@@ -47,9 +47,9 @@ from rdflib.namespace import OWL, RDF, SKOS, XSD
 # GENERATED BLOCK — regenerate per project (models + projection).
 # ===========================================================================
 
-NS = Namespace("https://contingency-atlas.local/ontology#")  # ontology namespace
-DATA = Namespace("https://contingency-atlas.local/id/")      # instance namespace
-CAT = Namespace("https://contingency-atlas.local/ontology/cat/")
+NS = Namespace("https://workbench-atlas.local/ontology#")  # ontology namespace
+DATA = Namespace("https://workbench-atlas.local/id/")      # instance namespace
+CAT = Namespace("https://workbench-atlas.local/ontology/cat/")
 
 # Object properties whose *derived* edges are worth showing in the report
 # (materialized by property chains in domain.ttl; never asserted directly).

@@ -200,7 +200,7 @@ def private_settings(settings, tmp_path: Path):
 
 
 def run(settings, root: Path, tmp_path: Path, **kwargs):
-    from contingency_atlas.bulk_ingest import run_batch
+    from workbench_atlas.bulk_ingest import run_batch
 
     kwargs.setdefault("out_dir", tmp_path / "out")
     return run_batch(settings, root, actor="Synthetic operator", **kwargs)

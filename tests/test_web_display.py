@@ -5,9 +5,9 @@ from urllib.parse import urlunsplit
 
 import pytest
 
-from contingency_atlas.web import server
-from contingency_atlas.web import settings as settings_ui
-from contingency_atlas.web.display import safe_endpoint_message, safe_endpoint_url
+from workbench_atlas.web import server
+from workbench_atlas.web import settings as settings_ui
+from workbench_atlas.web.display import safe_endpoint_message, safe_endpoint_url
 
 
 def credential_url():

@@ -1,4 +1,4 @@
-# Contingency Atlas whitepaper — Top-level build system
+# Atlas Workbench whitepaper — Top-level build system
 # ======================================================
 # Usage:
 #   make all       — regenerate all figures + compile PDF
@@ -10,8 +10,8 @@
 SCRIPTS  = scripts
 FIGURES  = figures
 MANU     = manuscript
-TEX      = $(MANU)/contingency_atlas_whitepaper.tex
-PDF      = $(MANU)/contingency_atlas_whitepaper.pdf
+TEX      = $(MANU)/workbench_atlas_whitepaper.tex
+PDF      = $(MANU)/workbench_atlas_whitepaper.pdf
 
 # Override LATEXMK when the executable is not on PATH.
 LATEXMK ?= latexmk
@@ -30,7 +30,7 @@ figures:
 
 pdf:
 	@echo "=== Compiling PDF ==="
-	cd $(MANU) && $(LATEXMK) -pdf -interaction=nonstopmode -f contingency_atlas_whitepaper.tex
+	cd $(MANU) && $(LATEXMK) -pdf -interaction=nonstopmode -f workbench_atlas_whitepaper.tex
 	@echo "=== PDF compiled: $(PDF) ==="
 
 clean:

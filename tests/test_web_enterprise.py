@@ -18,8 +18,8 @@ from urllib.parse import quote
 import pytest
 import yaml
 
-from contingency_atlas import imports
-from contingency_atlas.web import enterprise, server
+from workbench_atlas import imports
+from workbench_atlas.web import enterprise, server
 
 
 ACTOR = "Synthetic integration reviewer"
@@ -111,7 +111,7 @@ def test_download_is_frozen_and_cannot_widen_after_preview(dashboard, enterprise
     assert result["tables"]["scenarios"][0]["title"] == "Fictional payments outage"
     assert not any(name.startswith("organization_") for name in result["tables"])
     assert headers["Cache-Control"] == "no-store"
-    assert headers["Content-Disposition"].startswith('attachment; filename="contingency-atlas-')
+    assert headers["Content-Disposition"].startswith('attachment; filename="workbench-atlas-')
 
 
 @pytest.mark.parametrize("format,media_type", [
@@ -298,7 +298,7 @@ def test_service_links_require_current_records_and_coverage_has_explicit_denomin
 
 
 def test_activation_preserves_unrelated_configuration(dashboard, enterprise_settings, tmp_path, monkeypatch):
-    from contingency_atlas.web import context_setup
+    from workbench_atlas.web import context_setup
 
     config_path = tmp_path / "configuration.yaml"
     original = "# Operator comment\nscoring:\n  simulation_seed: 17\norganization_context:\n  enabled: false\n"
@@ -317,7 +317,7 @@ def test_activation_preserves_unrelated_configuration(dashboard, enterprise_sett
 
 @pytest.mark.parametrize("failure", ["deployment-disabled", "invalid-yaml"])
 def test_activation_failures_leave_configuration_unchanged(dashboard, tmp_path, monkeypatch, failure):
-    from contingency_atlas.web import context_setup
+    from workbench_atlas.web import context_setup
 
     config_path = tmp_path / "configuration.yaml"
     original = "scoring: [broken" if failure == "invalid-yaml" else "# Fictional config\nscoring: {}\n"

@@ -1,8 +1,8 @@
 # Enterprise discovery and experience delivery
 
-Tracking issue: [#13](https://github.com/sw30labs/contingency-atlas/issues/13).
+Tracking issue: [#13](https://github.com/sw30labs/atlas-workbench/issues/13).
 
-I am extending Contingency Atlas into a governed operational-risk discovery
+I am extending Atlas Workbench into a governed operational-risk discovery
 workbench. The user journey is: establish the service context, investigate a
 signal, review the evidence, examine an exposure, assign a decision or test,
 and share a traceable brief.

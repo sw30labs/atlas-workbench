@@ -31,8 +31,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from contingency_atlas.review import register_lock  # noqa: E402
-from contingency_atlas.scoring.inventory import slugify  # noqa: E402
+from workbench_atlas.review import register_lock  # noqa: E402
+from workbench_atlas.scoring.inventory import slugify  # noqa: E402
 
 
 def assign_ids(register: list[dict]) -> list[tuple[dict, str, bool]]:

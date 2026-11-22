@@ -6,9 +6,9 @@ import json
 
 import pytest
 
-from contingency_atlas.scoring.ablations import run_ablations, write_ablation_outputs
-from contingency_atlas.scoring.scorer import DetScorer, ScorerConfig
-from contingency_atlas.scoring.synthetic import R0Config, generate_r0
+from workbench_atlas.scoring.ablations import run_ablations, write_ablation_outputs
+from workbench_atlas.scoring.scorer import DetScorer, ScorerConfig
+from workbench_atlas.scoring.synthetic import R0Config, generate_r0
 
 FAST = ScorerConfig(mc_draws=300, interval_draws=300)
 

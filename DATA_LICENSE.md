@@ -5,7 +5,7 @@ apply to data, documentation, source publications, and generated output.
 
 ## Source code
 
-Unless a file states otherwise, source code authored for Contingency Atlas is
+Unless a file states otherwise, source code authored for Atlas Workbench is
 licensed under the [Apache License 2.0](LICENSE), SPDX identifier
 `Apache-2.0`.
 
@@ -20,7 +20,7 @@ subject to their owners’ rights.
 
 Data files that are both:
 
-1. created specifically by the Contingency Atlas project; and
+1. created specifically by the Atlas Workbench project; and
 2. conspicuously labeled `synthetic`
 
 are dedicated to the public domain under
@@ -44,7 +44,7 @@ SPDX identifier `CC-BY-4.0`.
 
 Attribution should include:
 
-> Contingency Atlas contributors, record identifier, release or commit, and
+> Atlas Workbench contributors, record identifier, release or commit, and
 > source URL.
 
 The license applies only to the project-authored contribution. It does not
@@ -53,7 +53,7 @@ trademark, personal data, or facts subject to other legal restrictions.
 
 ## Public-source records
 
-Contingency Atlas cites public sources; it does not relicense them. Source
+Atlas Workbench cites public sources; it does not relicense them. Source
 publishers retain any rights they may have in their publications. A URL,
 factual citation, short quotation, or independently written summary does not
 imply that the source licensed its content under this project’s terms.
@@ -65,7 +65,7 @@ redistributing, scraping, archiving, or submitting source material to a model.
 
 The optional MITRE ATLAS overlay reads an operator-supplied release file into
 the local database. That upstream knowledge-base content is not bundled with
-Contingency Atlas and is not relicensed as project-authored data. The official
+Atlas Workbench and is not relicensed as project-authored data. The official
 `mitre-atlas/atlas-data` repository identifies its content as copyright
 2021–2026 MITRE and licensed under the Apache License 2.0.
 
@@ -82,7 +82,7 @@ trademark notices.
 
 Project-authored scenario mappings, rationales, and review decisions do not
 change the license of the underlying ATLAS objects. Conversely, the upstream
-license does not convert unrelated Contingency Atlas records into MITRE
+license does not convert unrelated Atlas Workbench records into MITRE
 content. MITRE ATLAS™ is referenced only for identification; no affiliation,
 sponsorship, approval, or endorsement by MITRE is implied.
 

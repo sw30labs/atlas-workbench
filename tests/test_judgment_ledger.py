@@ -13,12 +13,12 @@ import sqlite3
 
 import pytest
 
-from contingency_atlas.compound_join import migrate_compound
-from contingency_atlas.proposals import create_analogues, migrate_proposals
-from contingency_atlas.review import approve_analogue
-from contingency_atlas.scoring import judgment_ledger as jl
-from contingency_atlas.scoring.cli import eval_main
-from contingency_atlas.scoring.models import IncidentEvent, pair_id_for
+from workbench_atlas.compound_join import migrate_compound
+from workbench_atlas.proposals import create_analogues, migrate_proposals
+from workbench_atlas.review import approve_analogue
+from workbench_atlas.scoring import judgment_ledger as jl
+from workbench_atlas.scoring.cli import eval_main
+from workbench_atlas.scoring.models import IncidentEvent, pair_id_for
 
 # ---------------------------------------------------------------------------
 # helpers
@@ -266,7 +266,7 @@ def test_record_analogue_claims_skips_without_realization(tmp_path, caplog):
     # no compound_scenarios row for this pair
 
     ledger = tmp_path / "ledger.jsonl"
-    with caplog.at_level(logging.INFO, logger="contingency_atlas.scoring.judgment_ledger"):
+    with caplog.at_level(logging.INFO, logger="workbench_atlas.scoring.judgment_ledger"):
         assert jl.record_analogue_claims(db, ledger) == 0
     assert _read_lines(ledger) == []
     assert any(

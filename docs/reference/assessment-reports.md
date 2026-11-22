@@ -22,7 +22,7 @@ not send email, call a destination system or start a model. I keep its output
 directory private and apply the same retention policy as organization records.
 
 ```bash
-python -m contingency_atlas.assessment_reports \
+python -m workbench_atlas.assessment_reports \
   --baseline-id BASELINE_ID \
   --include-context \
   --output-directory /path/to/private/review-packs \

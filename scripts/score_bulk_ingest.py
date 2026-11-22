@@ -21,8 +21,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from contingency_atlas.bulk_ingest.coerce import parse_money  # noqa: E402
-from contingency_atlas.bulk_ingest.linker import duration_profile, name_key, vendor_key  # noqa: E402
+from workbench_atlas.bulk_ingest.coerce import parse_money  # noqa: E402
+from workbench_atlas.bulk_ingest.linker import duration_profile, name_key, vendor_key  # noqa: E402
 
 
 def _ratio(num: int, den: int) -> float | None:

@@ -1,6 +1,6 @@
 """Dynamic prompt-registry release checks."""
 
-from contingency_atlas.prompt_registry import (
+from workbench_atlas.prompt_registry import (
     PromptRecord,
     discover_prompt_names,
     discover_prompts,

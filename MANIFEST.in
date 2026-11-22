@@ -12,11 +12,11 @@ include ROADMAP.md
 include SECURITY.md
 include TAXONOMY.md
 include THIRD_PARTY_NOTICES.md
-include contingency-atlas.yaml
+include workbench-atlas.yaml
 include start.sh
 include Makefile
 include .env.example
-include contingency_atlas/source_registry.yaml
+include workbench_atlas/source_registry.yaml
 recursive-include LICENSES *.txt
 recursive-include docs *.md *.pdf *.png *.svg *.tex *.yaml
 include docs/whitepaper/Makefile

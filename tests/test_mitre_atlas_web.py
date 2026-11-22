@@ -12,13 +12,13 @@ from pathlib import Path
 
 import pytest
 
-from contingency_atlas.config import Settings
-from contingency_atlas.db import get_scenario, update_scenario_fields, upsert_scenario
-from contingency_atlas.frameworks import migrate_frameworks
-from contingency_atlas.frameworks.mappings import list_mapping_proposals
-from contingency_atlas.schema import migrate, migrate_evidence_events
-from contingency_atlas.web import server
-from contingency_atlas.web.server import DashboardHandler
+from workbench_atlas.config import Settings
+from workbench_atlas.db import get_scenario, update_scenario_fields, upsert_scenario
+from workbench_atlas.frameworks import migrate_frameworks
+from workbench_atlas.frameworks.mappings import list_mapping_proposals
+from workbench_atlas.schema import migrate, migrate_evidence_events
+from workbench_atlas.web import server
+from workbench_atlas.web.server import DashboardHandler
 
 
 def _add_object(
@@ -513,7 +513,7 @@ def test_installed_but_inactive_catalog_keeps_the_core_dashboard_usable(
 def test_dashboard_asset_names_the_governance_and_non_scoring_boundaries():
     html = (
         Path(__file__).resolve().parents[1]
-        / "contingency_atlas/web/static/index.html"
+        / "workbench_atlas/web/static/index.html"
     ).read_text()
     assert "/api/frameworks/mitre-atlas/techniques" in html
     assert "/api/frameworks/mitre-atlas/proposals" in html

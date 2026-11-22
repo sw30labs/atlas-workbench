@@ -1,1 +1,0 @@
-"""Contingency Atlas pipeline phases."""

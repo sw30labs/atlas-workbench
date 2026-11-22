@@ -6,7 +6,7 @@ from bulk_ingest_helpers import (
     build_mini_pack, doc, private_settings, records, run, write_board_pptx, write_controls_csv,
     write_scenarios_csv, write_services_xlsx, write_vendors_csv,
 )
-from contingency_atlas.bulk_ingest.linker import Registry, VendorRegistry
+from workbench_atlas.bulk_ingest.linker import Registry, VendorRegistry
 
 
 @pytest.fixture

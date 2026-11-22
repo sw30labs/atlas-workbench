@@ -9,9 +9,9 @@ from pathlib import Path
 
 import pytest
 
-from contingency_atlas import cli
-from contingency_atlas.config import Settings
-from contingency_atlas.demo import DemoError, fixtures_dir, seed_into
+from workbench_atlas import cli
+from workbench_atlas.config import Settings
+from workbench_atlas.demo import DemoError, fixtures_dir, seed_into
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -202,7 +202,7 @@ def test_demo_refuses_the_checkout_root():
 
 def test_packaged_fixtures_match_examples():
     """The wheel copy must not drift from the reviewed fixture corpus."""
-    packaged = ROOT / "contingency_atlas" / "fixtures"
+    packaged = ROOT / "workbench_atlas" / "fixtures"
     for name in ("demo_evidence.json", "demo_emerging_risks.json", "demo_scenarios.json"):
         assert (packaged / name).read_bytes() == (ROOT / "examples" / name).read_bytes()
 

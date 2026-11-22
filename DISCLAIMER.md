@@ -4,7 +4,7 @@ Effective: 28 July 2026
 
 ## Independent personal project
 
-Contingency Atlas is an independent personal research project. It is not a
+Atlas Workbench is an independent personal research project. It is not a
 product, service, control framework, or official publication of the author’s
 employer or of any other organization.
 
@@ -37,13 +37,13 @@ with ORX products, data, schemas, or taxonomies.
 
 Nassim Nicholas Taleb’s books *The Black Swan* and *Antifragile* influenced the
 project’s general interest in uncertainty, rare events, fragility, and
-resilience. Contingency Atlas does not reproduce or simulate Taleb’s persona,
+resilience. Atlas Workbench does not reproduce or simulate Taleb’s persona,
 voice, likeness, writings, opinions, or endorsement. It is not affiliated with
 Taleb or his publishers.
 
 ## Research, not advice
 
-Contingency Atlas is provided for research, education, and software
+Atlas Workbench is provided for research, education, and software
 experimentation. Nothing in the repository or its outputs is financial,
 investment, legal, regulatory, accounting, cybersecurity, business-continuity,
 or risk-management advice.

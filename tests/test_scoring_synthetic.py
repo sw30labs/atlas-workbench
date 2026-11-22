@@ -2,8 +2,8 @@
 
 from collections import defaultdict
 
-from contingency_atlas.scoring.channels import cooccurrence_counts, occurrence_series
-from contingency_atlas.scoring.synthetic import (
+from workbench_atlas.scoring.channels import cooccurrence_counts, occurrence_series
+from workbench_atlas.scoring.synthetic import (
     R0Config,
     aggregate_incident_features,
     generate_r0,
