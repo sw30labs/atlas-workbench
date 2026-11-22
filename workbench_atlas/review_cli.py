@@ -111,17 +111,34 @@ def _build_parser() -> argparse.ArgumentParser:
         "approve-signpost",
         help="Approve one pending scenario signpost assessment",
     )
-    approve_signpost.add_argument("record_id", help="Scenario ID")
-    approve_signpost.add_argument("--note", default="", help="Optional reviewer note")
+    approve_signpost.add_argument(
+        "record_id",
+        help="Scenario ID (not the assessment row id shown as assessment_id)",
+    )
+    approve_signpost.add_argument("--note", default=None, help="Optional reviewer note")
+    approve_signpost.add_argument(
+        "--reason",
+        default=None,
+        help="Same value as --note",
+    )
 
     reject_signpost = commands.add_parser(
         "reject-signpost",
         help="Reject one pending scenario signpost assessment",
     )
-    reject_signpost.add_argument("record_id", help="Scenario ID")
+    reject_signpost.add_argument(
+        "record_id",
+        help="Scenario ID (not the assessment row id shown as assessment_id)",
+    )
     reject_signpost.add_argument(
         "--reason",
+        default=None,
         help="Reviewer rationale (prompted interactively when omitted)",
+    )
+    reject_signpost.add_argument(
+        "--note",
+        default=None,
+        help="Same value as --reason",
     )
 
     for command in (approve_event, approve_risk, reject_event, reject_risk):
@@ -178,6 +195,15 @@ def _rejection_reason(value: str | None) -> str:
         return value.strip()
     if sys.stdin.isatty():
         return input("Rejection reason: ").strip()
+    return ""
+
+
+def _signpost_text(reason: str | None, note: str | None) -> str:
+    """`--reason` and `--note` are one field. A supplied reason wins."""
+    if reason and reason.strip():
+        return reason.strip()
+    if note and note.strip():
+        return note.strip()
     return ""
 
 
@@ -305,7 +331,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 scenario_db,
                 args.record_id,
                 evidence_db=evidence_db,
-                note=args.note,
+                note=_signpost_text(args.reason, args.note),
             )
         elif args.action == "approve-merge":
             payload = approve_merge(
@@ -328,7 +354,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             payload = reject_signpost_assessment(
                 scenario_db,
                 args.record_id,
-                reason=_rejection_reason(args.reason),
+                reason=_rejection_reason(_signpost_text(args.reason, args.note)),
             )
     except (ReviewError, ValueError, OSError, json.JSONDecodeError) as exc:
         print(f"review error: {exc}", file=sys.stderr)

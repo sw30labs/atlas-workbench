@@ -5,8 +5,9 @@ Precedence, highest first:
 ```text
 explicit Python arguments
   → environment variables
-    → config.yaml
-      → built-in defaults
+    → workbench-atlas.local.yaml, when the checkout file is the active config
+      → config.yaml or workbench-atlas.yaml
+        → built-in defaults
 ```
 
 Unknown keys and wrong types are rejected loudly: a config typo is worse than
@@ -51,6 +52,13 @@ keep their layout:
 2. `$ATLAS_HOME/config.yaml` if it exists.
 3. `workbench-atlas.yaml` in a source checkout.
 
+When step 3 is the file actually read, `workbench-atlas.local.yaml` beside
+it is merged on top. That overlay is gitignored. Dashboard activation of the
+organization workspace writes the overlay and does not edit the tracked
+checkout file. `ATLAS_CONFIG` and `$ATLAS_HOME/config.yaml` are edited in
+place and do not read the checkout overlay. Invalid YAML in the overlay is
+rejected.
+
 ---
 
 ## Model endpoints
@@ -65,7 +73,7 @@ exports, and the dashboard all work.
 | `ATLAS_LLM_PROVIDER` | `omlx` |
 | `OMLX_BASE_URL` | `http://127.0.0.1:8000/v1` |
 | `OMLX_API_KEY` | `test` |
-| `OMLX_MODEL` | `DeepSeek-V4-Flash-0731-MXFP4-MLX` |
+| `OMLX_MODEL` | `DeepSeek-V4.1-Flash-1017-oQ4e-mtp` |
 | `OMLX_MODEL_JUDGE` | same as `OMLX_MODEL` |
 | `OMLX_MODEL_FINAL_JUDGE` | empty (independent final judge disabled) |
 | `OMLX_TIMEOUT` | `600` seconds |
@@ -100,8 +108,8 @@ provider: omlx          # omlx | dgx (aliases: mlx | vllm)
 
 omlx:
   base_url: http://127.0.0.1:8000/v1
-  model: DeepSeek-V4-Flash-0731-MXFP4-MLX
-  model_judge: DeepSeek-V4-Flash-0731-MXFP4-MLX
+  model: DeepSeek-V4.1-Flash-1017-oQ4e-mtp
+  model_judge: DeepSeek-V4.1-Flash-1017-oQ4e-mtp
   model_final_judge: ""
   timeout: 600
   max_tokens: 16384
@@ -121,7 +129,10 @@ organization_context:
   db_path: organization-context.db
 ```
 
-`atlas init` writes this file into the data directory.
+In a source checkout, put a machine's private `organization_context` block in
+`workbench-atlas.local.yaml`. The tracked file stays shared configuration:
+`enabled: false`, or omit the block. `atlas init` writes `config.yaml` into
+the data directory, and activation edits that file in place.
 
 ---
 

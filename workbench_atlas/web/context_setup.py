@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 
 import yaml
 
-from workbench_atlas.config import yaml_config_path
+from workbench_atlas.config import activation_config_path, yaml_config_path
 from workbench_atlas.review import register_lock
 
 
@@ -24,7 +24,9 @@ def enable_context(settings, *, actor):
         raise ValueError("A named operator is required.")
     if os.environ.get("ATLAS_CONTEXT_ENABLED", "").strip().lower() in {"0", "false", "no", "off"}:
         raise ValueError("Organization context is disabled by your deployment settings. Ask the operator to enable it.")
-    path = yaml_config_path()
+    # A source checkout keeps operator activation in the gitignored overlay.
+    # ATLAS_CONFIG and ATLAS_HOME/config.yaml are still edited in place.
+    path = activation_config_path(yaml_config_path())
     path.parent.mkdir(parents=True, exist_ok=True)
     with register_lock(path):
         original = path.read_text(encoding="utf-8") if path.exists() else ""

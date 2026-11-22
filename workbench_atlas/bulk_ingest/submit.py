@@ -10,7 +10,9 @@ is not.
 
 from __future__ import annotations
 
+import hashlib
 import json
+import os
 from pathlib import Path
 from typing import Any
 
@@ -129,9 +131,66 @@ def plan_submission(batch: dict[str, Any], selection: str | list[str]) -> dict[s
             "skipped": skipped, "warnings": sorted(set(warnings))}
 
 
+def _refusing(relative: object) -> SubmitError:
+    return SubmitError(
+        f"Refusing handoff path {relative!r}: it is not a regular file inside this batch.",
+        code="invalid_selection",
+    )
+
+
+def _relative_handoff(relative: object) -> Path | None:
+    """Lexical handoff path, or None when it can leave the batch directory."""
+    if not isinstance(relative, str) or not relative or "\\" in relative or "\x00" in relative:
+        return None
+    if relative.startswith(("/", "\\")):
+        return None
+    parts = Path(relative).parts
+    if not parts or any(part in ("", ".", "..") for part in parts):
+        return None
+    return Path(*parts)
+
+
+def read_handoff_bytes(base: Path, relative: object) -> bytes:
+    """Read one staged handoff file confined to ``base``.
+
+    Absolute paths, backslashes, empty segments, ``.`` and ``..``, symlinks,
+    and anything that does not resolve inside ``base`` are refused. The final
+    open uses ``O_NOFOLLOW`` where the platform provides it.
+    """
+    rel = _relative_handoff(relative)
+    if rel is None:
+        raise _refusing(relative)
+    root = Path(base).resolve()
+    current = root
+    for part in rel.parts:
+        current = current / part
+        if current.is_symlink():
+            raise _refusing(relative)
+    if not current.is_file():
+        raise _refusing(relative)
+    resolved = current.resolve()
+    if not resolved.is_relative_to(root):
+        raise _refusing(relative)
+    flags = os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0)
+    try:
+        fd = os.open(current, flags)
+    except OSError as exc:
+        raise _refusing(relative) from exc
+    try:
+        with os.fdopen(fd, "rb") as handle:
+            return handle.read()
+    except OSError as exc:
+        raise _refusing(relative) from exc
+
+
 def submit_batch(settings: Settings, batch_path: str | Path, *, selection: str | list[str],
-                 actor: str) -> dict[str, Any]:
-    """Preview then confirm each payload's selected records with the named actor."""
+                 actor: str, payload_sha256: dict[str, str] | None = None) -> dict[str, Any]:
+    """Preview then confirm each payload's selected records with the named actor.
+
+    Handoff files are read only from inside the batch directory. When
+    ``payload_sha256`` is provided, each file's current bytes must match the
+    digest captured with the reviewed plan.
+    """
     if not isinstance(actor, str) or not actor.strip():
         raise SubmitError("A named reviewer is required.", code="actor_required")
     batch, base = load_batch(batch_path)
@@ -149,7 +208,16 @@ def submit_batch(settings: Settings, batch_path: str | Path, *, selection: str |
     results = []
     for step in plan["payloads"]:
         wanted = {r["id"] for r in step["records"]}
-        content = json.loads((base / step["file"]).read_text(encoding="utf-8"))
+        raw = read_handoff_bytes(base, step["file"])
+        if payload_sha256 is not None:
+            expected = payload_sha256.get(step["file"])
+            actual = hashlib.sha256(raw).hexdigest()
+            if not isinstance(expected, str) or expected != actual:
+                raise SubmitError(
+                    "The handoff payload changed since the plan was reviewed. Preview the plan again.",
+                    code="stale_plan", written=len(results),
+                )
+        content = json.loads(raw)
         records = [r for r in content["records"] if r["data"].get("id") in wanted]
         preview = preview_import(settings, content=json.dumps({"records": records}), format="json",
                                  actor=actor, source=source)

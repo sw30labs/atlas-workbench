@@ -32,14 +32,22 @@ _SOURCE_ONTOLOGY_DIR = ROOT / "ontology"
 
 
 def _installed_ontology_dir() -> Path:
-    """Resolve wheel data through its installation metadata when available."""
-    try:
-        for entry in files("workbench-atlas") or ():
-            label = entry.as_posix()
-            if label.endswith("share/workbench-atlas/ontology/guard.py"):
-                return Path(entry.locate()).resolve().parent
-    except PackageNotFoundError:
-        pass
+    """Resolve wheel data through its installation metadata when available.
+
+    The distribution name is ``atlas-workbench`` (``pyproject.toml``).
+    The data-files directory is ``share/workbench-atlas``. Asking
+    ``files()`` for the directory name never finds a distribution, so
+    that lookup has to use the project name and then fall back to the
+    sysconfig data path.
+    """
+    for dist_name in ("atlas-workbench",):
+        try:
+            for entry in files(dist_name) or ():
+                label = entry.as_posix()
+                if label.endswith("share/workbench-atlas/ontology/guard.py"):
+                    return Path(entry.locate()).resolve().parent
+        except PackageNotFoundError:
+            continue
     return (
         Path(sysconfig.get_path("data"))
         / "share"

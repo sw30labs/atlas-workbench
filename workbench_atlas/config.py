@@ -41,6 +41,10 @@ def _abs_under_root(path: Path | str, root: Path | None = None) -> Path:
     return p.resolve()
 
 
+CHECKOUT_CONFIG_NAME = "workbench-atlas.yaml"
+LOCAL_OVERLAY_NAME = "workbench-atlas.local.yaml"
+
+
 def yaml_config_path() -> Path:
     """Path to the YAML config file.
 
@@ -55,7 +59,43 @@ def yaml_config_path() -> Path:
         candidate = Path(home).expanduser() / "config.yaml"
         if candidate.is_file():
             return candidate
-    return project_root() / "workbench-atlas.yaml"
+    return checkout_config_path()
+
+
+def checkout_config_path() -> Path:
+    """The shared config file that ships with a source checkout."""
+    return project_root() / CHECKOUT_CONFIG_NAME
+
+
+def _is_checkout_config(path: Path) -> bool:
+    try:
+        return path.expanduser().resolve() == checkout_config_path().resolve()
+    except OSError:
+        return False
+
+
+def local_overlay_path() -> Path | None:
+    """Gitignored overlay beside the checkout config, when that file is active.
+
+    ``None`` when ``ATLAS_CONFIG`` or ``$ATLAS_HOME/config.yaml`` is the file
+    in use. The overlay file itself may not exist yet.
+    """
+    if not _is_checkout_config(yaml_config_path()):
+        return None
+    return checkout_config_path().parent / LOCAL_OVERLAY_NAME
+
+
+def activation_config_path(configured: Path | None = None) -> Path:
+    """File organization-workspace activation should edit.
+
+    Activating a source checkout writes ``workbench-atlas.local.yaml`` and
+    leaves the tracked checkout file alone. Any other config path is edited
+    in place.
+    """
+    configured = yaml_config_path() if configured is None else configured
+    if _is_checkout_config(configured):
+        return checkout_config_path().parent / LOCAL_OVERLAY_NAME
+    return configured
 
 
 # YAML omlx: key → (Settings field, type coercion). The API key is deliberately
@@ -145,13 +185,12 @@ def _parse_llm_section(
     return out
 
 
-def load_yaml_settings(path: Path | None = None) -> dict[str, Any]:
-    """Read the YAML config file into {Settings field: value}.
+def _load_one_yaml(path: Path) -> dict[str, Any]:
+    """Read one YAML config file into {Settings field: value}.
 
     Missing file → {}. Invalid YAML, unknown sections/keys, or wrong types
     raise ValueError — a config file with a silent typo is worse than none.
     """
-    path = path or yaml_config_path()
     if not path.is_file():
         return {}
     try:
@@ -184,6 +223,24 @@ def load_yaml_settings(path: Path | None = None) -> dict[str, Any]:
     }))
     out.update(_parse_bulk_ingest_section(path, data))
     return out
+
+
+def load_yaml_settings(path: Path | None = None) -> dict[str, Any]:
+    """Read the active YAML config into {Settings field: value}.
+
+    When ``path`` is the checkout ``workbench-atlas.yaml``, keys in the
+    gitignored ``workbench-atlas.local.yaml`` beside it override the
+    checkout file. Any other path, including ``ATLAS_CONFIG`` and
+    ``$ATLAS_HOME/config.yaml``, is read alone. A missing file contributes
+    nothing. Invalid YAML fails closed.
+    """
+    path = path or yaml_config_path()
+    loaded = _load_one_yaml(path)
+    if _is_checkout_config(path):
+        overlay = checkout_config_path().parent / LOCAL_OVERLAY_NAME
+        if overlay.is_file():
+            loaded.update(_load_one_yaml(overlay))
+    return loaded
 
 
 def _parse_bulk_ingest_section(path: Path, data: dict[str, Any]) -> dict[str, Any]:
@@ -224,11 +281,11 @@ class Settings(BaseModel):
     )
     omlx_api_key: str = Field(default="test", repr=False)
     omlx_model: str = Field(
-        default="DeepSeek-V4-Flash-0731-MXFP4-MLX",
+        default="DeepSeek-V4.1-Flash-1017-oQ4e-mtp",
         description="Default model for generation tasks",
     )
     omlx_model_judge: str = Field(
-        default="DeepSeek-V4-Flash-0731-MXFP4-MLX",
+        default="DeepSeek-V4.1-Flash-1017-oQ4e-mtp",
         description="Model for LLM-as-a-Judge evaluation",
     )
     omlx_model_final_judge: str = Field(
@@ -375,7 +432,8 @@ class Settings(BaseModel):
         # otherwise "isolated" runs get silently redirected by ambient env.
         explicit = self.model_fields_set
 
-        # YAML config file: above built-in defaults, below env vars.
+        # YAML config file, with the checkout overlay already merged:
+        # above built-in defaults, below env vars.
         for attr, val in load_yaml_settings().items():
             if attr not in explicit:
                 object.__setattr__(self, attr, val)

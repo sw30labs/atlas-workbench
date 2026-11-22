@@ -699,7 +699,7 @@ python -m workbench_atlas.web
 Configuration precedence is:
 
 ```text
-explicit Python arguments -> environment variables -> workbench-atlas.yaml -> defaults
+explicit Python arguments -> environment variables -> workbench-atlas.local.yaml (checkout only) -> workbench-atlas.yaml or config.yaml -> defaults
 ```
 
 Keep secrets in environment variables. Do not commit API keys to
@@ -912,7 +912,7 @@ details, or untraceable generated claims.
   guard before persisting; a REJECT blocks the write and the previous state
   stands. See [docs/reference/ONTOLOGY.md](docs/reference/ONTOLOGY.md). Set `ATLAS_GUARD=off`
   to disable.
-- Stale flags and eligible refreshes may be applied during maintenance.
+- Maintenance records stale and refresh recommendations. Refresh does not change a scenario's lifecycle status.
 - Merge and retire actions require the explicit `ATLAS_AUTO_RETIRE=1` safety
   switch because merging retires the merged-away scenario.
 - The dashboard cannot override that switch.

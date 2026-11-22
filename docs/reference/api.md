@@ -227,8 +227,8 @@ live-mutated; restart the dashboard. Environment overrides (`OMLX_MODEL`,
 …) return 409.
 
 ```json
-{"model": "DeepSeek-V4-Flash-0731-MXFP4-MLX",
- "model_judge": "DeepSeek-V4-Flash-0731-MXFP4-MLX",
+{"model": "DeepSeek-V4.1-Flash-1017-oQ4e-mtp",
+ "model_judge": "DeepSeek-V4.1-Flash-1017-oQ4e-mtp",
  "model_final_judge": "",
  "use_responses_api": false}
 ```

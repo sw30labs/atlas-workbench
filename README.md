@@ -163,8 +163,8 @@ or the dashboard. Model-backed generation needs an OpenAI-compatible endpoint.
 ```bash
 export ATLAS_LLM_PROVIDER=omlx                 # or dgx for NVIDIA vLLM
 export OMLX_BASE_URL=http://127.0.0.1:8000/v1
-export OMLX_MODEL=DeepSeek-V4-Flash-0731-MXFP4-MLX
-export OMLX_MODEL_JUDGE=DeepSeek-V4-Flash-0731-MXFP4-MLX
+export OMLX_MODEL=DeepSeek-V4.1-Flash-1017-oQ4e-mtp
+export OMLX_MODEL_JUDGE=DeepSeek-V4.1-Flash-1017-oQ4e-mtp
 atlas doctor                                   # verifies the endpoint
 atlas run --with-llm --scenarios 5
 ```

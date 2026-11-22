@@ -87,6 +87,10 @@ def settings(tmp_workspace):
         evidence_db_path=tmp_workspace / "event_evidence.db",
         emerging_risks_path=tmp_workspace / "emerging_risks.json",
         scenario_export_path=tmp_workspace / "scenario_export.json",
+        # A checkout config may enable the operator's private workspace.
+        # Fixtures stay on an absent temp store unless a test opts in.
+        context_enabled=False,
+        context_db_path=tmp_workspace / "organization-context.db",
     )
 
 

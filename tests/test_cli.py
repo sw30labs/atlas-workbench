@@ -155,6 +155,89 @@ def test_doctor_runs_offline(tmp_path, capsys, monkeypatch):
     assert checks["model endpoint"] == "SKIP"
 
 
+@pytest.mark.parametrize(
+    ("body", "generation", "judge", "status", "needle"),
+    [
+        (
+            '{"data":[{"id":"served-model"}]}',
+            "served-model",
+            "served-model",
+            "OK",
+            "configured models present",
+        ),
+        (
+            '{"models":["served-model"]}',
+            "served-model",
+            "",
+            "OK",
+            "1 served model",
+        ),
+        (
+            '[{"id":"served-model"}]',
+            "missing-model",
+            "served-model",
+            "WARN",
+            "generation missing-model",
+        ),
+        (
+            '{"data":[{"id":"served-model"}]}',
+            "ThisModelDoesNotExist",
+            "ThisModelDoesNotExist",
+            "WARN",
+            "ThisModelDoesNotExist",
+        ),
+        ("not json", "m", "m", "OK", "model list unreadable"),
+        ('{"oops": 1}', "m", "m", "OK", "model list unreadable"),
+        ("[1, null]", "m", "m", "WARN", "Served: (none)"),
+    ],
+)
+def test_classify_served_models(body, generation, judge, status, needle):
+    from workbench_atlas.cli.main import classify_served_models
+
+    got_status, detail = classify_served_models(
+        body, generation_model=generation, judge_model=judge
+    )
+    assert got_status == status
+    assert needle in detail
+    if status == "WARN":
+        assert "Offline analysis still works." in detail
+
+
+def test_doctor_warns_when_configured_model_is_not_served(tmp_path, capsys, monkeypatch):
+    import httpx
+
+    class _Response:
+        status_code = 200
+        text = '{"data":[{"id":"served-model"}]}'
+
+    class _Client:
+        def __init__(self, *args, **kwargs):
+            del args, kwargs
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            return False
+
+        def get(self, url, headers=None):
+            del url, headers
+            return _Response()
+
+    monkeypatch.delenv("ATLAS_HOME", raising=False)
+    monkeypatch.setenv("OMLX_MODEL", "ThisModelDoesNotExist")
+    monkeypatch.setenv("OMLX_MODEL_JUDGE", "ThisModelDoesNotExist")
+    monkeypatch.setattr(httpx, "Client", _Client)
+    home = tmp_path / "data"
+    code, output = run_cli(capsys, "doctor", "--home", str(home), "--json")
+    assert code == 0, output
+    checks = {item["check"]: item for item in json.loads(output)}
+    detail = checks["model endpoint"]["detail"]
+    assert checks["model endpoint"]["status"] == "WARN"
+    assert "ThisModelDoesNotExist" in detail
+    assert "served-model" in detail
+
+
 def test_clean_requires_confirmation(tmp_path, capsys, monkeypatch):
     monkeypatch.delenv("ATLAS_HOME", raising=False)
     home = tmp_path / "data"

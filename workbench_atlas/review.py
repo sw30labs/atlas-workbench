@@ -33,6 +33,7 @@ except ImportError:  # pragma: no cover - Windows fallback
 from .db import (
     SIGNPOST_ASSESSMENT_STATUSES,
     SIGNPOST_DIRECTIONAL_STATUSES,
+    connect,
     decide_signpost_assessment,
     get_evidence_event,
     get_latest_signpost_assessment,
@@ -813,6 +814,25 @@ def _pending_signpost_assessment(
             f"Scenario database is not initialized or readable: {db_path}: {exc}"
         ) from exc
     if record is None:
+        if str(scenario_id).isdigit():
+            try:
+                with connect(str(db_path)) as conn:
+                    found = conn.execute(
+                        "SELECT scenario_id FROM signpost_assessments WHERE id = ?",
+                        (int(scenario_id),),
+                    ).fetchone()
+            except sqlite3.Error as exc:
+                raise ReviewError(
+                    f"Scenario database is not initialized or readable: {db_path}: {exc}"
+                ) from exc
+            if found is not None and _text(found["scenario_id"]):
+                raise ReviewError(
+                    f"{scenario_id} looks like an assessment id; "
+                    f"pass the scenario id ({_text(found['scenario_id'])})"
+                )
+            raise ReviewError(
+                f"{scenario_id} looks like an assessment id; pass the scenario id"
+            )
         raise ReviewError(
             f"Scenario {scenario_id} has no signpost assessment history"
         )

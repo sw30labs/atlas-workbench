@@ -35,7 +35,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from ..llm import OMLXClient, LLMError
+from ..llm import OMLXClient
 from ..db import list_evidence_events, list_scenarios, to_json_str, from_json_str
 from ..provenance import is_approved_record
 
@@ -399,6 +399,21 @@ Return JSON:
 }}"""
 
 
+def _as_object(payload: Any, key: str) -> list[Any]:
+    """Accept {"key": [...]}, a bare list, or any other shape.
+
+    A model that answers with a top-level array is valid JSON. This stage
+    is advisory, so a wrong shape becomes an empty list instead of an
+    AttributeError that aborts the run.
+    """
+    if isinstance(payload, dict):
+        value = payload.get(key)
+        return value if isinstance(value, list) else []
+    if isinstance(payload, list):
+        return payload
+    return []
+
+
 class CausalDeepAgents:
     """Multi-agent causal synthesis using LLM (deepagents pattern).
 
@@ -427,11 +442,14 @@ class CausalDeepAgents:
                 temperature=self.temperature,
                 max_tokens=2048,
             )
-        except (LLMError, Exception) as e:
-            logger.error(f"Hypothesis agent failed: {e}")
+        except Exception as exc:
+            # Breadth is intended. This stage is advisory: a transport
+            # failure or a bug in the client must degrade to no findings
+            # rather than abort the deterministic phases around it.
+            logger.error(f"Hypothesis agent failed: {exc}")
             return []
 
-        hyps = hypotheses.get("hypotheses", [])
+        hyps = _as_object(hypotheses, "hypotheses")
         if not hyps:
             return []
 
@@ -443,30 +461,37 @@ class CausalDeepAgents:
                 temperature=self.temperature,
                 max_tokens=2048,
             )
-        except (LLMError, Exception) as e:
-            logger.error(f"Critic agent failed: {e}")
-            critiques = {"critiques": []}
+        except Exception as exc:
+            logger.error(f"Critic agent failed: {exc}")
+            critiques = None
+
+        critique_items = _as_object(critiques, "critiques")
 
         # 3. Synthesis agent
         try:
             synthesis = self.client.chat_json(
                 [{"role": "user", "content": SYNTHESIS_PROMPT.format(
                     hypotheses_json=json.dumps(hyps, indent=2),
-                    critiques_json=json.dumps(critiques.get("critiques", []), indent=2))}],
+                    critiques_json=json.dumps(critique_items, indent=2))}],
                 temperature=self.temperature,
                 max_tokens=2048,
             )
-        except (LLMError, Exception) as e:
-            logger.error(f"Synthesis agent failed: {e}")
+        except Exception as exc:
+            logger.error(f"Synthesis agent failed: {exc}")
             return []
 
         findings = []
-        for f in synthesis.get("findings", []):
+        for item in _as_object(synthesis, "findings"):
+            if not isinstance(item, dict):
+                continue
+            evidence = item.get("evidence", [])
+            if not isinstance(evidence, list):
+                evidence = []
             findings.append(PatternDetection(
-                pattern_type=f.get("pattern_type", "causal_mechanism"),
-                description=f.get("description", ""),
-                confidence=f.get("confidence", 0.5),
-                evidence=f.get("evidence", []),
+                pattern_type=item.get("pattern_type", "causal_mechanism"),
+                description=item.get("description", ""),
+                confidence=item.get("confidence", 0.5),
+                evidence=evidence,
             ))
 
         return findings

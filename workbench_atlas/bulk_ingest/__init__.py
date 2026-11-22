@@ -10,10 +10,10 @@ Staging only; see docs/reference/bulk-ingest.md. Public API:
 from .inventory import Limits, build_inventory
 from .models import BATCH_SCHEMA_VERSION, ROUTES
 from .orchestrator import BatchCancelled, BatchResult, batches_dir, run_batch, run_bulk_ingest_job
-from .submit import SUBMIT_ERROR_CODES, SubmitError, load_batch, plan_submission, submit_batch
+from .submit import SUBMIT_ERROR_CODES, SubmitError, load_batch, plan_submission, read_handoff_bytes, submit_batch
 
 __all__ = [
     "BATCH_SCHEMA_VERSION", "ROUTES", "SUBMIT_ERROR_CODES", "BatchCancelled", "BatchResult", "Limits",
-    "SubmitError", "batches_dir", "build_inventory", "load_batch", "plan_submission", "run_batch",
-    "run_bulk_ingest_job", "submit_batch",
+    "SubmitError", "batches_dir", "build_inventory", "load_batch", "plan_submission", "read_handoff_bytes",
+    "run_batch", "run_bulk_ingest_job", "submit_batch",
 ]

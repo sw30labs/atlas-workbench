@@ -153,6 +153,7 @@ atlas review list --kind risk --status pending
 atlas review approve-event EVT-123 --confirm-public-source --confirm-rights
 atlas review reject-event EVT-123 --reason "Source does not support the claim"
 atlas review approve-signpost ATLAS-2026-001 --note "Checked against cited evidence"
+atlas review approve-signpost ATLAS-2026-001 --reason "Checked against cited evidence"
 atlas review approve-merge PROP-1 --reason "Same underlying control failure"
 atlas review rate-memo MEMO-1 --rating 0.8
 ```
@@ -160,6 +161,11 @@ atlas review rate-memo MEMO-1 --rating 0.8
 The two confirmation flags are reviewer attestations, not automated factual or
 rights determinations. Risk approval additionally requires every reference to
 resolve to a fully approved public evidence event.
+
+`list --kind signpost` includes `scenario_id` and `assessment_id`. Decisions
+take the scenario id. `id` is the same row number as `assessment_id` and is
+kept so older readers do not break. `--reason` and `--note` are the same
+field on `approve-signpost` and `reject-signpost`.
 
 Run `atlas review --help` for the complete list.
 
@@ -174,7 +180,12 @@ an existing file.
 atlas export --format pdf   --scenario-id ATLAS-2026-001 --output brief.pdf
 atlas export --format xlsx  --status active --output portfolio.xlsx
 atlas export --format json  --output snapshot.json
+atlas export --format csv   --output brief.csv
 ```
+
+`csv` is a zip of CSV files. A path that does not already end in `.zip`
+is written with `.zip` appended (`brief.csv` becomes `brief.csv.zip`), and
+the command prints that path.
 
 Run `atlas export --help` for formats and selectors.
 

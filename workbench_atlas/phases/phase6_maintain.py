@@ -8,8 +8,8 @@ Keeps the scenario library healthy over time:
   - Log pipeline runs for audit trail
   - Optional LLM assist for retirement / merge recommendations
 
-Fully autonomous by default; writes decisions to pipeline_runs and
-updates scenario status fields.
+Merge and retire write lifecycle status only when the auto-retire gate is
+on. Refresh is recorded and never changes a scenario's status.
 """
 
 from __future__ import annotations
@@ -408,18 +408,9 @@ def find_duplicate_candidates(
             if not tb:
                 continue
             jacc = len(ta & tb) / len(ta | tb)
-            # Also flag strong shared core phrase "cloud identity"
-            blob_a = f"{a.get('title', '')} {a.get('description', '')}".lower()
-            blob_b = f"{b.get('title', '')} {b.get('description', '')}".lower()
-            phrase_boost = 0.0
-            for phrase in ("cloud identity", "stablecoin depeg", "deepfake kyc"):
-                if phrase in blob_a and phrase in blob_b:
-                    phrase_boost = 0.15
-                    break
-            score = jacc + phrase_boost
-            if score >= threshold:
+            if jacc >= threshold:
                 keep, merge = _prefer_survivor(a, b)
-                pairs.append((keep, merge, round(min(score, 1.0), 3)))
+                pairs.append((keep, merge, round(min(jacc, 1.0), 3)))
     return pairs
 
 
@@ -529,7 +520,7 @@ def run_maintenance_cycle(
     1. Load scenarios
     2. Heuristic stale + duplicate detection
     3. Optional LLM recommendations
-    4. Apply refresh actions if apply=True
+    4. Record refresh recommendations. Refresh never changes lifecycle status.
     5. Apply merge or retire only if apply_retire=True
        (requires ATLAS_AUTO_RETIRE=1 by default)
     6. Optionally assess signposts against newly approved local evidence
@@ -537,8 +528,8 @@ def run_maintenance_cycle(
 
     Safety: retirements are NEVER applied unless apply_retire is True or
     ATLAS_AUTO_RETIRE=1. This includes merges, which retire the merged-away
-    scenario. Refresh never touches retired scenarios and never promotes
-    drafts that have not passed the judge. Signpost assessments read only the
+    scenario. Refresh does not publish a non-active scenario and does not
+    rewrite an active one. Signpost assessments read only the
     supplied evidence database, are stored as pending human review, and never
     change scenario lifecycle status.
     """
@@ -549,7 +540,8 @@ def run_maintenance_cycle(
     run_id = run_id or f"maint-{uuid.uuid4().hex[:8]}"
     started = now_iso()
 
-    # apply defaults True for refresh bookkeeping; merge and retire are gated
+    # apply defaults True. Refresh never writes lifecycle status.
+    # Merge and retire additionally require apply_retire.
     if apply is None:
         apply = True
     if apply_retire is None:
@@ -723,14 +715,13 @@ def run_maintenance_cycle(
                 if status == "retired":
                     action.reason = f"{action.reason} (skipped: retired scenarios are not reactivated)"
                     continue
-                if status == "draft" and not current.get("judge_score"):
-                    action.reason = f"{action.reason} (skipped: draft has not passed QA)"
+                if status != "active":
+                    action.reason = (
+                        f"{action.reason} (not applied: refresh does not publish a {status} scenario)"
+                    )
                     continue
-                update_scenario_fields(
-                    db_path, action.scenario_id,
-                    {"status": "active"},
-                )
-                action.applied = True
+                # Already active. Record the recommendation and leave status alone.
+                action.applied = False
             except sqlite3.Error as e:
                 logger.error(f"Refresh failed for {action.scenario_id}: {e}")
                 result.errors.append(str(e))

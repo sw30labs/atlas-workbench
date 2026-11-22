@@ -111,6 +111,60 @@ def test_failed_replace_does_not_create_config_and_retry_can_activate(activation
     assert yaml.safe_load(path.read_text())["organization_context"]["enabled"] is True
 
 
+def test_checkout_activation_writes_the_gitignored_overlay(tmp_path, monkeypatch):
+    from workbench_atlas import config
+
+    checkout = tmp_path / "workbench-atlas.yaml"
+    checkout.write_text("provider: omlx\n# keep me\n")
+    overlay = tmp_path / "workbench-atlas.local.yaml"
+    monkeypatch.delenv("ATLAS_CONFIG", raising=False)
+    monkeypatch.delenv("ATLAS_HOME", raising=False)
+    monkeypatch.delenv("ATLAS_CONTEXT_ENABLED", raising=False)
+    monkeypatch.setattr(config, "project_root", lambda: tmp_path)
+    settings = SimpleNamespace(context_db_path=tmp_path / "organization-context.db")
+    before = checkout.read_text()
+
+    result = context_setup.enable_context(settings, actor="Synthetic operator")
+
+    assert result["enabled"] is True
+    assert checkout.read_text() == before
+    parsed = yaml.safe_load(overlay.read_text())
+    assert parsed == {"organization_context": {
+        "enabled": True, "db_path": str(settings.context_db_path),
+    }}
+    overlay.write_text("provider: dgx\norganization_context:\n  enabled: false\n  db_path: kept.db\n")
+    context_setup.enable_context(settings, actor="Synthetic operator")
+    assert checkout.read_text() == before
+    again = yaml.safe_load(overlay.read_text())
+    assert again["provider"] == "dgx"
+    assert again["organization_context"]["enabled"] is True
+    assert again["organization_context"]["db_path"] == "kept.db"
+
+
+def test_foreign_config_activation_does_not_touch_the_checkout(activation):
+    from workbench_atlas.config import checkout_config_path
+
+    path, settings = activation
+    path.write_text("provider: omlx\n")
+    checkout = checkout_config_path()
+    before = checkout.read_text() if checkout.is_file() else None
+    overlay = checkout.with_name("workbench-atlas.local.yaml")
+    overlay_before = overlay.read_text() if overlay.is_file() else None
+
+    context_setup.enable_context(settings, actor="Synthetic operator")
+
+    assert yaml.safe_load(path.read_text())["organization_context"]["enabled"] is True
+    assert not (path.parent / "workbench-atlas.local.yaml").exists()
+    if before is None:
+        assert not checkout.is_file()
+    else:
+        assert checkout.read_text() == before
+    if overlay_before is None:
+        assert not overlay.is_file()
+    else:
+        assert overlay.read_text() == overlay_before
+
+
 def test_deployment_disable_precedes_any_write(activation, monkeypatch):
     path, settings = activation
     monkeypatch.setenv("ATLAS_CONTEXT_ENABLED", " false ")

@@ -402,3 +402,22 @@ def test_cli_writes_output_but_never_overwrites(export_settings, tmp_path, monke
     first = output.read_bytes()
     assert main(["--format", "json", "--output", str(output)]) == 1
     assert output.read_bytes() == first
+
+
+def test_csv_cli_appends_zip_suffix(export_settings, tmp_path, monkeypatch, capsys):
+    monkeypatch.setattr("workbench_atlas.exports.get_settings", lambda: export_settings)
+    requested = tmp_path / "brief.csv"
+    assert main(["--format", "csv", "--scenario-id", "SYN-SCN-A", "--output", str(requested)]) == 0
+    written = tmp_path / "brief.csv.zip"
+    assert written.is_file()
+    assert not requested.exists()
+    with zipfile.ZipFile(written) as archive:
+        assert "manifest.json" in archive.namelist()
+    captured = capsys.readouterr()
+    assert "brief.csv.zip" in captured.err
+
+    already = tmp_path / "report.zip"
+    assert main(["--format", "csv", "--scenario-id", "SYN-SCN-A", "--output", str(already)]) == 0
+    assert already.is_file()
+    assert not (tmp_path / "report.zip.zip").exists()
+    assert "report.zip.zip" not in capsys.readouterr().err

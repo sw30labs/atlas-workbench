@@ -24,7 +24,7 @@ class TestConfig:
         s = Settings()
         assert s.omlx_base_url == "http://127.0.0.1:8000/v1"
         assert s.omlx_api_key == "test"
-        assert s.omlx_model == "DeepSeek-V4-Flash-0731-MXFP4-MLX"
+        assert s.omlx_model == "DeepSeek-V4.1-Flash-1017-oQ4e-mtp"
         assert s.max_judge_iterations == 3
         assert s.judge_score_threshold == 0.75
         # Absolute paths under project root
@@ -134,7 +134,7 @@ class TestConfig:
     def test_yaml_missing_file_uses_defaults(self, tmp_path, monkeypatch):
         monkeypatch.setenv("ATLAS_CONFIG", str(tmp_path / "nope.yaml"))
         from workbench_atlas.config import Settings
-        assert Settings().omlx_model == "DeepSeek-V4-Flash-0731-MXFP4-MLX"
+        assert Settings().omlx_model == "DeepSeek-V4.1-Flash-1017-oQ4e-mtp"
 
     def test_use_responses_api_from_yaml_and_env(self, tmp_path, monkeypatch):
         cfg = tmp_path / "gs.yaml"

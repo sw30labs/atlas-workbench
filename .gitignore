@@ -40,6 +40,7 @@ env/
 *.local.yaml
 *.local.yml
 workbench-atlas.local.yaml
+*.yaml.lock
 
 # Runtime databases and SQLite sidecars
 *.db

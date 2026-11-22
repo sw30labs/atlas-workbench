@@ -569,6 +569,50 @@ def test_yaml_context_opt_in_and_environment_precedence(tmp_path, monkeypatch):
     assert Settings(context_enabled=True).context_enabled is True
 
 
+def test_checkout_overlay_overrides_only_the_checkout_file(tmp_path, monkeypatch):
+    from workbench_atlas import config as config_mod
+
+    checkout = tmp_path / "workbench-atlas.yaml"
+    checkout.write_text(
+        "provider: omlx\norganization_context:\n  enabled: false\n  db_path: tracked.db\n"
+    )
+    overlay = tmp_path / "workbench-atlas.local.yaml"
+    overlay.write_text("organization_context:\n  enabled: true\n  db_path: private.db\n")
+    monkeypatch.delenv("ATLAS_CONFIG", raising=False)
+    monkeypatch.delenv("ATLAS_HOME", raising=False)
+    monkeypatch.delenv("ATLAS_CONTEXT_ENABLED", raising=False)
+    monkeypatch.setattr(config_mod, "project_root", lambda: tmp_path)
+
+    loaded = load_yaml_settings()
+    assert loaded["context_enabled"] is True
+    assert loaded["context_db_path"] == "private.db"
+    assert loaded["llm_provider"] == "omlx"
+    assert load_yaml_settings(checkout)["context_enabled"] is True
+    assert Settings().context_enabled is True
+    assert Settings().context_db_path.name == "private.db"
+    assert Settings(context_enabled=False).context_enabled is False
+
+    other = tmp_path / "other.yaml"
+    other.write_text("organization_context:\n  enabled: false\n  db_path: other.db\n")
+    assert load_yaml_settings(other)["context_enabled"] is False
+    monkeypatch.setenv("ATLAS_CONFIG", str(other))
+    assert load_yaml_settings()["context_enabled"] is False
+    assert load_yaml_settings()["context_db_path"] == "other.db"
+
+    home = tmp_path / "home"
+    home.mkdir()
+    (home / "config.yaml").write_text("organization_context:\n  enabled: false\n  db_path: home.db\n")
+    monkeypatch.delenv("ATLAS_CONFIG", raising=False)
+    monkeypatch.setenv("ATLAS_HOME", str(home))
+    assert load_yaml_settings()["context_enabled"] is False
+    assert load_yaml_settings()["context_db_path"] == "home.db"
+
+    monkeypatch.delenv("ATLAS_HOME", raising=False)
+    overlay.write_text("organization_context: [\n")
+    with pytest.raises(ValueError, match="workbench-atlas.local.yaml"):
+        load_yaml_settings()
+
+
 def test_service_scope_and_supplier_identifiers_are_explicit_metadata(settings):
     service = _save(settings, "services", name="Fictional scoped service", owner=ACTOR,
                     impact_tolerance="Fictional tolerance", legal_entity="Fictional Entity",

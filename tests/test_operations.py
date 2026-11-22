@@ -23,6 +23,8 @@ def operational_settings(tmp_path, monkeypatch):
         scenario_db_path=tmp_path / "custom-scenarios.db",
         evidence_db_path=tmp_path / "custom-evidence.db",
         emerging_risks_path=tmp_path / "custom-risks.json",
+        # Keep the operator's enabled workspace out of backup and readiness fixtures.
+        context_enabled=False,
         context_db_path=tmp_path / "custom-context.db",
         omlx_api_key="synthetic-secret-never-back-up",
         # Entirely fictional negative fixture: backup must strip URL credentials.

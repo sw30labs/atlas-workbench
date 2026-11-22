@@ -255,14 +255,27 @@ def _digest(batch_file: Path, plan: dict[str, Any]) -> str:
     return digest.hexdigest()
 
 
+def _bind_payload_hashes(base: Path, plan: dict[str, Any]) -> None:
+    """Record the bytes each handoff step would import. The digest covers them."""
+    from workbench_atlas.bulk_ingest import read_handoff_bytes
+
+    for step in plan["payloads"]:
+        step["payload_sha256"] = hashlib.sha256(read_handoff_bytes(base, step["file"])).hexdigest()
+
+
 def plan(settings: Settings, batch_id: Any, selection: Any) -> dict[str, Any]:
-    """The engine's plan for a selection, plus a digest that ``submit`` must echo."""
+    """The engine's plan for a selection, plus a digest that ``submit`` must echo.
+
+    The digest covers ``batch.json``, the plan summary, and the SHA-256 of
+    every handoff payload the plan would import.
+    """
     from workbench_atlas.bulk_ingest import SubmitError, load_batch
 
     path = batch_path(settings, batch_id)
     try:
-        batch, _base = load_batch(path)
+        batch, base = load_batch(path)
         result = _plan(batch, _selection(selection))
+        _bind_payload_hashes(base, result)
     except SubmitError as exc:
         raise BatchError(str(exc), code=exc.code) from exc
     return {**result, "plan_digest": _digest(path, result)}
@@ -280,8 +293,9 @@ def submit(settings: Settings, batch_id: Any, selection: Any, *, actor: Any, pla
                          code="stale_plan")
     if not current["payloads"]:
         raise BatchError("Nothing to submit: no selected record is ready.", code="nothing_to_submit")
+    hashes = {step["file"]: step["payload_sha256"] for step in current["payloads"]}
     try:
         return submit_batch(settings, batch_path(settings, batch_id), selection=_selection(selection),
-                            actor=actor.strip())
+                            actor=actor.strip(), payload_sha256=hashes)
     except SubmitError as exc:
         raise BatchError(str(exc), code=exc.code) from exc

@@ -21,6 +21,7 @@
 | [ADR-017](017-unified-draft-first-research-intake.md) | Unified draft-first research intake and approved-only scenario planning | accepted |
 | [ADR-018](018-perfect-storms-workshop-no-compound-nodes.md) | Hub-fire is first-hop AND-gates; Perfect Storms stay workshop; compounds are never nodes | proposed |
 | [ADR-019](019-regulatory-regime-mismatch.md) | Regulatory regime mismatch is intake, signposts, and workshop display — not a score | proposed |
+| [ADR-020](020-csv-export-filename.md) | A CSV export is a zip, and the CLI writes that suffix | accepted |
 
 Format: context → decision → consequences → alternatives considered.
 Dates are decision dates, not authoring dates.

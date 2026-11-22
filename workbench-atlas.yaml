@@ -18,10 +18,10 @@ omlx:
   base_url: http://127.0.0.1:8000/v1
 
   # Generation / default model
-  model: DeepSeek-V4-Flash-0731-MXFP4-MLX
+  model: DeepSeek-V4.1-Flash-1017-oQ4e-mtp
 
   # Ralph-loop judge model
-  model_judge: DeepSeek-V4-Flash-0731-MXFP4-MLX
+  model_judge: DeepSeek-V4.1-Flash-1017-oQ4e-mtp
 
   # Optional independent model for the final pass/fail verdict.
   # Empty string = disabled (the judge model also does the final pass).

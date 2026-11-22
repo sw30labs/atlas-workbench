@@ -837,6 +837,84 @@ def test_signpost_approval_rejects_invalid_snapshot_and_projection(tmp_path):
         )
 
 
+def test_signpost_cli_names_the_row_and_accepts_reason(tmp_path, capsys):
+    from workbench_atlas.review_cli import main as review_main
+
+    db_path = _scenario_db(tmp_path)
+    evidence_db = _evidence_db(tmp_path)
+    add_evidence_event(str(evidence_db), _event("EVT-SIGNPOST-REASON"))
+    approve_evidence(
+        evidence_db,
+        "EVT-SIGNPOST-REASON",
+        public_source_attested=True,
+        rights_attested=True,
+    )
+    upsert_scenario(str(db_path), {
+        "scenario_id": "ATLAS-SIGNPOST-REASON",
+        "title": "Pending signpost interpretation",
+        "risk_category": "Digital resilience",
+        "status": "active",
+    })
+    record_signpost_assessment(
+        str(db_path),
+        "ATLAS-SIGNPOST-REASON",
+        classification="weakened",
+        rationale="New evidence matches a weakening signpost.",
+        evidence_refs=["EVT-SIGNPOST-REASON"],
+        considered_refs=[
+            "EVT-SIGNPOST-REASON",
+            "https://www.sec.gov/example/EVT-SIGNPOST-REASON",
+        ],
+        evaluated_at="2026-01-04T00:00:00+00:00",
+    )
+
+    def invoke(*argv: str) -> tuple[int, str, str]:
+        code = review_main([
+            "--scenario-db", str(db_path),
+            "--evidence-db", str(evidence_db),
+            *argv,
+        ])
+        captured = capsys.readouterr()
+        return code, captured.out, captured.err
+
+    code, out, err = invoke("list", "--kind", "signpost")
+    assert code == 0, err
+    rows = json.loads(out)
+    assert rows[0]["scenario_id"] == "ATLAS-SIGNPOST-REASON"
+    assert rows[0]["assessment_id"] == rows[0]["id"]
+    row_id = str(rows[0]["id"])
+
+    code, _out, err = invoke("approve-signpost", row_id, "--reason", "must not apply")
+    assert code == 2
+    assert "looks like an assessment id" in err
+    assert "ATLAS-SIGNPOST-REASON" in err
+    assert get_latest_signpost_assessment(
+        str(db_path), "ATLAS-SIGNPOST-REASON"
+    )["review_status"] == "pending"
+
+    code, _out, err = invoke("approve-signpost", "ATLAS-NO-SUCH")
+    assert code == 2
+    assert "has no signpost assessment history" in err
+
+    code, _out, err = invoke("approve-signpost", "999999")
+    assert code == 2
+    assert "looks like an assessment id" in err
+    assert "999999" in err
+    assert "(" not in err
+
+    code, out, err = invoke(
+        "approve-signpost",
+        "ATLAS-SIGNPOST-REASON",
+        "--reason",
+        "Checked against the cited notice.",
+    )
+    assert code == 0, err
+    assert json.loads(out)["signpost_review_status"] == "approved"
+    history = get_latest_signpost_assessment(str(db_path), "ATLAS-SIGNPOST-REASON")
+    assert history["review_status"] == "approved"
+    assert "cited notice" in history["reviewer_note"]
+
+
 def test_unchanged_signpost_approval_requires_considered_evidence(tmp_path):
     db_path = _scenario_db(tmp_path)
     evidence_db = _evidence_db(tmp_path)

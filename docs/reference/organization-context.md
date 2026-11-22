@@ -8,7 +8,10 @@ facts about an organization.
 
 ## Enablement and storage
 
-Explicit activation uses configuration:
+Explicit activation uses configuration. In a source checkout the dashboard
+writes the gitignored overlay `workbench-atlas.local.yaml` and leaves the
+tracked `workbench-atlas.yaml` unchanged. `ATLAS_CONFIG` and
+`$ATLAS_HOME/config.yaml` are edited in place.
 
 ```yaml
 organization_context:
@@ -16,8 +19,10 @@ organization_context:
   db_path: organization-context.db
 ```
 
-`ATLAS_CONTEXT_ENABLED` and `ATLAS_CONTEXT_DB` override YAML; explicitly passed
-`Settings` fields override environment values. `get_settings()` reads fresh
+Precedence, highest first: explicit `Settings` arguments, environment
+(`ATLAS_CONTEXT_ENABLED`, `ATLAS_CONTEXT_DB`), the local overlay, then the
+active config file, then defaults. The overlay applies only when the active
+file is the checkout `workbench-atlas.yaml`. `get_settings()` reads fresh
 configuration, so an operator's activation takes effect without a restart.
 Both settings are omitted from `Settings.to_safe_dict()`.
 

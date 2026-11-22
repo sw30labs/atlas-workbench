@@ -513,10 +513,10 @@ normalization.
 **Not run on 2026-10-18.** OMLX was reachable at `127.0.0.1:8000`.
 `OMLXClient.list_models()` answered with the default key (no `OMLX_API_KEY`
 in the environment; the YAML deliberately holds no key). But
-`/api/status` reported `models_loaded: 0`. The configured
-`omlx_model` (`DeepSeek-V4-Flash-0731-MXFP4-MLX`) is not among the server's
-models, and the server default is `DeepSeek-V4.1-Flash-1017-MLX-Q9`
-(~296 GB, not loaded). A chat call would have made OMLX load a model, which
+`/api/status` reported `models_loaded: 0`. The id configured that day
+was not among the server's models, and the server default was
+`DeepSeek-V4.1-Flash-1017-MLX-Q9` (~296 GB, not loaded). The configured
+id is now `DeepSeek-V4.1-Flash-1017-oQ4e-mtp`. A chat call would have made OMLX load a model, which
 the operator had ruled out (one giant model at a time on this Mac). No LLM
 numbers are recorded here. To measure once a model is loaded:
 
@@ -592,7 +592,10 @@ screen in `web/static/index.html` (between the `BULK IMPORT` markers). Tests:
 - **Commit.** Only ids in a handoff `org_context` payload are selectable (all
   ready, per contract, or individually). `POST /api/bulk-ingest/plan`
   `{batch_id, selection}` returns `plan_submission` output plus a
-  `plan_digest` over the batch file and the plan. `POST
+  `plan_digest` over the batch file, the plan, and the SHA-256 of each handoff
+  payload that plan would import. Submit re-reads those payloads only as
+  regular files inside the batch directory (no absolute paths, `..`, or
+  symlinks) and returns 409 when the bytes no longer match the digest. `POST
   /api/bulk-ingest/submit` `{batch_id, selection, plan_digest, actor}` calls
   `submit_batch` only when the digest still matches (409 otherwise). The
   actor follows the existing endpoints: the typed operator name in local mode,

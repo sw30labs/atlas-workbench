@@ -522,10 +522,16 @@ def list_signpost_assessments(
         query += " LIMIT ?"
         params.append(max(0, int(limit)))
     with connect(db_path) as conn:
-        return [
-            dict(row)
-            for row in conn.execute(query, params).fetchall()
-        ]
+        rows = []
+        for row in conn.execute(query, params).fetchall():
+            item = dict(row)
+            # `id` is the signpost_assessments row. Callers that copy the
+            # first identifier into approve-signpost need scenario_id.
+            # assessment_id names the row without removing id.
+            if "id" in item:
+                item["assessment_id"] = item["id"]
+            rows.append(item)
+        return rows
 
 
 def decide_signpost_assessment(

@@ -404,6 +404,11 @@ class OMLXClient:
         OMLX may not reliably support response_format=json_object,
         so we try it first and fall back to extracting JSON from text.
 
+        Callers must not assume a container type. ``json.loads`` can
+        return an object, an array, a scalar, or None. Use
+        :meth:`chat_json_object` or :meth:`chat_json_list` when the
+        caller needs one of those shapes.
+
         Note: no outer @retry — chat() already retries transient failures.
         """
         model = model or self.settings.llm_model
@@ -485,6 +490,53 @@ class OMLXClient:
                 )
                 return obj
             raise LLMError(f"Cannot parse JSON from LLM response: {text[:200]}") from e
+
+    def chat_json_object(
+        self,
+        messages: list[dict[str, str]],
+        *,
+        keys: tuple[str, ...] = (),
+        **kw: Any,
+    ) -> dict[str, Any]:
+        """``chat_json``, guaranteed to return a dict.
+
+        A list, scalar, null, or unparseable response becomes ``{}``.
+        ``keys`` names the fields the caller intends to read. They are
+        not filtered out of a valid object; a missing key is the
+        caller's own ``.get``. This does not retry the model.
+        """
+        del keys  # documented intent, not a filter
+        try:
+            payload = self.chat_json(messages, **kw)
+        except (LLMError, ValueError, TypeError):
+            return {}
+        if isinstance(payload, dict):
+            return payload
+        return {}
+
+    def chat_json_list(
+        self,
+        messages: list[dict[str, str]],
+        **kw: Any,
+    ) -> list[Any]:
+        """``chat_json``, guaranteed to return a list.
+
+        A bare array is returned as-is. An object returns its first
+        list-valued field, or ``[]`` when it has none. Anything else,
+        including a parse failure, returns ``[]``. This does not retry
+        the model.
+        """
+        try:
+            payload = self.chat_json(messages, **kw)
+        except (LLMError, ValueError, TypeError):
+            return []
+        if isinstance(payload, list):
+            return payload
+        if isinstance(payload, dict):
+            for value in payload.values():
+                if isinstance(value, list):
+                    return value
+        return []
 
     @staticmethod
     def _degenerate_json(text: str) -> bool:

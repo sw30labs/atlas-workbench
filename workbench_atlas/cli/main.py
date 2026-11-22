@@ -405,6 +405,70 @@ def _fmt(counts: dict[str, int]) -> str:
     return ", ".join(f"{key} {value}" for key, value in sorted(counts.items()))
 
 
+def _served_model_ids(payload: Any) -> list[str] | None:
+    """Return served model ids, or None when the payload is not a model list."""
+    if isinstance(payload, dict):
+        raw = payload.get("data", payload.get("models"))
+        if raw is None:
+            return None
+    elif isinstance(payload, list):
+        raw = payload
+    else:
+        return None
+    if not isinstance(raw, list):
+        return None
+    ids: list[str] = []
+    for item in raw:
+        if isinstance(item, str) and item:
+            ids.append(item)
+        elif isinstance(item, dict):
+            model_id = item.get("id")
+            if isinstance(model_id, str) and model_id:
+                ids.append(model_id)
+    return ids
+
+
+def _format_served_ids(ids: list[str]) -> str:
+    if len(ids) <= 12:
+        return ", ".join(ids) if ids else "(none)"
+    shown = ", ".join(ids[:8])
+    return f"{shown}, and {len(ids) - 8} more"
+
+
+def classify_served_models(
+    body: str,
+    *,
+    generation_model: str,
+    judge_model: str,
+) -> tuple[str, str]:
+    """Classify a ``/models`` body. WARN when a configured model is absent.
+
+    An unreadable body stays OK: a non-conforming backend is still
+    reachable, and offline analysis does not need the model list.
+    """
+    try:
+        payload = json.loads(body)
+    except json.JSONDecodeError:
+        return "OK", "reachable (model list unreadable)"
+    ids = _served_model_ids(payload)
+    if ids is None:
+        return "OK", "reachable (model list unreadable)"
+    missing: list[str] = []
+    for label, model in (("generation", generation_model), ("judge", judge_model)):
+        if model and model not in ids and f"{label} {model}" not in missing:
+            missing.append(f"{label} {model}")
+    if not missing:
+        noun = "model" if len(ids) == 1 else "models"
+        return "OK", f"reachable; {len(ids)} served {noun}, configured models present"
+    listed = "; ".join(missing)
+    return (
+        "WARN",
+        f"reachable, but not served: {listed}. Served: {_format_served_ids(ids)}. "
+        "Set OMLX_MODEL / model in workbench-atlas.yaml to a served id. "
+        "Offline analysis still works.",
+    )
+
+
 def cmd_doctor(args: argparse.Namespace, home: Path) -> int:
     """Diagnose the installation. Exit 1 only on FAIL, never on WARN."""
     checks: list[dict[str, str]] = []
@@ -492,7 +556,12 @@ def cmd_doctor(args: argparse.Namespace, home: Path) -> int:
                     url, headers={"Authorization": f"Bearer {settings.llm_api_key}"}
                 )
             if response.status_code < 400:
-                record("model endpoint", "OK", f"{settings.llm_base_url} reachable")
+                status, detail = classify_served_models(
+                    response.text,
+                    generation_model=settings.llm_model,
+                    judge_model=settings.llm_model_judge,
+                )
+                record("model endpoint", status, detail)
             else:
                 record(
                     "model endpoint",

@@ -927,7 +927,12 @@ def render_snapshot(snapshot: dict, *, format: str = "json") -> ExportArtifact:
 def main(argv: list[str] | None = None) -> int:
     """``atlas-export --format pdf --scenario-id ID --output review.pdf``."""
     parser = argparse.ArgumentParser(prog="atlas export", description="Export a governed research snapshot without running a model.")
-    parser.add_argument("--format", choices=FORMATS, default="json")
+    parser.add_argument(
+        "--format",
+        choices=FORMATS,
+        default="json",
+        help="json, csv (a zip of CSV files; written as .zip), xlsx, pdf, docx, or pptx",
+    )
     parser.add_argument("--output", type=Path, required=True)
     for kind in ("scenario", "risk", "evidence", "compound"):
         parser.add_argument(f"--{kind}-id", action="append", dest=f"{kind}_ids")
@@ -941,13 +946,28 @@ def main(argv: list[str] | None = None) -> int:
                                risk_ids=args.risk_ids, evidence_ids=args.evidence_ids,
                                compound_ids=args.compound_ids, status=args.status, origin=args.origin,
                                include_context=args.include_context)
+        # csv is a zip of CSV files. A path whose suffix is not the
+        # canonical one (brief.csv) would be refused by Excel and pandas,
+        # so append the real suffix and say so. Existing scripts that
+        # already pass report.zip are unchanged.
+        output_path = args.output
+        canonical = Path(artifact.filename).suffix
+        note = None
+        if output_path.suffix.lower() != canonical:
+            output_path = output_path.with_name(output_path.name + canonical)
+            note = (
+                f"Note: {args.format} is stored as a {canonical} file; "
+                f"writing {output_path}."
+            )
         # Never overwrite a previously distributed report by accident.
-        with args.output.open("xb") as output:
+        with output_path.open("xb") as output:
             output.write(artifact.content)
     except (ExportError, OSError) as exc:
         print(f"Export failed: {exc}", file=sys.stderr)
         return 1
-    print(f"Exported {artifact.snapshot_id} to {args.output}")
+    if note:
+        print(note, file=sys.stderr)
+    print(f"Exported {artifact.snapshot_id} to {output_path}")
     return 0
 
 

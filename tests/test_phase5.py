@@ -138,6 +138,58 @@ class TestCausalDeepAgents:
         assert findings[0].pattern_type == "causal_mechanism"
         assert findings[0].confidence == 0.75
 
+    def test_synthesize_accepts_non_object_json(self, mock_omlox_client):
+        from workbench_atlas.phases.phase5_patterns import CausalDeepAgents
+
+        call_count = [0]
+
+        def mock_json(*_args, **_kwargs):
+            call_count[0] += 1
+            if call_count[0] == 1:
+                return [{"cause": "A", "effect": "B", "mechanism": "m"}]
+            if call_count[0] == 2:
+                return {"critiques": "not a list"}
+            return [
+                "skip me",
+                {
+                    "pattern_type": "causal_mechanism",
+                    "description": "kept",
+                    "confidence": 0.6,
+                    "evidence": "not a list",
+                },
+            ]
+
+        mock_omlox_client.chat_json = mock_json
+        findings = CausalDeepAgents(mock_omlox_client).synthesize(
+            [{"type": "temporal", "cause": "A", "effect": "B"}]
+        )
+        assert len(findings) == 1
+        assert findings[0].description == "kept"
+        assert findings[0].evidence == []
+
+    @pytest.mark.parametrize(
+        "payload",
+        [None, {"hypotheses": "not a list"}, ["not a dict"]],
+    )
+    def test_synthesize_wrong_shapes_return_empty(self, mock_omlox_client, payload):
+        from workbench_atlas.phases.phase5_patterns import CausalDeepAgents
+
+        mock_omlox_client.chat_json = lambda *_args, **_kwargs: payload
+        assert CausalDeepAgents(mock_omlox_client).synthesize(
+            [{"type": "temporal"}]
+        ) == []
+
+    def test_synthesize_degrades_when_the_client_raises(self, mock_omlox_client):
+        from workbench_atlas.phases.phase5_patterns import CausalDeepAgents
+
+        def boom(*_args, **_kwargs):
+            raise RuntimeError("transport")
+
+        mock_omlox_client.chat_json = boom
+        assert CausalDeepAgents(mock_omlox_client).synthesize(
+            [{"type": "temporal"}]
+        ) == []
+
 
 class TestRunPatternAnalysis:
     def test_run_without_llm(self, tmp_workspace):

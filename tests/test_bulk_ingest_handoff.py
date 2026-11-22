@@ -1,14 +1,18 @@
 """Bulk ingest: stager payloads through the real import gate, submit helper, CLI and scorer."""
 
+import hashlib
 import importlib.util
 import json
+import os
 from pathlib import Path
 
 import pytest
 
 from bulk_ingest_helpers import build_mini_pack, private_settings, records, run, write_services_xlsx
 from workbench_atlas import imports
-from workbench_atlas.bulk_ingest import SubmitError, plan_submission, run_bulk_ingest_job, submit_batch
+from workbench_atlas.bulk_ingest import (
+    SubmitError, plan_submission, read_handoff_bytes, run_bulk_ingest_job, submit_batch,
+)
 from workbench_atlas.bulk_ingest import stager
 from workbench_atlas.bulk_ingest.__main__ import main as cli_main
 from workbench_atlas.bulk_ingest.orchestrator import default_output_dir
@@ -235,3 +239,113 @@ def test_scorer_on_a_tiny_answer_key(psettings, tmp_path):
     assert flags["injection"]["tp"] == 1 and report["flags"]["exact_match_accuracy"] == 1.0
     text = _scorer().format_report(report)
     assert "Routes: precision 1.0" in text and "Injections detected: 1/1" in text
+
+
+def _minimal_batch(file_field: str) -> dict:
+    return {
+        "kind": "atlas_bulk_ingest_batch",
+        "batch_id": "bulk-001122334455",
+        "prepared_by": "synthetic",
+        "candidates": [{
+            "id": "svc-1",
+            "kind": "services",
+            "status": "ready",
+            "errors": [],
+            "contract_status": "existing",
+            "data": {"id": "svc-1", "name": "Fictional service"},
+        }],
+        "handoff": {"org_context": [{
+            "file": file_field, "order": 1, "candidate_ids": ["svc-1"],
+        }]},
+    }
+
+
+def _watch_outside(monkeypatch, outside: Path) -> list[str]:
+    hits: list[str] = []
+    real_open = os.open
+    outside_real = os.path.realpath(outside)
+
+    def spy_open(path, flags, *args, **kwargs):
+        try:
+            same = os.path.realpath(path) == outside_real
+        except OSError:
+            same = False
+        if same:
+            hits.append(os.fspath(path))
+        return real_open(path, flags, *args, **kwargs)
+
+    real_read_text = Path.read_text
+    real_read_bytes = Path.read_bytes
+
+    def spy_read_text(self, *args, **kwargs):
+        if self.resolve() == outside.resolve():
+            hits.append(str(self))
+        return real_read_text(self, *args, **kwargs)
+
+    def spy_read_bytes(self, *args, **kwargs):
+        if self.resolve() == outside.resolve():
+            hits.append(str(self))
+        return real_read_bytes(self, *args, **kwargs)
+
+    monkeypatch.setattr(os, "open", spy_open)
+    monkeypatch.setattr(Path, "read_text", spy_read_text)
+    monkeypatch.setattr(Path, "read_bytes", spy_read_bytes)
+    return hits
+
+
+def test_handoff_reads_stay_inside_the_batch(psettings, tmp_path, monkeypatch):
+    outside = tmp_path / "outside.json"
+    outside.write_bytes(b'{"records":[{"data":{"id":"svc-1","name":"LEAKED-OUTSIDE"}}]}')
+    batch_dir = tmp_path / "staged"
+    (batch_dir / "handoff").mkdir(parents=True)
+    hits = _watch_outside(monkeypatch, outside)
+    escapes = [str(outside), "handoff/../../outside.json", "handoff/../outside.json"]
+    for relative in escapes:
+        batch_path = batch_dir / "batch.json"
+        batch_path.write_text(json.dumps(_minimal_batch(relative)), encoding="utf-8")
+        with pytest.raises(SubmitError, match="not a regular file") as caught:
+            submit_batch(psettings, batch_path, selection="all", actor="Synthetic reviewer")
+        assert caught.value.code == "invalid_selection"
+        assert "LEAKED-OUTSIDE" not in str(caught.value)
+    link = batch_dir / "handoff" / "org_context_001.json"
+    link.symlink_to(outside)
+    batch_path = batch_dir / "batch.json"
+    batch_path.write_text(json.dumps(_minimal_batch("handoff/org_context_001.json")), encoding="utf-8")
+    with pytest.raises(SubmitError, match="not a regular file") as caught:
+        submit_batch(psettings, batch_path, selection="all", actor="Synthetic reviewer")
+    assert caught.value.code == "invalid_selection"
+    assert hits == []
+    assert not psettings.context_db_path.exists()
+    link.unlink()
+    payload = b'{"records":[]}\n'
+    link.write_bytes(payload)
+    assert read_handoff_bytes(batch_dir, "handoff/org_context_001.json") == payload
+
+
+def test_plan_digest_binds_handoff_bytes(psettings):
+    from workbench_atlas.bulk_ingest.orchestrator import batches_dir
+    from workbench_atlas.web import bulk_ingest_web as bulk
+
+    batch_id = "bulk-001122334455"
+    folder = batches_dir(psettings) / batch_id
+    payload = folder / "handoff" / "org_context_001.json"
+    payload.parent.mkdir(parents=True)
+    original = {"records": [{"kind": "services", "data": {"id": "svc-1", "name": "Fictional"}}]}
+    payload.write_text(json.dumps(original), encoding="utf-8")
+    (folder / "batch.json").write_text(json.dumps(_minimal_batch("handoff/org_context_001.json")), encoding="utf-8")
+
+    first = bulk.plan(psettings, batch_id, "all")
+    assert first["payloads"][0]["payload_sha256"] == hashlib.sha256(payload.read_bytes()).hexdigest()
+    payload.write_text(json.dumps({"records": [{"kind": "services", "data": {"id": "svc-1", "name": "Tampered"}}]}),
+                       encoding="utf-8")
+    second = bulk.plan(psettings, batch_id, "all")
+    assert second["plan_digest"] != first["plan_digest"]
+    with pytest.raises(bulk.BatchError) as stale:
+        bulk.submit(psettings, batch_id, "all", actor="Synthetic reviewer", plan_digest=first["plan_digest"])
+    assert stale.value.code == "stale_plan"
+    hashes = {step["file"]: step["payload_sha256"] for step in first["payloads"]}
+    with pytest.raises(SubmitError) as swapped:
+        submit_batch(psettings, folder / "batch.json", selection="all", actor="Synthetic reviewer",
+                     payload_sha256=hashes)
+    assert swapped.value.code == "stale_plan"
+    assert not psettings.context_db_path.exists()

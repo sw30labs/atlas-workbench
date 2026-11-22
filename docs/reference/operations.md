@@ -17,7 +17,8 @@ OpenAI-compatible endpoint for LLM phases — local
 default, or an NVIDIA DGX vLLM server with `provider: dgx`. No endpoint
 is required for deterministic phases (4–7).
 
-Configuration (precedence: explicit args → env → `workbench-atlas.yaml`
+Configuration (precedence: explicit args → env → `workbench-atlas.local.yaml`
+when the checkout file is active → `workbench-atlas.yaml` or `config.yaml`
 → defaults): `provider` selects the backend (`omlx` | `dgx`; env
 `ATLAS_LLM_PROVIDER`). OMLX keys: `omlx.base_url`, `omlx.model`,
 `omlx.model_judge`, `omlx.model_final_judge`, `omlx.timeout`,
