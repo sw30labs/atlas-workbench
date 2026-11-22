@@ -1,16 +1,14 @@
 # Public-release checklist
 
-Keep the repository private until every item below is complete. Changing
-visibility is an administrative release action, not a substitute for review.
+The repository was made public on 2026-11-21 after the review below.
+Changing visibility is an administrative release action, not a substitute
+for review.
 
-The checks below, except the two visibility steps, were re-verified on
-2026-11-21 in this worktree. Public package metadata names “Atlas Workbench
-contributors.” Named authorship is deliberately retained only where normal
-scholarly attribution requires it (the authored white paper and citations).
-Git commits and the annotated `0.2.0` tag keep the maintainer identity that
-created them; publishing the repository publishes that identity. Repository
-visibility and private vulnerability reporting remain the two release-time
-actions at the end of this list.
+The content checks were re-verified on 2026-11-21 in this worktree. Public
+package metadata names “Atlas Workbench contributors.” Named authorship is
+deliberately retained only where normal scholarly attribution requires it
+(the authored white paper and citations). Git commits and the annotated
+`0.2.0` tag keep the maintainer identity that created them.
 
 - [x] Run `python -m pytest`, `python scripts/verify_all.py`,
       `python scripts/scout_sources.py validate`, and
@@ -49,11 +47,13 @@ actions at the end of this list.
 - [x] Confirm the canonical URLs in `pyproject.toml` and `CITATION.cff`
       are `https://github.com/sw30labs/atlas-workbench`. That repository is
       the project. Do not point them at another forge.
-- [ ] Coordinate the visibility change with an administrator. Immediately
-      enable GitHub private vulnerability reporting. Verify that a reporter
-      can use it, and test the documented security channel.
-- [ ] Confirm the repository is public only after all post-change security
-      settings have been verified.
+- [x] On 2026-11-21 the repository visibility was changed to public.
+      GitHub private vulnerability reporting is enabled. The security
+      policy is published, and the Security tab offers “Report a
+      vulnerability” through a private advisory. Secret scanning and push
+      protection are enabled.
+- [x] The repository is public, and the post-change security settings
+      above were verified on 2026-11-21.
 
 The private reporting channel is GitHub private vulnerability reporting.
 `SECURITY.md` must match that before visibility changes. The setting is
