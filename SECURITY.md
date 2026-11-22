@@ -12,20 +12,18 @@ time, but maintainers will triage credible reports as promptly as practical.
 
 ## Report privately
 
-When this repository is public and its private vulnerability reporting feature
-is enabled, use the repository’s **Security** tab and choose **Report a
-vulnerability**.
+When the project is public, use the forge’s confidential vulnerability report
+if it has one. On GitLab, open a confidential issue and assign it to the
+maintainers. Do not put exploit details in a public issue.
 
-While the repository is private, or whenever that button is unavailable,
-contact the repository or organization owner through an established private
-channel. Do not open an issue containing exploit details, credentials,
+Until a public project path exists, contact the repository owner through a
+private channel. Do not open an issue containing exploit details, credentials,
 personal data, employer material, private infrastructure, or other sensitive
 evidence.
 
-GitHub currently limits private vulnerability reporting to public
-repositories. Enabling and verifying it immediately after any visibility
+Enabling and verifying that private channel immediately after any visibility
 change is a mandatory step in
-[PUBLIC_RELEASE_CHECKLIST.md](PUBLIC_RELEASE_CHECKLIST.md).
+[docs/release/PUBLIC_RELEASE_CHECKLIST.md](docs/release/PUBLIC_RELEASE_CHECKLIST.md).
 
 Include, when possible:
 

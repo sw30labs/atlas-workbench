@@ -227,7 +227,7 @@ def test_r1_series_building_on_dense_fixture(tmp_path):
 
 
 def test_model_inventory_entry():
-    data = yaml.safe_load((REPO / "docs/redesignv1/model-inventory.yaml").read_text())
+    data = yaml.safe_load((REPO / "docs/research/redesignv1/model-inventory.yaml").read_text())
     for key in ("model_id", "name", "version", "tier", "owner", "purpose", "restrictions", "validation"):
         assert key in data, key
     assert data["tier"] == "research"

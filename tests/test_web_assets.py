@@ -93,42 +93,54 @@ def test_scenario_origin_controls_use_persisted_provenance(source):
     assert "scenarioOrigin(s) === scnState.origin" in source
 
 
+def _nav_views(chunk):
+    return re.findall(r'class="nav-btn[^"]*" data-view="([^"]+)"', chunk)
+
+
 def test_primary_navigation_expresses_the_operator_loop(source):
-    """Only workflow-level choices belong in the persistent rail."""
+    """The rail leads with the workbench path. Specialist screens stay collapsed."""
     nav = re.search(r'<nav class="side".*?</nav>', source, re.S)
     assert nav, "primary navigation not found"
-    views = re.findall(r'class="nav-btn[^\"]*" data-view="([^"]+)"', nav.group())
-    assert views == [
+    html = nav.group()
+    primary, advanced_and_rest = html.split('<details class="nav-advanced">', 1)
+    advanced, utilities = advanced_and_rest.split('<div class="nav-utilities">', 1)
+    assert _nav_views(primary) == [
         "overview",
-        "organization",
-        "bulk",  # onboarding: stage a whole folder instead of one form per record
         "evidence",
         "review",
         "pipeline",
         "scenarios",
-        "settings",
-        "about",
     ]
-    assert "Discovery workflow" in nav.group()
+    assert _nav_views(advanced) == [
+        "organization",
+        "bulk",
+        "compounds",
+        "playground",
+        "costs",
+    ]
+    assert _nav_views(utilities) == ["settings", "about"]
+    assert "Discovery workflow" in primary
     for step in ("1", "2", "3", "4"):
-        assert f'<span class="step">{step}</span>' in nav.group()
+        assert f'<span class="step">{step}</span>' in primary
 
 
 def test_specialist_screens_are_contextual_workspace_tabs(source):
-    tabs = set(re.findall(r'class="workspace-tab[^\"]*"[^>]*data-view="([^"]+)"', source))
-    assert tabs == {
-        "evidence",
-        "risks",
-        "findings",
-        "pipeline",
-        "playground",
-        "costs",
-        "scenarios",
-        "compounds",
-    }
+    tabs = set(re.findall(r'class="workspace-tab[^"]*"[^>]*data-view="([^"]+)"', source))
+    assert tabs == {"evidence", "risks", "findings"}
     assert 'risks: "evidence", findings: "evidence"' in source
     assert 'playground: "pipeline", costs: "pipeline"' in source
     assert 'scenarios: "scenarios", compounds: "scenarios"' in source
+
+
+def test_analyze_is_one_run_and_the_demo_library_is_labeled(source):
+    pipeline = source.split('id="view-pipeline"', 1)[1].split('id="view-playground"', 1)[0]
+    assert "RUN ANALYSIS" in pipeline
+    assert 'id="run-all-btn"' in pipeline
+    assert 'data-view="playground"' not in pipeline
+    assert 'data-view="costs"' not in pipeline
+    assert 'id="demo-banner"' in source
+    assert "function corpusIsFictionalDemo" in source
+    assert "function renderDemoBanner" in source
 
 
 def test_today_prioritizes_next_action_over_duplicate_analytics(source):

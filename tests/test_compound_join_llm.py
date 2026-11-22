@@ -1,4 +1,4 @@
-"""Dark-matter LLM compound join (docs/technical/llm-compound-join.md).
+"""Dark-matter LLM compound join (docs/research/llm-compound-join.md).
 
 Covers the parse-time discipline (dark-matter rule, mandatory mechanism /
 signature / disanalogy, citation clamp), the end-to-end run on a dense

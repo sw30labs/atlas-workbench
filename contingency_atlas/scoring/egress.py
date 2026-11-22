@@ -1,4 +1,4 @@
-"""Egress gateway enforcement point (docs/redesignv1/architecture.md section 5.2).
+"""Egress gateway enforcement point (docs/research/redesignv1/architecture.md section 5.2).
 
 The only path from local processing to external or frontier compute.
 The policy is a deterministic validator with a tamper-evident audit log:

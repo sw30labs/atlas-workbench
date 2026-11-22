@@ -73,10 +73,21 @@ atlas up
 
 Everything else: `atlas --help`. Full reference: [docs/CLI.md](docs/CLI.md).
 
+## Research and maintenance commands
+
+These stay separate from the six commands above. They are for scoring research, pre-registered evaluation, catalog import, and export.
+
+| Command | What it does |
+|---|---|
+| `atlas-score` | Deterministic compound scoring |
+| `atlas-eval` | Pre-registered evaluation |
+| `atlas-framework` | MITRE ATLAS catalog import |
+| `atlas-export` | The same exporter as `atlas export` |
+
 ```console
 $ atlas status
 Contingency Atlas status
-  data directory  /Users/you/.atlas
+  data directory  ~/.atlas
   initialized     yes
 
 Library
@@ -188,7 +199,7 @@ for convenience.
 
 | Before | Now |
 |---|---|
-| Six-step manual setup (`setup_and_run.sh`) | `./start.sh`, idempotent |
+| Six-step manual setup (`scripts/setup_and_run.sh`) | `./start.sh`, idempotent |
 | Runtime stores in the repo root / cwd | One `ATLAS_HOME` directory |
 | `python -m contingency_atlas.web` + env vars | `atlas serve` |
 | `scripts/review_records.py …` | `atlas review …` (same audited path) |
@@ -218,7 +229,7 @@ contingency_atlas/     engine, phases, scoring, dashboard, and the `atlas` CLI
   web/                 stdlib HTTP dashboard
 ontology/              fail-closed write guard
 tests/                 unit and integration tests
-docs/                  method, architecture, and reference documentation
+docs/                  use (CLI, configuration), decisions, reference, and research
 examples/              fictional demo fixtures
 ```
 
@@ -227,12 +238,14 @@ Contributor rules are unchanged: see [CONTRIBUTING.md](CONTRIBUTING.md) and
 
 ## Documentation
 
+Start at [docs/README.md](docs/README.md). That map splits use, decisions, and research.
+
 - [docs/CLI.md](docs/CLI.md) — every command and flag
 - [docs/CONFIGURATION.md](docs/CONFIGURATION.md) — data paths and settings
-- [docs/technical/enterprise-experience.md](docs/technical/enterprise-experience.md) — the workbench tour
-- [docs/technical/organization-context.md](docs/technical/organization-context.md) — the organization layer
-- [docs/technical/exports.md](docs/technical/exports.md) — export contract
-- [TAXONOMY.md](TAXONOMY.md) — the project-native risk taxonomy
+- [docs/reference/enterprise-experience.md](docs/reference/enterprise-experience.md) — the workbench tour
+- [docs/reference/organization-context.md](docs/reference/organization-context.md) — the organization layer
+- [docs/reference/exports.md](docs/reference/exports.md) — export contract
+- [docs/reference/TAXONOMY.md](docs/reference/TAXONOMY.md) — the project-native risk taxonomy
 - [docs/REFERENCE_README.md](docs/REFERENCE_README.md) — the original full manual
 
 ## License

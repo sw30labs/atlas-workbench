@@ -140,7 +140,7 @@ def test_exporter_treats_empty_database_files_and_optional_tables_as_empty(tmp_p
 
 
 def test_setup_runs_explicit_migration_before_snapshot_export():
-    script = (ROOT / "setup_and_run.sh").read_text(encoding="utf-8")
+    script = (ROOT / "scripts" / "setup_and_run.sh").read_text(encoding="utf-8")
     migration = "python scripts/migrate_runtime_stores.py"
     exporter = "python ontology/export_existing.py"
 

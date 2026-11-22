@@ -1,6 +1,6 @@
 """Dark-matter compound join — LLM-proposed, engine-scored (shadow lane).
 
-Design: ``docs/technical/llm-compound-join.md``. The deterministic join
+Design: ``docs/research/llm-compound-join.md``. The deterministic join
 (`compound_join.py`) censors candidate *generation*: only pairs sharing a
 channel tag are ever scored — the visible matter. This module lifts that
 censorship WITHOUT touching the scorer:

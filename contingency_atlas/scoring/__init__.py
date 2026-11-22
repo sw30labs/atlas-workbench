@@ -1,7 +1,7 @@
 """Deterministic scenario-scoring core (redesign Phase 1).
 
 This package implements the falsifiable core of the Contingency Atlas
-redesign (``docs/redesignv1/``): hybrid frequency x severity scoring of
+redesign (``docs/research/redesignv1/``): hybrid frequency x severity scoring of
 compound risk scenarios, channel-graph candidate generation, and the
 evaluation harness that decides whether the approach lives or dies.
 
@@ -17,7 +17,7 @@ posterior draws use ``random`` with explicit seeds for reproducibility.
 
 ALGORITHM_VERSION = "0.3.0"
 """Semver of the scoring algorithm. Breaking change = score components change
-meaning (see docs/redesignv1/algorithm-spec.md section 14).
+meaning (see docs/research/redesignv1/algorithm-spec.md section 14).
 
 0.2.0 -> 0.3.0: unknown severity remains null; monetary research fits require
 measured training losses for each constituent. Realization identities pin the

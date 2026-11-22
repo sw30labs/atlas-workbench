@@ -1,5 +1,5 @@
 """Evaluation harness — Task B (pair co-occurrence ranking) and Task C
-(synthetic structure recovery) from docs/redesignv1/evaluation-plan.md.
+(synthetic structure recovery) from docs/research/redesignv1/evaluation-plan.md.
 
 Task B is the core product claim under test: a dependence-aware scorer must
 rank held-out pair co-occurrence better than independence (B1) by a

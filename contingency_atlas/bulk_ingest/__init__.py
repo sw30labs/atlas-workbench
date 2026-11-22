@@ -1,6 +1,6 @@
 """Bulk ingest pods: folder -> one reviewable, staged batch.
 
-Staging only; see docs/technical/bulk-ingest.md. Public API:
+Staging only; see docs/reference/bulk-ingest.md. Public API:
 
 - :func:`run_batch` / :class:`BatchResult` — run every pod and write ``batch.json`` + handoff payloads.
 - :func:`plan_submission` / :func:`submit_batch` — human-selected import through ``imports``.

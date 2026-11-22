@@ -103,6 +103,16 @@ nav.side {
 }
 .nav-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.3em; color: var(--faint); text-transform: uppercase; padding: 0 12px 10px; }
 .nav-label.loop { margin-top: 18px; padding-bottom: 7px; }
+.nav-advanced {
+  margin-top: 16px; border-top: 1px solid var(--line); padding-top: 8px;
+}
+.nav-advanced summary {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.3em;
+  color: var(--faint); text-transform: uppercase;
+  padding: 8px 12px 10px; cursor: pointer; list-style: none;
+}
+.nav-advanced summary::-webkit-details-marker { display: none; }
+.nav-advanced summary::marker { content: ""; }
 .nav-btn {
   display: flex; align-items: center; gap: 11px;
   padding: 10px 12px; border: 1px solid transparent; border-radius: 6px;
@@ -272,6 +282,8 @@ main { flex: 1; padding: 28px 30px 60px; max-width: 1460px; }
     background: rgba(4, 6, 12, 0.94); backdrop-filter: blur(14px);
   }
   .nav-label, .side-foot { display: none; }
+  .nav-advanced { display: flex; flex: none; align-items: center; margin-top: 0; border-top: 0; padding-top: 0; }
+  .nav-advanced summary { flex: none; padding: 8px 10px; }
   .nav-utilities { margin-top: 0; padding-top: 0; border-top: 0; display: contents; }
   .nav-btn { flex: none; padding: 8px 10px; white-space: nowrap; }
   .nav-btn .step { width: 16px; height: 16px; }
@@ -1057,8 +1069,6 @@ textarea.rv-input { resize: vertical; line-height: 1.5; }
       Briefing
     </button>
 
-    <button class="nav-btn" data-view="organization"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="5" r="3"/><circle cx="5" cy="18" r="3"/><circle cx="19" cy="18" r="3"/><path d="M10 8 6 15m8-7 4 7M8 18h8"/></svg> Organization</button>
-    <button class="nav-btn" data-view="bulk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 7h6l2 2h10v10H3z"/><path d="M12 17v-6m-3 3 3-3 3 3"/></svg> Bulk import</button>
     <div class="nav-label loop">Discovery workflow</div>
     <button class="nav-btn" data-view="evidence">
       <span class="step">1</span>
@@ -1076,6 +1086,15 @@ textarea.rv-input { resize: vertical; line-height: 1.5; }
       <span class="step">4</span>
       Scenarios <span class="count" id="nav-scn-count"></span>
     </button>
+
+    <details class="nav-advanced">
+      <summary>Advanced</summary>
+      <button class="nav-btn" data-view="organization"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="5" r="3"/><circle cx="5" cy="18" r="3"/><circle cx="19" cy="18" r="3"/><path d="M10 8 6 15m8-7 4 7M8 18h8"/></svg> Organization</button>
+      <button class="nav-btn" data-view="bulk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 7h6l2 2h10v10H3z"/><path d="M12 17v-6m-3 3 3-3 3 3"/></svg> Bulk import</button>
+      <button class="nav-btn" data-view="compounds">Compound candidates</button>
+      <button class="nav-btn" data-view="playground">Validation</button>
+      <button class="nav-btn" data-view="costs">Telemetry</button>
+    </details>
 
     <div class="nav-utilities">
       <button class="nav-btn" data-view="settings">
@@ -1098,6 +1117,7 @@ textarea.rv-input { resize: vertical; line-height: 1.5; }
         <div class="ex-eyebrow">DISCOVER · CHALLENGE · PREPARE</div><h1>See what’s <em>next.</em></h1>
         <p>Explore emerging disruptions. Find the dependencies that make them matter. Turn a blind spot into a decision.</p>
       </div>
+      <div id="demo-banner" class="ex-notice" role="status" hidden>This library is the fictional demo. It is not a finding about any institution. Add your own research, or replace the demo, before you rely on it.</div>
       <div id="ex-briefing-context"></div>
       <div id="next-action"></div>
       <div class="workflow-strip" id="workflow-strip" aria-label="Operator workflow"></div>
@@ -1141,10 +1161,6 @@ textarea.rv-input { resize: vertical; line-height: 1.5; }
 
     <!-- ═══ SCENARIOS ═══ -->
     <section class="view" id="view-scenarios">
-      <div class="workspace-tabs" role="tablist" aria-label="Scenario views">
-        <button class="workspace-tab active" role="tab" aria-selected="true" type="button" data-view="scenarios">Library</button>
-        <button class="workspace-tab" role="tab" aria-selected="false" type="button" data-view="compounds">Compound candidates</button>
-      </div>
       <div class="view-head">
         <h1>SCENARIO <em>PORTFOLIO</em></h1>
         <p>Decision-ready hypotheses synthesized from approved research and scored for urgency.</p>
@@ -1321,10 +1337,7 @@ textarea.rv-input { resize: vertical; line-height: 1.5; }
 
     <!-- ═══ COMPOUNDS ═══ -->
     <section class="view" id="view-compounds">
-      <div class="workspace-tabs" role="tablist" aria-label="Scenario views">
-        <button class="workspace-tab" role="tab" aria-selected="false" type="button" data-view="scenarios">Library</button>
-        <button class="workspace-tab active" role="tab" aria-selected="true" type="button" data-view="compounds">Compound candidates</button>
-      </div>
+      <button class="btn ghost" type="button" data-go="scenarios">Back to library</button>
       <div class="view-head">
         <h1>COMPOUND <em>CANDIDATES</em></h1>
         <p>Intermediate Phase 7 pairs. Holdout-proven candidates graduate into the scenario library via Phase 8.</p>
@@ -1357,11 +1370,6 @@ textarea.rv-input { resize: vertical; line-height: 1.5; }
 
     <!-- ═══ PIPELINE ═══ -->
     <section class="view" id="view-pipeline">
-      <div class="workspace-tabs" role="tablist" aria-label="Analysis views">
-        <button class="workspace-tab active" role="tab" aria-selected="true" type="button" data-view="pipeline">Run cycle</button>
-        <button class="workspace-tab" role="tab" aria-selected="false" type="button" data-view="playground">Validation</button>
-        <button class="workspace-tab" role="tab" aria-selected="false" type="button" data-view="costs">Telemetry</button>
-      </div>
       <div class="view-head">
         <h1>ANALYZE <em>APPROVED RESEARCH</em></h1>
         <p>Prepare unstructured research for Review, then generate scenarios only from the approved corpus.</p>
@@ -1373,7 +1381,7 @@ textarea.rv-input { resize: vertical; line-height: 1.5; }
         </div>
         <div style="display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end">
           <button class="btn ghost" id="plan-scenarios-btn">PLAN SCENARIOS</button>
-          <button class="btn primary" id="run-all-btn">+ ADD RESEARCH</button>
+          <button class="btn primary" id="run-all-btn">RUN ANALYSIS</button>
         </div>
       </div>
       <div class="grid g-3 mt" id="pipe-kpis"></div>
@@ -1403,11 +1411,7 @@ textarea.rv-input { resize: vertical; line-height: 1.5; }
     </section>
     <!-- ═══ PLAYGROUND ═══ -->
     <section class="view" id="view-playground">
-      <div class="workspace-tabs" role="tablist" aria-label="Analysis views">
-        <button class="workspace-tab" role="tab" aria-selected="false" type="button" data-view="pipeline">Run cycle</button>
-        <button class="workspace-tab active" role="tab" aria-selected="true" type="button" data-view="playground">Validation</button>
-        <button class="workspace-tab" role="tab" aria-selected="false" type="button" data-view="costs">Telemetry</button>
-      </div>
+      <button class="btn ghost" type="button" data-go="pipeline">Back to Analyze</button>
       <div class="view-head">
         <h1>VALIDATION <em>LAB</em></h1>
         <p>Falsification, elicitation, and governance checks on demand. Every output is advisory; nothing here self-applies.</p>
@@ -1526,11 +1530,7 @@ textarea.rv-input { resize: vertical; line-height: 1.5; }
     </section>
     <!-- ═══ COSTS ═══ -->
     <section class="view" id="view-costs">
-      <div class="workspace-tabs" role="tablist" aria-label="Analysis views">
-        <button class="workspace-tab" role="tab" aria-selected="false" type="button" data-view="pipeline">Run cycle</button>
-        <button class="workspace-tab" role="tab" aria-selected="false" type="button" data-view="playground">Validation</button>
-        <button class="workspace-tab active" role="tab" aria-selected="true" type="button" data-view="costs">Telemetry</button>
-      </div>
+      <button class="btn ghost" type="button" data-go="pipeline">Back to Analyze</button>
       <div class="view-head">
         <h1>ANALYSIS <em>TELEMETRY</em></h1>
         <p>Measured usage, economics, latency, and egress outcomes from governed runs.</p>
@@ -3322,7 +3322,36 @@ function renderNavigationState() {
   if (reviewButton) reviewButton.classList.toggle("attention", pending > 0);
 }
 
+function recordIsSynthetic(row) {
+  const status = String(row.review_status || "");
+  const provenance = String(row.provenance_class || "");
+  const source = String(row.source_type || "");
+  return status === "approved_synthetic" || provenance === "synthetic" || source === "synthetic";
+}
+
+function scenarioIsDemoFixture(row) {
+  const origin = String(row.origin || "");
+  const id = String(row.id || "");
+  return origin === "synthetic_fixture" || id.slice(0, 11) === "ATLAS-DEMO-";
+}
+
+function corpusIsFictionalDemo() {
+  const events = DATA.evidence_events || [];
+  const risks = DATA.risks || [];
+  const scenarios = DATA.scenarios || [];
+  if (!events.length || !risks.length || !scenarios.length) return false;
+  if (!events.every(recordIsSynthetic) || !risks.every(recordIsSynthetic)) return false;
+  return scenarios.every(scenarioIsDemoFixture);
+}
+
+function renderDemoBanner() {
+  const banner = $("#demo-banner");
+  if (!banner) return;
+  banner.hidden = !corpusIsFictionalDemo();
+}
+
 function renderNextAction() {
+  renderDemoBanner();
   const pending = pendingReviewCount();
   const research = (DATA.meta.evidence_event_count || 0) + (DATA.meta.risk_count || 0);
   const runs = [...(DATA.runs || [])].sort((a, b) =>
@@ -6983,7 +7012,7 @@ function setRunButton(phase, running) {
     btn.disabled = running;
     btn.textContent = running
       ? "RUNNING…"
-      : (phase === "full" ? "+ ADD RESEARCH"
+      : (phase === "full" ? "RUN ANALYSIS"
         : phase === "phase3" && btn.id === "plan-scenarios-btn" ? "PLAN SCENARIOS" : "RUN");
   });
 }

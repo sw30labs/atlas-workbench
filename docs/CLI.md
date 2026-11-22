@@ -87,7 +87,7 @@ atlas open                  # open the default URL without starting a server
 
 The backend binds to loopback only. A shared deployment requires the separate
 identity-proxy contract in
-[docs/technical/shared-deployment.md](technical/shared-deployment.md).
+[docs/reference/shared-deployment.md](reference/shared-deployment.md).
 
 ---
 

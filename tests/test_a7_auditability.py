@@ -411,7 +411,7 @@ def test_k3_graduation_records_honest_attestation(tmp_path):
     assert scen["signal_maturity"] == "established"
     assert scen["momentum"] == "stable"
     assert scen["evidence_strength"] in ("limited", "moderate", "strong")
-    assert scen["financial_impact_band"] == "Limited"  # q95 9e5 banded per TAXONOMY.md (C-01)
+    assert scen["financial_impact_band"] == "Limited"  # q95 9e5 banded per docs/reference/TAXONOMY.md (C-01)
 
 
 def test_activation_regime_graduation_omits_dollar_band(tmp_path):

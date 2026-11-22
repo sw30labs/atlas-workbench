@@ -149,7 +149,7 @@ def _responses_truncated(data: dict[str, Any]) -> bool:
 def _require_local_endpoint(base_url: str, provider: str) -> None:
     """Refuse to send prompts off-box unless the operator says so.
 
-    docs/technical/security.md states that all inference is local and that
+    docs/reference/security.md states that all inference is local and that
     outbound web traffic exists in exactly one feature (deep research). The
     DGX backend reads its base URL from DGX_BASE_URL / VLLM_BASE_URL, so a
     remote value would quietly turn every prompt —

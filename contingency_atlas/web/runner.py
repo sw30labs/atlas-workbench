@@ -991,8 +991,8 @@ def execute_phase(phase: str, params: dict[str, Any]) -> dict[str, Any]:
         # deterministic scorer scores them. Proposals land PENDING in the
         # Review queue; every scored join is pre-registered in the judgment
         # ledger with its falsifiable signature. Display/shadow lane only —
-        # production scores and graduation are untouched (docs/technical/
-        # llm-compound-join.md).
+        # production scores and graduation are untouched
+        # (docs/research/llm-compound-join.md).
         from contingency_atlas.compound_join_llm import run_llm_compound_join
 
         if not omlx_reachable(settings):

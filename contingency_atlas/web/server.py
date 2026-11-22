@@ -426,7 +426,7 @@ def build_payload() -> dict[str, Any]:
 
 
 def _llm_join_artifact(settings) -> dict[str, Any] | None:
-    """The dark-matter join artifact (docs/technical/llm-compound-join.md),
+    """The dark-matter join artifact (docs/research/llm-compound-join.md),
     or None when no run has written it yet. Read per-request, tolerant of
     absence and corruption — the display strip simply does not render.
     Display-only: the artifact never feeds production scores.

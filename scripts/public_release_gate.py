@@ -41,13 +41,13 @@ REQUIRED_FILES = {
     "DISCLAIMER.md",
     "LICENSE",
     "LICENSES/CC0-1.0.txt",
-    "PUBLIC_RELEASE_CHECKLIST.md",
+    "docs/release/PUBLIC_RELEASE_CHECKLIST.md",
     "README.md",
     "SECURITY.md",
-    "TAXONOMY.md",
+    "docs/reference/TAXONOMY.md",
     "THIRD_PARTY_NOTICES.md",
     "contingency_atlas/source_registry.yaml",
-    "docs/RADAR_AND_BRIEFS.md",
+    "docs/reference/RADAR_AND_BRIEFS.md",
     "examples/demo_emerging_risks.json",
     "examples/demo_evidence.json",
     "examples/demo_scenarios.json",
@@ -66,11 +66,11 @@ DISCLOSURE_EXEMPTIONS: dict[str, frozenset[str]] = {
             "DATA_LICENSE.md",
             "DATA_PROVENANCE.md",
             "DISCLAIMER.md",
-            "PUBLIC_RELEASE_CHECKLIST.md",
+            "docs/release/PUBLIC_RELEASE_CHECKLIST.md",
             "README.md",
             "THIRD_PARTY_NOTICES.md",
             "contingency_atlas/web/about.yaml",
-            "docs/essays/checklist-empty-cells/article.md",
+            "docs/research/essays/checklist-empty-cells/article.md",
         }
     ),
     "author acknowledgment": frozenset(
@@ -79,7 +79,7 @@ DISCLOSURE_EXEMPTIONS: dict[str, frozenset[str]] = {
             "CONTRIBUTING.md",
             "DATA_PROVENANCE.md",
             "DISCLAIMER.md",
-            "PUBLIC_RELEASE_CHECKLIST.md",
+            "docs/release/PUBLIC_RELEASE_CHECKLIST.md",
             "README.md",
             "contingency_atlas/web/about.yaml",
         }
@@ -107,22 +107,37 @@ REVIEWED_BINARY_SHA256 = {
     # preregistered synthetic R0 dataset (baselines, PIT calibration, rare-pair
     # markdown, interval violations). Axis labels, titles and the one annotated
     # id (scn-04bc49946200) are synthetic; no institution, person or path
-    # appears. Regenerate with docs/whitepaper/scripts/generate_figures.py.
-    "docs/whitepaper/figures/figure1_taskb_baselines.png": "0806a7bdede596966c03608ca35cdf2cb92a6848b2ed3646b76b2069f10cf3c7",
-    "docs/whitepaper/figures/figure2_pit_calibration.png": "05efa4e487324a570e0784a64b145b9d1062f71a33dc9af889a5e62af7cdf4dc",
-    "docs/whitepaper/figures/figure3_rare_pair_markdown.png": "fcfd684ac4b772781daf12231cae5b6a37adb50767fb767f8b804a9d78b88610",
-    "docs/whitepaper/figures/figure4_interval_violations.png": "6a247f265a3f69de987d3781dc823c81a446c8825a6343a8f2e6e006b42765f3",
+    # appears. Regenerate with docs/research/whitepaper/scripts/generate_figures.py.
+    "docs/research/whitepaper/figures/figure1_taskb_baselines.png": "0806a7bdede596966c03608ca35cdf2cb92a6848b2ed3646b76b2069f10cf3c7",
+    "docs/research/whitepaper/figures/figure2_pit_calibration.png": "05efa4e487324a570e0784a64b145b9d1062f71a33dc9af889a5e62af7cdf4dc",
+    "docs/research/whitepaper/figures/figure3_rare_pair_markdown.png": "fcfd684ac4b772781daf12231cae5b6a37adb50767fb767f8b804a9d78b88610",
+    "docs/research/whitepaper/figures/figure4_interval_violations.png": "6a247f265a3f69de987d3781dc823c81a446c8825a6343a8f2e6e006b42765f3",
     # Built manuscript reviewed 2026-08-29: no embedded local path or username,
     # document metadata empty (/Author, /Title, /Subject, /Keywords), producer
     # pdfTeX. The manuscript contains attribution but no personal contact data.
-    "docs/whitepaper/manuscript/contingency_atlas_whitepaper.pdf": "dd4f314682630d07cbea8fa2472e0bdb8fc4db8deac668c27ec9fb47e93384f3",
+    "docs/research/whitepaper/manuscript/contingency_atlas_whitepaper.pdf": "dd4f314682630d07cbea8fa2472e0bdb8fc4db8deac668c27ec9fb47e93384f3",
     # Essay hero figure reviewed 2026-08-09: a hand-authored conceptual diagram
     # (checklist rows vs an axis matrix) built from the generic taxonomy labels
     # already in the essay. No institution, person, path or dataset appears;
     # the vector source sits beside it as checklist_vs_search.svg.
-    "docs/essays/checklist-empty-cells/figures/checklist_vs_search.png": "0e164c5415c7162d4ab2653ebf6432249783171b977601711d3c4929351da0a2",
+    "docs/research/essays/checklist-empty-cells/figures/checklist_vs_search.png": "0e164c5415c7162d4ab2653ebf6432249783171b977601711d3c4929351da0a2",
 }
 REVIEWED_BINARY_PATHS = frozenset(REVIEWED_BINARY_SHA256)
+# Older commits store these same bytes at docs/whitepaper/ and docs/essays/.
+# A historical blob is reviewed when its digest matches, even after the move.
+REVIEWED_BINARY_DIGESTS = frozenset(REVIEWED_BINARY_SHA256.values())
+
+
+def historical_binary_failure(path_label: str, data: bytes) -> str | None:
+    """Return a finding for an unreviewed binary, or None when the bytes were reviewed."""
+    digest = hashlib.sha256(data).hexdigest()
+    if path_label in REVIEWED_BINARY_PATHS:
+        if digest != REVIEWED_BINARY_SHA256[path_label]:
+            return f"{path_label}: reviewed binary digest mismatch"
+        return None
+    if digest in REVIEWED_BINARY_DIGESTS:
+        return None
+    return f"{path_label}: binary historical blob"
 
 # A cited URL is not a filesystem path. Only the two home-directory rules are
 # exempted from URL text: they match bare substrings, so any link whose path
@@ -843,14 +858,9 @@ def scan_history() -> list[str]:
         data = _git("cat-file", "blob", object_id).stdout
         text = _decode_text(data)
         if text is None:
-            if path_label not in REVIEWED_BINARY_PATHS:
-                failures.append(
-                    f"history:{object_id[:12]}:{path_label}: binary historical blob"
-                )
-            elif hashlib.sha256(data).hexdigest() != REVIEWED_BINARY_SHA256[path_label]:
-                failures.append(
-                    f"history:{object_id[:12]}:{path_label}: reviewed binary digest mismatch"
-                )
+            failure = historical_binary_failure(path_label, data)
+            if failure:
+                failures.append(f"history:{object_id[:12]}:{failure}")
             continue
         failures.extend(
             f"history:{object_id[:12]}:{item}"

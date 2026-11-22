@@ -1,4 +1,4 @@
-"""Telemetry (docs/redesignv1/telemetry-spec.md) — Phase 1 subset.
+"""Telemetry (docs/research/redesignv1/telemetry-spec.md) — Phase 1 subset.
 
 Every LLM call must go through the instrumented wrapper; the 100% coverage
 invariant is testable (telemetry-spec section 9). Deterministic score jobs

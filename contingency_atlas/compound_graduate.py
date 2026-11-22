@@ -348,7 +348,7 @@ def _likelihood_band(p_hat: float) -> str:
 
 
 def _financial_band_for_loss(loss_usd: float) -> str:
-    """Band a stored q95 loss per the TAXONOMY.md parser thresholds
+    """Band a stored q95 loss per the docs/reference/TAXONOMY.md parser thresholds
     (Extreme ≥ $10B, Major ≥ $1B, Significant ≥ $100M, Moderate ≥ $10M,
     else Limited). C-01: the band field carries the band, not a stats string."""
     if loss_usd >= 1e10:

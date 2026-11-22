@@ -141,7 +141,7 @@ def test_graduation_writes_scenario_with_provenance(settings_with_compound):
     scoped = json.loads(row["additional_information"])
     assert scoped["signal_co_activation_band"] == "Moderate"
     assert scoped["observation_scope"] == "public_signal_co_activation"
-    assert row["financial_impact_band"] == "Limited"  # q95 banded per TAXONOMY.md
+    assert row["financial_impact_band"] == "Limited"  # q95 banded per docs/reference/TAXONOMY.md
     assert "identity plane concentration" in row["core_risks"]
     info = json.loads(row["additional_information"])
     assert info["origin"] == "compound_graduation"

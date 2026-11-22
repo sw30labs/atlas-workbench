@@ -503,7 +503,7 @@ def rubric_check(markdown: str, extraction: dict[str, Any], client: Any) -> dict
     # source until reviewers stopped reading it. The other three criteria are
     # different in kind: each detects an extraction ERROR (a dropped source,
     # invented attribution, invented facts), so those still gate. See
-    # docs/technical/adr/006-review-first-ingestion.md.
+    # docs/decisions/006-review-first-ingestion.md.
     data["facts_missing"] = sorted(
         k for k, v in (data.get("load_bearing_facts") or {}).items()
         if str(v).lower() == "missing"

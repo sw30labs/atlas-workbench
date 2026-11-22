@@ -2,7 +2,7 @@
 
 > **Reference copy.** This is the original project manual, preserved for its
 > method, safety, and governance detail. Relative links are written for the
-> repository root (for example `docs/technical/...`), not for this directory.
+> repository root (for example `docs/reference/...`), not for this directory.
 > For the friendly quick start, see [../README.md](../README.md).
 
 **An operational-risk discovery and preparedness workbench from SW3.0 Labs**
@@ -47,7 +47,7 @@ This is an independent personal research project:
 
 Read [DISCLAIMER.md](DISCLAIMER.md), [DATA_PROVENANCE.md](DATA_PROVENANCE.md),
 and [DATA_LICENSE.md](DATA_LICENSE.md) before using or contributing data. The
-controlled [product roadmap](ROADMAP.md) records current delivery status and
+controlled [product roadmap](docs/research/ROADMAP.md) records current delivery status and
 acceptance gates.
 
 ## What it does
@@ -80,7 +80,7 @@ The radar extension adds:
 - an opt-in, bounded scout that emits pending proposals without writing to the
   evidence stores.
 
-See [Radar, Signposts, and Atlas Briefs](docs/RADAR_AND_BRIEFS.md) for field
+See [Radar, Signposts, and Atlas Briefs](docs/reference/RADAR_AND_BRIEFS.md) for field
 semantics and safety boundaries.
 
 ## From a signal to an owned decision
@@ -109,11 +109,11 @@ Evidence diagnostics show source concentration, duplicate citations, missing
 fields and stale approvals. Reading mode and reduced motion provide a quieter
 working view without removing visual exploration.
 
-See the [workbench guide](docs/technical/enterprise-experience.md),
-[organization model](docs/technical/organization-context.md),
-[export contract](docs/technical/exports.md),
-[committee packs and watchlist digests](docs/technical/assessment-reports.md), and
-[pilot validation protocol](docs/technical/pilot-validation.md).
+See the [workbench guide](docs/reference/enterprise-experience.md),
+[organization model](docs/reference/organization-context.md),
+[export contract](docs/reference/exports.md),
+[committee packs and watchlist digests](docs/reference/assessment-reports.md), and
+[pilot validation protocol](docs/reference/pilot-validation.md).
 
 The current maturity is an enterprise evaluation workbench. Ranking results,
 calibration and operational readiness are separate verdicts. Customer pilot
@@ -125,7 +125,7 @@ must be demonstrated in the deployment where they will be used.
 Contingency Atlas can add reviewed AI-adversary context from
 [MITRE ATLAS™](https://atlas.mitre.org/) to a scenario. The integration is an
 optional external-framework overlay; it does not replace the
-[Contingency Atlas Risk Taxonomy](TAXONOMY.md), and it never changes
+[Contingency Atlas Risk Taxonomy](docs/reference/TAXONOMY.md), and it never changes
 likelihood, impact, urgency, compound generation, graduation, or any other
 score.
 
@@ -181,11 +181,11 @@ MITRE ATLAS content retains its upstream copyright and Apache-2.0 terms.
 MITRE has not affiliated with, sponsored, approved, or endorsed Contingency
 Atlas. See [Third-Party Notices](THIRD_PARTY_NOTICES.md),
 [Data and Documentation License](DATA_LICENSE.md), and
-[ADR-016](docs/technical/adr/016-mitre-atlas-reviewed-overlay.md).
+[ADR-016](docs/decisions/016-mitre-atlas-reviewed-overlay.md).
 
 ## Architecture
 
-![Contingency Atlas architecture: public or synthetic evidence enters a provenance-gated eight-phase workflow, which produces governed research products for a review dashboard](docs/technical/architecture-current.svg)
+![Contingency Atlas architecture: public or synthetic evidence enters a provenance-gated eight-phase workflow, which produces governed research products for a review dashboard](docs/reference/architecture-current.svg)
 
 Text alternative:
 
@@ -271,7 +271,7 @@ URL badges in the intake preview report literal presence and structurally public
 HTTP(S) shape. They do **not** claim that a URL is reachable, canonical, supports
 the proposed record, or grants reuse rights. Exact duplicates are held as
 already known; semantic similarities are advisory and never auto-merge. See
-[ADR-017](docs/technical/adr/017-unified-draft-first-research-intake.md) for the
+[ADR-017](docs/decisions/017-unified-draft-first-research-intake.md) for the
 graph, bounded QA loop, partial-submission, identity, and approved-only planning
 invariants.
 
@@ -315,7 +315,7 @@ reviewer's written reason, pre-filled into the decision panel for editing.
   those fields; rights and factual verification remain pending until a human
   reviewer approves the record.
 - **Taxonomy is project-native.** The compact, reviewable
-  [Contingency Atlas Risk Taxonomy](TAXONOMY.md) is independently authored and
+  [Contingency Atlas Risk Taxonomy](docs/reference/TAXONOMY.md) is independently authored and
   versioned; optional MITRE ATLAS mappings remain a separate external overlay.
 - **Broad drivers stay separate from banking consequences.** The radar overlay
   records the external change, while the Contingency Atlas Risk Taxonomy and
@@ -340,7 +340,7 @@ reviewer's written reason, pre-filled into the decision panel for editing.
 
 ## Quick start from a source checkout
 
-For a one-command setup, [`setup_and_run.sh`](setup_and_run.sh) creates the
+For a one-command setup, [`scripts/setup_and_run.sh`](../scripts/setup_and_run.sh) creates the
 virtual environment, installs the package with dev and ontology dependencies,
 runs the test suite, transactionally upgrades existing local SQLite schemas,
 refreshes the ontology guard snapshot
@@ -350,7 +350,7 @@ repository root; the fictional demo corpus is seeded explicitly with
 `python scripts/seed_demo.py` (writes to `generated/demo`):
 
 ```bash
-./setup_and_run.sh
+./scripts/setup_and_run.sh
 ```
 
 Or perform the same steps manually:
@@ -379,10 +379,10 @@ export ATLAS_DRIFTLAB_ENABLED=1
 
 ### Redesign Phase 1 — falsifiable scoring core
 
-The [`docs/redesignv1/`](docs/redesignv1/README.md) pack repositions Atlas as an
+The [`docs/research/redesignv1/`](docs/research/redesignv1/README.md) pack repositions Atlas as an
 operational-risk **scenario analysis engine**. Phase 1 is the smallest
 falsifiable slice (accepted and logged in
-[`docs/redesignv1/roadmap.md`](docs/redesignv1/roadmap.md)): a deterministic
+[`docs/research/redesignv1/roadmap.md`](docs/research/redesignv1/roadmap.md)): a deterministic
 frequency × severity scorer with shrunk-empirical dependence and Monte Carlo
 propagation, evaluated against pre-registered baselines on the synthetic R0
 regime. No LLM is involved in scoring, and no new dependencies are added.
@@ -421,7 +421,7 @@ atlas-eval run --risks generated/redesign/phase1/r0/r0_risks.json \
 ```
 
 `atlas-score pairs` writes one `ScoreRealization` per pair with the full
-audit blob from `docs/redesignv1/algorithm-spec.md` §9 (atom fits, dependence
+audit blob from `docs/research/redesignv1/algorithm-spec.md` §9 (atom fits, dependence
 parameters, MC seed and hit count, uncertainty class), one telemetry event
 per scored pair, and a `run_report.json` cost rollup ($0 on the
 deterministic path). The egress gateway stub
@@ -457,7 +457,7 @@ adapter for operator-supplied event extracts.
   coverage, and Brier-on-occurrence, with sparse-regime caveats surfaced
   in the report (on R0 the strict rule FAILs by construction — discrete
   intervals over-cover at low rates; the report says so).
-- **Model inventory entry** — `docs/redesignv1/model-inventory.yaml`
+- **Model inventory entry** — `docs/research/redesignv1/model-inventory.yaml`
   registers the scorer as research-tier with restrictions and evidence
   links.
 - **Ablation runner** — `atlas-eval ablations --risks … --events …`
@@ -660,8 +660,8 @@ bounded chunk extraction and rubric checks, and produces an editable draft for
 the lower-level phase interface. The `/api/ingest/convert` and pipeline input
 contracts remain documented for programmatic callers; unified intake is the
 preferred dashboard path, not a removal of those APIs. See
-[ADR-006](docs/technical/adr/006-review-first-ingestion.md) and
-[ADR-017](docs/technical/adr/017-unified-draft-first-research-intake.md).
+[ADR-006](docs/decisions/006-review-first-ingestion.md) and
+[ADR-017](docs/decisions/017-unified-draft-first-research-intake.md).
 
 ### Compound candidates tab (GUI)
 
@@ -774,7 +774,7 @@ before using a lead.
 
 Use `--source SOURCE_ID` one or more times to limit a run. Registry and
 proposal details are documented in
-[Radar, Signposts, and Atlas Briefs](docs/RADAR_AND_BRIEFS.md).
+[Radar, Signposts, and Atlas Briefs](docs/reference/RADAR_AND_BRIEFS.md).
 
 ### Advanced/programmatic intake
 
@@ -852,7 +852,7 @@ python -m contingency_atlas.web
 ```
 
 The dashboard backend binds only to loopback. The default mode supports a
-local operator; the optional [shared deployment contract](docs/technical/shared-deployment.md)
+local operator; the optional [shared deployment contract](docs/reference/shared-deployment.md)
 adds signed authenticated identity, roles and explicit export permissions
 behind a separately configured identity proxy. It does not install an identity
 provider or expose the backend directly to a network. Research → **Signals & Radar** includes the
@@ -862,7 +862,7 @@ discussion. Legacy records remain visible with conservative fallback labels.
 
 Jobs retain their state across restarts. Interrupted execution needs an explicit
 retry; queued work can be cancelled. The
-[operations guide](docs/technical/operations.md) covers verified backups,
+[operations guide](docs/reference/operations.md) covers verified backups,
 restoration into a new directory and the responsibilities of a deployment owner.
 
 ### Verify a release candidate
@@ -877,7 +877,7 @@ After the first commit, add `--history` to scan every reachable Git blob as
 well as the current tree.
 
 Before changing repository visibility, complete
-[PUBLIC_RELEASE_CHECKLIST.md](PUBLIC_RELEASE_CHECKLIST.md).
+[docs/release/PUBLIC_RELEASE_CHECKLIST.md](docs/release/PUBLIC_RELEASE_CHECKLIST.md).
 
 ## Runtime data
 
@@ -910,7 +910,7 @@ details, or untraceable generated claims.
 - Machine-producer write seams (ingest, risk register, scenario generation,
   compound join, channel proposals) validate every batch through the ontology
   guard before persisting; a REJECT blocks the write and the previous state
-  stands. See [README_ONTOLOGY.md](README_ONTOLOGY.md). Set `ATLAS_GUARD=off`
+  stands. See [docs/reference/ONTOLOGY.md](docs/reference/ONTOLOGY.md). Set `ATLAS_GUARD=off`
   to disable.
 - Stale flags and eligible refreshes may be applied during maintenance.
 - Merge and retire actions require the explicit `ATLAS_AUTO_RETIRE=1` safety
@@ -939,8 +939,8 @@ data exposure.
 ├── tests/                # unit and integration tests
 ├── contingency_atlas/web/about.yaml # dashboard About-page content
 ├── contingency-atlas.yaml # non-secret local inference configuration
-├── README_ONTOLOGY.md    # the two-gate ontology guard: rules, identity, wiring
-├── TAXONOMY.md           # Atlas categories, radar overlay, and impact bands
+├── docs/reference/ONTOLOGY.md    # the two-gate ontology guard: rules, identity, wiring
+├── docs/reference/TAXONOMY.md           # Atlas categories, radar overlay, and impact bands
 ├── DATA_PROVENANCE.md    # source and record-level provenance requirements
 ├── DATA_LICENSE.md       # licensing boundaries for data and fixtures
 └── pyproject.toml        # package metadata and dependencies

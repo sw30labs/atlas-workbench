@@ -1,0 +1,69 @@
+# Research model inventory entry — Contingency Atlas scenario scoring engine
+# Phase 3 scaffold (roadmap: "Model inventory / research model registration
+# as required"). Research tier: outputs are workshop inputs, never automated
+# risk decisions. Update owners/status through the project governance process.
+
+model_id: atlas-scenario-scorer
+name: Contingency Atlas compound scenario scorer (deterministic hybrid)
+version: "0.2.0"
+tier: research            # research | challenger | production
+status: registered-research
+
+owner:
+  accountable: TBD
+  developer: project team
+  validator: unassigned   # required before probability-calibration claims
+
+purpose: >
+  Systematic generation and hybrid frequency x severity scoring of compound
+  operational-risk scenarios, as continuous support to the scenario analysis
+  input of the op-risk framework. Not a capital model, not an AMA/SMA input,
+  not an ICAAP calculator.
+
+algorithm:
+  type: deterministic hybrid (Poisson/lognormal marginals, shrunk-empirical
+    dependence, Monte Carlo propagation, two-level Fréchet-clipped intervals)
+  algorithm_version_source: contingency_atlas/scoring/__init__.py
+  challenger_estimator: 'spike-and-slab mixture dependence (dependence_mode
+    "mixture"; measured by Task B-cal, NOT promoted — primary unchanged)'
+  judgment_channel: none (the optional LLM coherence-critique channel was
+    removed with the multiverse loop on 2026-08-01; all production scores
+    are deterministic)
+  # wave 5 (P1/P2): display-only analogue dossiers and channel/analogue
+  # proposal queues now exist — human-decided review items with NO score
+  # contact (ADR-014); judgment_channel stays none.
+  # wave 6 (P7): the prospective judgment ledger now exists at
+  # generated/judgment/ledger.jsonl — append-only, hash-chained, display-only.
+  # It freezes deterministic forecasts and records claim resolutions; nothing
+  # in it feeds any score. judgment_channel stays none.
+
+data:
+  regimes:
+    R0: synthetic generator with planted channels (fictional)
+    R1: public evidence store (evidence events, public)
+    synthetic_cell_demo: fictional grouped events for boundary testing
+  confidentiality:
+    egress_gateway: contingency_atlas/scoring/egress.py
+    rule: no local-detail content leaves local processing; allow-list schemas only
+
+restrictions:
+  - outputs are workshop/discussion inputs only
+  - no automated risk acceptance, capital, or limit decisions
+  - p_hat is a research quantity with calibration tracking, not a capital parameter
+  - frontier models may only see public payloads that pass the egress gateway
+
+validation:
+  status: phase-2 complete on synthetic data
+  evidence:
+    - generated/redesign/phase1/r0/eval_report.json      # Task B + C, GO
+    - generated/redesign/phase1/bcal/bcal_report.json    # Task B-cal (levels; FAIL documented, see evaluation-analysis §2a)
+    - generated/redesign/phase1/loss/task_loss.json      # Task L (severities)
+    - generated/redesign/phase1/multiseed/multiseed_report.json  # 10-seed distribution
+    - generated/redesign/phase3/ablations/ablations.json # ablations + kappa/pi0/c sensitivity + A1 challenger table
+    - generated/redesign/phase2/compare/loop_eval.json   # Path A/B, keep_loop (historical)
+    - generated/redesign/phase3/calibration/calibration_report.json  # Task A harness
+  kill_criteria: docs/research/redesignv1/evaluation-plan.md section 6 (pre-registered)
+  next_gate: Task A/B on denser synthetic or public series + human Task D panel
+
+review_cycle: quarterly
+last_updated: "2026-08-03"

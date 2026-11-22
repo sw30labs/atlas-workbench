@@ -2,7 +2,7 @@
 """Version the local data files in a git repository separate from the code.
 
 ADR-012 keeps runtime artifacts out of this repository, and that stays right:
-`PUBLIC_RELEASE_CHECKLIST.md` gates release on the *complete git history*, so a
+`docs/release/PUBLIC_RELEASE_CHECKLIST.md` gates release on the *complete git history*, so a
 a governed register committed here would be permanent and require scrubbing
 by rewriting history. But the register also holds human review decisions, which
 no re-run reproduces — the one runtime artifact whose recovery story is not

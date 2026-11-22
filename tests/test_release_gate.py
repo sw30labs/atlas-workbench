@@ -73,7 +73,7 @@ def test_credentials_in_urls_are_still_read():
 
 def test_personal_contact_is_not_exempted_from_manuscript():
     """Public attribution does not create a blanket personal-contact exception."""
-    manuscript = "docs/whitepaper/manuscript/contingency_atlas_whitepaper.tex"
+    manuscript = "docs/research/whitepaper/manuscript/contingency_atlas_whitepaper.tex"
     address = f"someone{AT}example.org"
     assert [
         f for f in gate._scan_text(manuscript, address) if "email address" in f
@@ -110,8 +110,24 @@ def test_every_reviewed_binary_still_exists():
         ), f"{relative} changed after binary review"
 
 
+def test_reviewed_bytes_remain_valid_at_their_old_path():
+    """The docs shelf moved reviewed figures. History still has the old paths."""
+    current = "docs/research/whitepaper/figures/figure1_taskb_baselines.png"
+    former = "docs/whitepaper/figures/figure1_taskb_baselines.png"
+    data = (ROOT / current).read_bytes()
+    assert gate.historical_binary_failure(current, data) is None
+    assert gate.historical_binary_failure(former, data) is None
+    mutated = data + b"one-byte-review-invalidated"
+    assert gate.historical_binary_failure(former, mutated) == (
+        f"{former}: binary historical blob"
+    )
+    assert "reviewed binary digest mismatch" in (
+        gate.historical_binary_failure(current, mutated) or ""
+    )
+
+
 def test_reviewed_binary_path_does_not_allow_mutated_bytes():
-    relative = "docs/whitepaper/figures/figure1_taskb_baselines.png"
+    relative = "docs/research/whitepaper/figures/figure1_taskb_baselines.png"
     mutated = (ROOT / relative).read_bytes() + b"one-byte-review-invalidated"
     findings = gate._scan_entry(relative, mutated)
     assert any("reviewed binary digest mismatch" in item for item in findings)

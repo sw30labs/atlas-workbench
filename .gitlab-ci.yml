@@ -1,0 +1,36 @@
+# Offline checks for a public mirror.
+# No model endpoint, scout, or network beyond installing pinned dependencies.
+
+stages:
+  - test
+
+default:
+  image: python:3.12-slim
+  before_script:
+    - apt-get update
+    - apt-get install -y --no-install-recommends git
+    - rm -rf /var/lib/apt/lists/*
+    - python -m pip install --upgrade pip
+    - python -m pip install -e '.[dev]'
+
+variables:
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+
+pytest:
+  stage: test
+  script:
+    - python -m pytest -q
+
+ruff:
+  stage: test
+  script:
+    - python -m ruff check --select F821,F811,F402,E9,F841 contingency_atlas scripts tests
+
+release-gate:
+  stage: test
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  variables:
+    GIT_DEPTH: "0"
+  script:
+    - python scripts/public_release_gate.py --history

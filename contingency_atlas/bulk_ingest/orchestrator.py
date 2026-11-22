@@ -236,7 +236,7 @@ def _counts(results: list[DocumentResult], candidates: list[Candidate], issues: 
 
 def run_bulk_ingest_job(params: dict[str, Any], settings: Settings, progress: Progress | None = None,
                         client: Any = None, *, cancel: threading.Event | None = None) -> dict[str, Any]:
-    """Job-runner entry point (see docs/technical/bulk-ingest.md, 'Integration').
+    """Job-runner entry point (see docs/reference/bulk-ingest.md, 'Integration').
 
     ``cancel`` is passed to :func:`run_batch`; a cancelled batch returns status
     ``cancelled`` and writes nothing."""

@@ -2982,7 +2982,7 @@ def build_readme(out: Path, pack: Path, stats: dict, c: dict) -> None:
         "> audit findings, reports, people, emails) is invented. It must never be mistaken for real data of ACME, of any",
         "> organisation called ACME, or of any bank. Real document realism is deliberate; real data is absent.",
         "",
-        "This is the demo folder for the Atlas bulk-ingest pods (see `docs/plans/ACME_BULK_INGEST.md`). An operator points",
+        "This is the demo folder for the Atlas bulk-ingest pods (see `docs/research/plans/ACME_BULK_INGEST.md`). An operator points",
         "Atlas at `pack/`; the pods classify each file, extract records and stage them for human review.",
         "`answer_key.json` (outside `pack/`) is the ground truth used to score the pods. Pods must never read it.",
         "",
