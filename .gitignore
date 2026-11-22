@@ -110,3 +110,6 @@ contingency-atlas.local.yaml
 *.fls
 *.out
 *.toc
+
+# PowerPoint source for the promo deck. The browsable copy is docs/deck/.
+/docs/promo/

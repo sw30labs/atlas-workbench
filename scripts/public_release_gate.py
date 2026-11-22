@@ -71,6 +71,7 @@ DISCLOSURE_EXEMPTIONS: dict[str, frozenset[str]] = {
             "THIRD_PARTY_NOTICES.md",
             "contingency_atlas/web/about.yaml",
             "docs/research/essays/checklist-empty-cells/article.md",
+            "docs/deck/index.html",
         }
     ),
     "author acknowledgment": frozenset(
@@ -82,6 +83,7 @@ DISCLOSURE_EXEMPTIONS: dict[str, frozenset[str]] = {
             "docs/release/PUBLIC_RELEASE_CHECKLIST.md",
             "README.md",
             "contingency_atlas/web/about.yaml",
+            "docs/deck/index.html",
         }
     ),
 }
@@ -121,6 +123,21 @@ REVIEWED_BINARY_SHA256 = {
     # already in the essay. No institution, person, path or dataset appears;
     # the vector source sits beside it as checklist_vs_search.svg.
     "docs/research/essays/checklist-empty-cells/figures/checklist_vs_search.png": "0e164c5415c7162d4ab2653ebf6432249783171b977601711d3c4929351da0a2",
+    # Deck frames reviewed 2026-11-21: loopback screenshots of the fictional
+    # demo. 14c-draft-open.png shows one held intake draft about a public
+    # BIS page. The draft was not sent, not approved, and is not a finding.
+    "docs/deck/frames/01-briefing.png": "342eee701e8a26d5a715f81b58014d1a04988d333c47f6b3013b1e60529b8c4d",
+    "docs/deck/frames/02-constellation.png": "a60106f6f0c59938d4a7d61990ada207dfb31117c732f43057f15dcdf91b39cb",
+    "docs/deck/frames/05-library.png": "290a94a755bfb09ab5445d7f615a740fe10cd4a133d0bf6f333d0e1d55395971",
+    "docs/deck/frames/06-brief.png": "636a28bf7121113ece5ca2bf1ff8c7b60706e8d1d1a0404bf9819a169284dc05",
+    "docs/deck/frames/08-signals.png": "82eb7cd36576d4ae2c3ad55b13109af42aee08e6d26d00759029e035adfdf696",
+    "docs/deck/frames/10-review.png": "6539ca433a43751f4e04780dbd5a8f4458575ed1926ee6c6202141053918f4d0",
+    "docs/deck/frames/11-analyze.png": "ac2c49bf8f1721fdb93b80a31bfde6fdeb5ece4924cc5ad0c97ded1abd3a09be",
+    "docs/deck/frames/12-organization.png": "6fae289f2f00096fa92ad25ce1c40487973dee8288fcb9eae54578eec2a3fabe",
+    "docs/deck/frames/14-add-research.png": "54c6b20903dbfd3b7706c55139d5aa1b29f5604e0fb79bc1a8f8b35b9a977daf",
+    "docs/deck/frames/14b-preparing.png": "1df09e16937be6214d6d84a3138c2def270e373644de3298a4c78e77f2937fe1",
+    "docs/deck/frames/14c-draft-open.png": "e209ca49d003cb5b3093d68a66d7a07b8f6d8193b99a38be4020e0f097c9e605",
+    "docs/deck/frames/15b-export-preview.png": "201935ccc04e8cae088204ea448486e0b87c016208f8c51b903855068ca4ea3d",
 }
 REVIEWED_BINARY_PATHS = frozenset(REVIEWED_BINARY_SHA256)
 # Older commits store these same bytes at docs/whitepaper/ and docs/essays/.

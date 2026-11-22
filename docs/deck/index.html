@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contingency Atlas Workbench</title>
+<style>
+  :root {
+    --navy: #1B2A4A;
+    --dk: #0F1B33;
+    --slate: #243656;
+    --teal: #0E7C86;
+    --gold: #D4A843;
+    --dkgold: #8A6A22;
+    --off: #FAFAF7;
+    --wg: #E8E4DD;
+    --tx: #2C2C2C;
+    --mu: #5C6570;
+    --wh: #fff;
+    --sand: #F4EBD6;
+    --paper2: #F3F0EA;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #070b14; }
+  #deck {
+    height: 100vh; height: 100dvh;
+    overflow-y: auto;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+  }
+  .slide {
+    height: 100vh; height: 100dvh;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    display: grid;
+    place-items: center;
+  }
+  .stage {
+    width: min(100vw, calc(100dvh * 16 / 9));
+    height: min(100dvh, calc(100vw * 9 / 16));
+    container-type: inline-size;
+    position: relative;
+    overflow: hidden;
+    font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+    color: var(--tx);
+    background: var(--off);
+  }
+  .stage.dark { background: var(--dk); color: var(--wh); }
+  .stage.navy { background: var(--navy); color: var(--wh); }
+  .bar { position: absolute; left: 0; right: 0; top: 0; height: 1.1cqi; background: var(--gold); }
+  .pad { position: absolute; inset: 4.5cqi 4.2cqi 6cqi; display: flex; flex-direction: column; }
+  .foot {
+    position: absolute; left: 4.2cqi; right: 4.2cqi; bottom: 2.2cqi;
+    display: flex; justify-content: space-between;
+    font-size: 1.45cqi; letter-spacing: 0.12em; color: var(--mu);
+  }
+  .dark .foot, .navy .foot { color: #9AA6B5; }
+  h1, h2, p { margin: 0; }
+  .kicker {
+    font-size: 1.7cqi; font-weight: 700; letter-spacing: 0.16em; color: var(--gold);
+  }
+  .display {
+    font-size: 7.2cqi; line-height: 0.92; font-weight: 700; letter-spacing: -0.02em;
+  }
+  h1 { font-size: 3.5cqi; line-height: 1.05; color: var(--navy); font-weight: 700; }
+  .dark h1, .navy h1 { color: var(--wh); }
+  .lede { font-size: 1.85cqi; color: var(--mu); margin-top: 0.8cqi; }
+  .dark .lede, .navy .lede { color: var(--gold); font-style: italic; }
+  .sub { font-size: 1.7cqi; color: var(--wg); margin-top: 0.7cqi; }
+  a { color: var(--gold); text-decoration: none; }
+  .mono { font-family: Menlo, ui-monospace, monospace; }
+  .cards, .rules, .layers { display: grid; gap: 1.4cqi; margin-top: 2cqi; flex: 1; }
+  .cards, .rules { grid-template-columns: repeat(3, 1fr); }
+  .layers { grid-template-columns: repeat(3, 1fr); }
+  .card, .rule, .layer, .bit, .row, .cmd {
+    background: var(--wh); border-radius: 0.3cqi;
+  }
+  .dark .card, .navy .card, .navy .rule { background: var(--slate); }
+  .card, .rule, .layer { padding: 1.6cqi 1.5cqi; }
+  .card .n, .rule .n, .layer .name { color: var(--gold); font-weight: 700; font-size: 1.7cqi; }
+  .card h2, .rule h2 { color: var(--wh); font-size: 2.15cqi; margin: 0.6cqi 0; }
+  .card p, .rule p { color: var(--wg); font-size: 1.55cqi; line-height: 1.35; }
+  .card { border-top: 0.7cqi solid var(--gold); }
+  .rows { display: flex; flex-direction: column; gap: 1.2cqi; margin-top: 2cqi; flex: 1; }
+  .row { display: grid; grid-template-columns: 8cqi 22cqi 1fr; align-items: center; padding: 0 1.6cqi; border-left: 0.7cqi solid var(--teal); }
+  .row.gold { border-left-color: var(--gold); }
+  .row .n { color: var(--gold); font-size: 2.6cqi; font-weight: 700; }
+  .row h2 { color: var(--navy); font-size: 2.2cqi; }
+  .row p { font-size: 1.6cqi; line-height: 1.35; }
+  .phases { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4cqi 3cqi; margin-top: 1.6cqi; }
+  .ph { display: grid; grid-template-columns: 6cqi 1fr; gap: 0 1cqi; align-items: start; padding: 0.8cqi 0; }
+  .ph .n { color: var(--gold); font-size: 2.3cqi; font-weight: 700; }
+  .ph h2 { color: var(--navy); font-size: 2.1cqi; }
+  .ph p { font-size: 1.55cqi; line-height: 1.3; margin-top: 0.2cqi; }
+  .rules { grid-template-rows: 1fr 1fr; }
+  .rule h2 { font-size: 2cqi; }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2cqi 1.6cqi; margin-top: 2.4cqi; }
+  .step .num {
+    width: 4.6cqi; height: 4.6cqi; border-radius: 50%; background: var(--navy); color: var(--gold);
+    display: grid; place-items: center; font-weight: 700; font-size: 1.4cqi;
+  }
+  .step h2 { color: var(--navy); font-size: 2.5cqi; margin: 0.8cqi 0 0.4cqi; }
+  .step p { font-size: 1.6cqi; line-height: 1.35; }
+  .bits { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2cqi; margin-top: 1.4cqi; }
+  .bit { padding: 1.3cqi 1.4cqi; }
+  .bit h2 { color: var(--navy); font-size: 1.9cqi; }
+  .bit p { font-size: 1.5cqi; line-height: 1.35; margin-top: 0.4cqi; }
+  .sand {
+    margin-top: 1.2cqi; background: var(--sand); padding: 1.2cqi 1.4cqi;
+  }
+  .sand .kicker { color: var(--dkgold); font-size: 1.35cqi; }
+  .sand p { font-size: 1.5cqi; line-height: 1.35; margin-top: 0.5cqi; }
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 2.4cqi; margin-top: 2cqi; flex: 1; }
+  .boot { background: var(--slate); padding: 2cqi; }
+  .boot .cmd { background: transparent; color: var(--wh); font-size: 3cqi; margin: 0.8cqi 0; }
+  .boot li { color: var(--wg); font-size: 1.6cqi; margin: 0.8cqi 0; }
+  .outs { display: flex; flex-direction: column; justify-content: space-between; }
+  .outs h2 { color: var(--wh); font-size: 2cqi; }
+  .outs p { color: var(--wg); font-size: 1.55cqi; margin-top: 0.2cqi; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 2cqi; margin-top: 1.4cqi; }
+  .cols li { list-style: none; display: flex; gap: 1cqi; align-items: flex-start; color: var(--wh); font-size: 1.65cqi; line-height: 1.3; margin: 0 0 1.3cqi; }
+  .cols ul { margin: 0.6cqi 0 0; padding: 0; }
+  .dot { width: 1.1cqi; height: 1.1cqi; border-radius: 50%; margin-top: 0.45cqi; flex: none; }
+  .dot.teal { background: var(--teal); }
+  .dot.gold { background: var(--gold); }
+  .layer { border-top: 0.8cqi solid var(--teal); display: flex; flex-direction: column; }
+  .layer.gold { border-top-color: var(--gold); }
+  .layer.navy { border-top-color: var(--navy); }
+  .layer .name { color: var(--navy); letter-spacing: 0.04em; margin-bottom: 0.8cqi; }
+  .layer p { font-size: 1.5cqi; line-height: 1.35; }
+  .cmds { margin-top: 1.4cqi; display: flex; flex-direction: column; gap: 0.45cqi; }
+  .cmdrow { display: grid; grid-template-columns: 18cqi 1fr; align-items: center; background: var(--wh); padding: 0.7cqi 1.2cqi; font-size: 1.6cqi; }
+  .cmdrow:nth-child(even) { background: var(--paper2); }
+  .cmdrow code { font-family: Menlo, ui-monospace, monospace; color: var(--navy); font-size: 1.55cqi; }
+  .lines { margin-top: 1.5cqi; display: flex; flex-direction: column; gap: 1.6cqi; }
+  .lines h2 { font-size: 3.6cqi; color: var(--wh); }
+  .lines p { color: var(--wg); font-size: 1.7cqi; margin-top: 0.3cqi; }
+  .band {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 18cqi; background: var(--navy);
+    padding: 2.2cqi 5.2cqi;
+  }
+  .gallery { display: grid; grid-template-columns: 1.4fr 0.8fr; gap: 1.6cqi; margin-top: 1.2cqi; flex: 1; min-height: 0; }
+  .gallery img, .beat img, .hand img {
+    width: 100%; height: 100%; object-fit: contain; background: #111; display: block;
+  }
+  .shot { min-height: 0; background: #111; }
+  .fact { font-size: 1.45cqi; line-height: 1.35; margin-top: 0.8cqi; }
+  .where { font-size: 1.35cqi; letter-spacing: 0.08em; color: var(--dkgold); font-weight: 700; }
+  .beats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.6cqi; margin-top: 1cqi; flex: 1; min-height: 0; }
+  .beat { display: flex; flex-direction: column; min-height: 0; }
+  .beat h2 { color: var(--navy); font-size: 1.8cqi; }
+  .beat .n { color: var(--dkgold); font-weight: 700; margin-right: 0.6cqi; }
+  .beat .shot { flex: 1; min-height: 0; margin: 0.5cqi 0; }
+  .beat p { font-size: 1.4cqi; line-height: 1.3; }
+  .hand { display: grid; grid-template-columns: 1.45fr 0.7fr; gap: 1.4cqi; margin-top: 1cqi; flex: 1; min-height: 0; }
+  .counts { display: flex; flex-direction: column; gap: 0.35cqi; margin-top: 0.8cqi; }
+  .counts div { display: grid; grid-template-columns: 4cqi 1fr; font-size: 1.6cqi; }
+  .counts b { color: var(--teal); }
+  .note { font-size: 1.35cqi; color: var(--mu); margin-top: 0.4cqi; }
+  .divider { margin: auto; max-width: 80cqi; }
+  .divider ol { margin: 1.4cqi 0 0; padding: 0; list-style: none; }
+  .divider li { font-size: 1.8cqi; margin: 0.45cqi 0; color: var(--navy); }
+  .divider li b { color: var(--dkgold); margin-right: 0.8cqi; }
+  #hud {
+    position: fixed; right: 16px; bottom: 12px; z-index: 2;
+    font: 12px/1.4 Menlo, ui-monospace, monospace; color: #d7dde6;
+    background: rgba(7, 11, 20, 0.72); padding: 6px 10px; border-radius: 6px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #deck { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+<div id="deck">
+
+<section class="slide" aria-label="Title">
+  <div class="stage dark">
+    <div class="bar"></div>
+    <div class="pad">
+      <div class="kicker">SW3.0 LABS · RESEARCH WORKBENCH</div>
+      <div class="display" style="margin-top:2cqi">CONTINGENCY<br>ATLAS</div>
+      <p class="lede">Operational-risk scenarios you can run, review, and defend.</p>
+      <p class="sub">A scenario is a hypothesis. The workbench exists so you can challenge it.</p>
+    </div>
+    <div class="band">
+      <p class="sub" style="margin:0">v0.2.0 · Apache 2.0 · Independent research</p>
+      <p class="mono" style="margin-top:0.8cqi;font-size:1.7cqi"><a href="https://github.com/sw30labs/atlas-workbench">github.com/sw30labs/atlas-workbench</a></p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Losses arrive as combinations">
+  <div class="stage navy">
+    <div class="bar"></div>
+    <div class="pad">
+      <h1>LOSSES ARRIVE AS COMBINATIONS</h1>
+      <p class="lede">Most preparation still treats risks one at a time.</p>
+      <div class="cards">
+        <article class="card"><div class="n">01</div><h2>One risk at a time</h2><p>The events that hurt usually need several things in the same window: a control failure, a concentrated supplier, an external shock. Registers still score the pieces apart.</p></article>
+        <article class="card"><div class="n">02</div><h2>Written as forecasts</h2><p>A scenario that reads like a prediction is hard to challenge. Contingency Atlas keeps it as a hypothesis, with signposts that can strengthen or fade.</p></article>
+        <article class="card"><div class="n">03</div><h2>Scores with no trail</h2><p>If a language model wrote the number, a reviewer cannot rebuild it. Here, models may draft prose for a person. They never write a score.</p></article>
+      </div>
+    </div>
+    <div class="foot"><span>CONTINGENCY ATLAS</span><span>02</span></div>
+  </div>
+</section>
+
+<section class="slide" aria-label="A hypothesis you can challenge">
+  <div class="stage">
+    <div class="pad">
+      <h1>A HYPOTHESIS YOU CAN CHALLENGE</h1>
+      <p class="lede" style="color:var(--teal);font-style:normal">Built for research, challenge, and preparedness. Banking is the domain, so the taxonomy stays bounded and public.</p>
+      <div class="rows">
+        <article class="row"><div class="n">01</div><h2>Cite the record</h2><p>Public-source claims stay attached to the record that supports them. Generated narrative never becomes its own source.</p></article>
+        <article class="row"><div class="n">02</div><h2>Name the reviewer</h2><p>Pending items show why they can or cannot be approved. A decision keeps the person, the reason, and the time.</p></article>
+        <article class="row gold"><div class="n">03</div><h2>Keep the doubt</h2><p>Scores are prioritization aids under stated assumptions. They are research quantities for challenge. They are not capital inputs.</p></article>
+      </div>
+    </div>
+    <div class="foot"><span>CONTINGENCY ATLAS</span><span>03</span></div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Eight phases">
+  <div class="stage">
+    <div class="pad">
+      <h1>EIGHT PHASES. ONE LIBRARY.</h1>
+      <p class="lede">Deterministic analysis runs with no model. Generation, when you turn it on, is a bounded judge-and-revise loop.</p>
+      <div class="phases">
+        <div class="ph"><div class="n">01</div><div><h2>Ingest</h2><p>Normalize public-source research you supply into cited event records.</p></div></div>
+        <div class="ph"><div class="n">05</div><div><h2>Detect</h2><p>Test temporal and thematic patterns, and surface the challenges.</p></div></div>
+        <div class="ph"><div class="n">02</div><div><h2>Monitor</h2><p>Turn forward-looking signals into an emerging-risk register.</p></div></div>
+        <div class="ph"><div class="n">06</div><div><h2>Maintain</h2><p>Refresh aging material. Merges and retirements stay gated.</p></div></div>
+        <div class="ph"><div class="n">03</div><div><h2>Generate</h2><p>Combine signals and event patterns into candidate scenarios.</p></div></div>
+        <div class="ph"><div class="n">07</div><div><h2>Join</h2><p>Score co-active reviewed signals into compound candidates.</p></div></div>
+        <div class="ph"><div class="n">04</div><div><h2>Prioritize</h2><p>Rank the library on likelihood, impact, controllability, and horizon.</p></div></div>
+        <div class="ph"><div class="n">08</div><div><h2>Graduate</h2><p>Promote holdout-qualified compounds through the scenario QA gate.</p></div></div>
+      </div>
+    </div>
+    <div class="foot"><span>CONTINGENCY ATLAS</span><span>04</span></div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Six rules">
+  <div class="stage navy">
+    <div class="bar"></div>
+    <div class="pad">
+      <h1>SIX RULES THAT STAY ON</h1>
+      <p class="lede">The workbench keeps the original boundaries.</p>
+      <div class="rules">
+        <article class="rule"><div class="n">01</div><h2>Draft before write</h2><p>Intake is classified and previewed. Only items you select are stored, and they enter as pending.</p></article>
+        <article class="rule"><div class="n">02</div><h2>Evidence before synthesis</h2><p>Citations stay on the source record. A generated paragraph is not a source.</p></article>
+        <article class="rule"><div class="n">03</div><h2>A person decides</h2><p>Merge and retire stay off unless the operator sets ATLAS_AUTO_RETIRE=1. The dashboard cannot flip that switch.</p></article>
+        <article class="rule"><div class="n">04</div><h2>Fail closed</h2><p>Machine write seams pass the ontology guard, or they do not persist.</p></article>
+        <article class="rule"><div class="n">05</div><h2>Prose, never scores</h2><p>A model may draft text for a person to review. No model writes or moves a number.</p></article>
+        <article class="rule"><div class="n">06</div><h2>Local by default</h2><p>SQLite, JSON, and local inference. Runtime state lives in one directory, ~/.atlas.</p></article>
+      </div>
+    </div>
+    <div class="foot"><span>CONTINGENCY ATLAS</span><span>05</span></div>
+  </div>
+</section>
+
+<section class="slide" aria-label="From a note to a brief">
+  <div class="stage">
+    <div class="pad">
+      <h1>FROM A NOTE TO A BRIEF</h1>
+      <p class="lede">Nothing is written until you select it. Nothing is approved until a person says so.</p>
+      <div class="steps">
+        <article class="step"><div class="num">01</div><h2>Add</h2><p>Paste prose, notes, and literal URLs into one field.</p></article>
+        <article class="step"><div class="num">02</div><h2>Draft</h2><p>Intake classifies the material and shows a preview.</p></article>
+        <article class="step"><div class="num">03</div><h2>Select</h2><p>Only the items you choose continue into review.</p></article>
+        <article class="step"><div class="num">04</div><h2>Review</h2><p>A named person approves or returns each item, with a reason on the record.</p></article>
+        <article class="step"><div class="num">05</div><h2>Run</h2><p>Analyse the approved corpus. Offline, unless you opt into a local model.</p></article>
+        <article class="step"><div class="num">06</div><h2>Hand over</h2><p>Read the portfolio or an Atlas Brief. Export with provenance and checksums.</p></article>
+      </div>
+    </div>
+    <div class="foot"><span>CONTINGENCY ATLAS</span><span>06</span></div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Scoring discipline">
+  <div class="stage">
+    <div class="pad">
+      <h1>STANDARD MATH. UNUSUAL DISCIPLINE.</h1>
+      <p class="lede">Compound rating — two or more risks in one window — is its own research path, kept apart from the library urgency rank.</p>
+      <div class="bits">
+        <article class="bit"><h2>Frequency, then severity</h2><p>Each risk is split into how often it happens and how bad it is. The two estimates stay separate, then recombine.</p></article>
+        <article class="bit"><h2>No link until the data says so</h2><p>Co-occurrence starts from independence. Thin shared history moves the estimate a little. Strong history moves it a lot.</p></article>
+        <article class="bit"><h2>Rehearse the year</h2><p>Monte Carlo counts how often a combination lands. An extreme-value overlay stays only when its own stability test passes.</p></article>
+        <article class="bit"><h2>Goalposts before the run</h2><p>Pass marks were written down first. Failures sit beside passes. Every published digit can be rebuilt from a stored file, seed included.</p></article>
+      </div>
+      <div class="sand">
+        <div class="kicker">WHAT THE RESULTS ACTUALLY SAY</div>
+        <p>On a simulated world with a planted answer, the method recovers that structure. That shows the machinery works. It is not yet evidence about the real world. On public history, shared quarters are still too thin for the dependence layer to add signal, and the estimator under-prices never-yet-seen pairs. The paper says so. Loss sizes are not yet validated. These numbers are for prioritization and challenge.</p>
+      </div>
+    </div>
+    <div class="foot"><span>CONTINGENCY ATLAS</span><span>07</span></div>
+  </div>
+</section>
+
+<section class="slide" aria-label="One command">
+  <div class="stage dark">
+    <div class="bar"></div>
+    <div class="pad">
+      <h1>ONE COMMAND. ONE DIRECTORY.</h1>
+      <p class="lede">Same engine and provenance rules. A shorter path to a working bench.</p>
+      <div class="split">
+        <div class="boot">
+          <div class="kicker">FIRST RUN</div>
+          <div class="cmd mono">./start.sh</div>
+          <p class="sub">Runtime state lives in one directory, ~/.atlas.</p>
+          <ul>
+            <li><b style="color:var(--gold)">01</b> Creates a virtualenv and installs the package.</li>
+            <li><b style="color:var(--gold)">02</b> Loads a conspicuously fictional demo corpus.</li>
+            <li><b style="color:var(--gold)">03</b> Opens the dashboard at 127.0.0.1:8080.</li>
+          </ul>
+        </div>
+        <div class="outs">
+          <div><h2>Portfolio</h2><p>Map or table, comparison, and saved views.</p></div>
+          <div><h2>Atlas Brief</h2><p>One scenario, with its evidence and its caveats.</p></div>
+          <div><h2>Review queue</h2><p>Every waiting item shows why it can move.</p></div>
+          <div><h2>Radar</h2><p>External drivers, maturity, momentum, signposts.</p></div>
+          <div><h2>Exports</h2><p>PDF, Word, Excel, PowerPoint, with checksums.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>CONTINGENCY ATLAS</span><span>08</span></div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Optional layers">
+  <div class="stage">
+    <div class="pad">
+      <h1>THREE LAYERS YOU OPT INTO</h1>
+      <p class="lede">Each one is explicit. None of them silently changes a score.</p>
+      <div class="layers">
+        <article class="layer"><div class="name">MITRE ATLAS</div><p>A pinned local import of an official release. A person proposes a technique. A decision approves it. Display only. If the scenario changes, the old approval goes stale. A mapping means a reviewer found the technique useful for the hypothesis. It is not an attribution, and case studies are not evidence for the scenario.</p></article>
+        <article class="layer gold"><div class="name">ORGANIZATION</div><p>A separate workspace for services, owners, tolerances, dependencies, controls, actions, and exercises. Coverage distinguishes unassessed, mapped, and evidenced tests. An empty cell stays empty. It is not marked safe.</p></article>
+        <article class="layer navy"><div class="name">RADAR AND SCOUT</div><p>An external-driver overlay with maturity, momentum, transmission path, and signposts. Scout can propose public-source leads. It stays outside the pipeline and never promotes a lead into evidence.</p></article>
+      </div>
+    </div>
+    <div class="foot"><span>CONTINGENCY ATLAS</span><span>09</span></div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Read this before you rely on it">
+  <div class="stage navy">
+    <div class="bar"></div>
+    <div class="pad">
+      <h1>READ THIS BEFORE YOU RELY ON IT</h1>
+      <p class="lede">An evaluation workbench. Ranking, calibration, and operational readiness are separate verdicts.</p>
+      <div class="cols">
+        <div>
+          <div class="kicker">WHAT IT IS</div>
+          <ul>
+            <li><span class="dot teal"></span>An independent personal research project.</li>
+            <li><span class="dot teal"></span>Alpha software, version 0.2.0, Apache 2.0 code.</li>
+            <li><span class="dot teal"></span>A bounded public taxonomy for banking operational risk.</li>
+            <li><span class="dot teal"></span>A local workbench for hypothetical research artifacts.</li>
+            <li><span class="dot teal"></span>A place where failures of the method are written down.</li>
+          </ul>
+        </div>
+        <div>
+          <div class="kicker">WHAT IT REFUSES</div>
+          <ul>
+            <li><span class="dot gold"></span>Financial, legal, regulatory, or risk-management advice.</li>
+            <li><span class="dot gold"></span>A production system of record, or a capital input.</li>
+            <li><span class="dot gold"></span>A forecast, a loss estimate, or a control assessment.</li>
+            <li><span class="dot gold"></span>Affiliation with an employer, with ORX, or with Taleb.</li>
+            <li><span class="dot gold"></span>A claim an event occurred, or that an institution is weak.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>CONTINGENCY ATLAS</span><span>10</span></div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Open it on fictional data">
+  <div class="stage">
+    <div class="pad">
+      <h1>OPEN IT ON FICTIONAL DATA</h1>
+      <p class="lede">Python 3.12 or 3.13. The deterministic path needs no model.</p>
+      <div class="cmds">
+        <div class="cmdrow"><code>atlas up</code><span>First run. Create the data directory, load the demo, open the dashboard.</span></div>
+        <div class="cmdrow"><code>atlas demo</code><span>Reload the fictional corpus. Pass --reset to start clean.</span></div>
+        <div class="cmdrow"><code>atlas run</code><span>Analyse the approved corpus. Offline and deterministic by default.</span></div>
+        <div class="cmdrow"><code>atlas status</code><span>Library counts, the review queue, and the last run.</span></div>
+        <div class="cmdrow"><code>atlas doctor</code><span>Check Python, stores, the guard bundle, the model endpoint, and the port.</span></div>
+        <div class="cmdrow"><code>atlas serve</code><span>Open the dashboard. Loads the demo if you have no data yet.</span></div>
+      </div>
+    </div>
+    <div class="foot"><span>CONTINGENCY ATLAS</span><span>11</span></div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Close">
+  <div class="stage dark">
+    <div class="bar"></div>
+    <div class="pad">
+      <div class="kicker">SW3.0 LABS · CONTINGENCY ATLAS</div>
+      <div class="lines">
+        <div><h2>Run the demo.</h2><p>A fictional corpus, on your machine, in one command.</p></div>
+        <div><h2>Read the method.</h2><p>The scoring paper publishes the failures beside the passes.</p></div>
+        <div><h2>Challenge the scores.</h2><p>That is the use of the workbench.</p></div>
+      </div>
+    </div>
+    <div class="band">
+      <p class="mono" style="margin:0;font-size:1.7cqi"><a href="https://github.com/sw30labs/atlas-workbench">github.com/sw30labs/atlas-workbench</a></p>
+      <p class="sub">Code is Apache 2.0. Data and documentation have their own terms. Outputs are hypothetical research artifacts.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Appendix A">
+  <div class="stage">
+    <div class="pad">
+      <div class="divider">
+        <div class="where">APPENDIX A</div>
+        <h1>The workbench</h1>
+        <p class="lede">Six screens from the fictional demo, captured on a loopback dashboard. Every scenario card is tagged synthetic fixture. The header reads OMLX online. The intake draft is in Appendix B.</p>
+        <ol>
+          <li><b>01</b> Risk constellation</li>
+          <li><b>02</b> Scenario portfolio</li>
+          <li><b>03</b> One Atlas Brief</li>
+          <li><b>04</b> Signals and radar</li>
+          <li><b>05</b> An empty organization</li>
+          <li><b>06</b> A traceable snapshot</li>
+        </ol>
+      </div>
+    </div>
+    <div class="foot"><span>CONTINGENCY ATLAS</span><span>13</span></div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Risk constellation">
+  <div class="stage">
+    <div class="pad">
+      <div class="where">Briefing · constellation</div>
+      <h1>Risk constellation</h1>
+      <div class="gallery">
+        <div class="shot"><img src="frames/02-constellation.png" alt="Briefing constellation of six fictional demo scenarios"></div>
+        <div>
+          <p>The briefing, in constellation view. Six fictional scenarios sit on shared cores: processing, physical, financial, and third-party.</p>
+          <p class="fact">Urgency on the list is the library rank, kept apart from the compound score.</p>
+          <p class="fact"><b>On this screen.</b> Header reads OMLX ONLINE. Six stars. Visible ranks: 82, 79, 77, 74, 69.</p>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>Fictional demo · loopback dashboard · OMLX online</span><span>14</span></div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Scenario portfolio">
+  <div class="stage">
+    <div class="pad">
+      <div class="where">Scenarios · library</div>
+      <h1>Scenario portfolio</h1>
+      <div class="gallery">
+        <div class="shot"><img src="frames/05-library.png" alt="Scenario portfolio of six synthetic fixture cards"></div>
+        <div>
+          <p>Every card is tagged synthetic fixture. Each description opens with “In this fictional exercise.”</p>
+          <p class="fact">The demo seed loaded this set. Nothing on the page was generated during the capture.</p>
+          <p class="fact"><b>On this screen.</b> Urgency bars: 82, 79, 77, 74, 69, 63. All six scenarios are on screen.</p>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>Fictional demo · loopback dashboard · OMLX online</span><span>15</span></div>
+  </div>
+</section>
+
+<section class="slide" aria-label="One Atlas Brief">
+  <div class="stage">
+    <div class="pad">
+      <div class="where">Scenario · ATLAS-DEMO-003</div>
+      <h1>One Atlas Brief</h1>
+      <div class="gallery">
+        <div class="shot"><img src="frames/06-brief.png" alt="Atlas Brief for fictional scenario ATLAS-DEMO-003"></div>
+        <div>
+          <p>Opened from the portfolio. The brief says the scenario remains a challengeable research hypothesis.</p>
+          <p class="fact">Applicability to a real service has not been assessed. The loss line is an exercise range.</p>
+          <p class="fact"><b>On this screen.</b> USD 30–100 million on this card. The screen says it is not a forecast.</p>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>Fictional demo · loopback dashboard · OMLX online</span><span>16</span></div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Signals and radar">
+  <div class="stage">
+    <div class="pad">
+      <div class="where">Research · signals</div>
+      <h1>Signals and radar</h1>
+      <div class="gallery">
+        <div class="shot"><img src="frames/08-signals.png" alt="Innovation radar with six fictional research signals"></div>
+        <div>
+          <p>Six research signals, plotted by maturity and external driver. Only reviewed records can inform scenario generation.</p>
+          <p class="fact">The radar proposes a reading. It does not write evidence, and it does not change a score.</p>
+          <p class="fact"><b>On this screen.</b> Five signals sit near the center. One sits toward Environment.</p>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>Fictional demo · loopback dashboard · OMLX online</span><span>17</span></div>
+  </div>
+</section>
+
+<section class="slide" aria-label="An empty organization">
+  <div class="stage">
+    <div class="pad">
+      <div class="where">Organization</div>
+      <h1>An empty organization</h1>
+      <div class="gallery">
+        <div class="shot"><img src="frames/12-organization.png" alt="Empty organization workspace with no declared services"></div>
+        <div>
+          <p>Declared scope is zero. Tested coverage has no denominator, because no service has been named.</p>
+          <p class="fact">The page says every map starts with a service. No confirmed exposure means the mapping may still be incomplete. It is not a risk clearance.</p>
+          <p class="fact"><b>On this screen.</b> Declared scope 0. Follow through 0. The empty map is not a risk clearance.</p>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>Fictional demo · loopback dashboard · OMLX online</span><span>18</span></div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Traceable snapshot">
+  <div class="stage">
+    <div class="pad">
+      <div class="where">Export · preview</div>
+      <h1>Traceable snapshot</h1>
+      <div class="gallery">
+        <div class="shot"><img src="frames/15b-export-preview.png" alt="Export dialog preview of the fictional public catalog"></div>
+        <div>
+          <p>Share dialog for the entire public research catalog. Preview contents was clicked, and the dialog returned these counts.</p>
+          <p class="fact">Organization context is unchecked. The snapshot is frozen for fifteen minutes. Download was not taken.</p>
+          <p class="fact"><b>On this screen.</b> 8 evidence events, 24 relationships, 6 risks, 6 mapping revisions, 6 scenarios.</p>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>Fictional demo · loopback dashboard · OMLX online</span><span>19</span></div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Appendix B">
+  <div class="stage">
+    <div class="pad">
+      <div class="divider">
+        <div class="where">APPENDIX B</div>
+        <h1>End to end</h1>
+        <p class="lede">The same demo, walked in order, with the local model online. A public note was drafted and held. It was not sent. The seeded library was already approved. No pipeline run was started.</p>
+        <ol>
+          <li><b>01</b> Land on the seeded briefing</li>
+          <li><b>02</b> Paste a public note. Prepare is on</li>
+          <li><b>03</b> Prepare the draft</li>
+          <li><b>04</b> Hold it. Do not send</li>
+          <li><b>05</b> Review inbox stays clear</li>
+          <li><b>06</b> Analyze. No run started</li>
+          <li><b>07</b> Open the share dialog. Do not download</li>
+        </ol>
+      </div>
+    </div>
+    <div class="foot"><span>CONTINGENCY ATLAS</span><span>20</span></div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Land, then add a public note">
+  <div class="stage">
+    <div class="pad">
+      <div class="where">APPENDIX B</div>
+      <h1>Land on the demo. Then add a public note.</h1>
+      <div class="beats">
+        <article class="beat">
+          <h2><span class="n">01</span> Land</h2>
+          <div class="shot"><img src="frames/01-briefing.png" alt="Seeded briefing with the portfolio map paused and OMLX online"></div>
+          <p>Header reads OMLX ONLINE. Six active scenarios, four at library urgency of 70 or higher, eight evidence events, and a clear inbox. The portfolio map is paused.</p>
+        </article>
+        <article class="beat">
+          <h2><span class="n">02</span> Add research</h2>
+          <div class="shot"><img src="frames/14-add-research.png" alt="Add Research dialog with a public BIS URL and Prepare draft enabled"></div>
+          <p>A Basel Committee page URL, pasted with a short paraphrase of that page. Prepare draft is enabled. The graph option stays off. Nothing is saved until you confirm.</p>
+        </article>
+      </div>
+    </div>
+    <div class="foot"><span>CONTINGENCY ATLAS</span><span>21</span></div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Prepare a draft and hold it">
+  <div class="stage">
+    <div class="pad">
+      <div class="where">APPENDIX B</div>
+      <h1>Prepare a draft. The gate holds it.</h1>
+      <div class="beats">
+        <article class="beat">
+          <h2><span class="n">03</span> Preparing</h2>
+          <div class="shot"><img src="frames/14b-preparing.png" alt="Preparing Research Draft panel while intake runs"></div>
+          <p>Atlas is structuring candidates and running bounded QA. The button reads Preparing. The panel says this can take several minutes.</p>
+        </article>
+        <article class="beat">
+          <h2><span class="n">04</span> Held draft</h2>
+          <div class="shot"><img src="frames/14c-draft-open.png" alt="Review Intake Draft with one held evidence item and send disabled"></div>
+          <p>One evidence candidate, held. Two checks did not pass: required metadata, and a source date in YYYY-MM-DD form. Send 0 to Review stays disabled. It was not sent and not approved. It is not a finding.</p>
+        </article>
+      </div>
+    </div>
+    <div class="foot"><span>CONTINGENCY ATLAS</span><span>22</span></div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Nothing waiting, nothing run">
+  <div class="stage">
+    <div class="pad">
+      <div class="where">APPENDIX B</div>
+      <h1>Nothing is waiting. Nothing was run.</h1>
+      <div class="beats">
+        <article class="beat">
+          <h2><span class="n">05</span> Review inbox</h2>
+          <div class="shot"><img src="frames/10-review.png" alt="Empty review inbox after the held draft was not sent"></div>
+          <p>The queue still reads clear. The held draft was not submitted, so nothing is pending. Decisions stay with a person.</p>
+        </article>
+        <article class="beat">
+          <h2><span class="n">06</span> Analyze</h2>
+          <div class="shot"><img src="frames/11-analyze.png" alt="Analyze page with the local model reachable and zero pipeline runs"></div>
+          <p>OMLX is reachable at 127.0.0.1:8000/v1. The screen says all phases are available. Pipeline runs: 0. DriftLab has not been run. Findings: 0.</p>
+        </article>
+      </div>
+    </div>
+    <div class="foot"><span>CONTINGENCY ATLAS</span><span>23</span></div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Hand over the public catalog">
+  <div class="stage">
+    <div class="pad">
+      <div class="where">APPENDIX B</div>
+      <h1>Hand over the public catalog.</h1>
+      <div class="hand">
+        <div>
+          <div class="shot" style="height:70%"><img src="frames/15b-export-preview.png" alt="Export preview of the fictional public research catalog"></div>
+          <p class="fact">Preview only. Download was not taken.</p>
+          <p class="note mono">export-074cf2de1cc80f22 · frozen 15 minutes · organization context off</p>
+        </div>
+        <div>
+          <h2 style="color:var(--navy);font-size:2cqi"><span style="color:var(--dkgold)">07</span> What came back</h2>
+          <div class="counts">
+            <div><b>8</b><span>evidence events</span></div>
+            <div><b>24</b><span>relationships</span></div>
+            <div><b>6</b><span>risks</span></div>
+            <div><b>6</b><span>mapping revisions</span></div>
+            <div><b>6</b><span>scenarios</span></div>
+          </div>
+          <div class="sand">
+            <div class="kicker">LEFT UNDONE</div>
+            <p>One draft was prepared and held. It was not sent and not approved. No pipeline run was started. Findings stayed at 0. DriftLab was not run, and no compounds were joined.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>CONTINGENCY ATLAS</span><span>24</span></div>
+  </div>
+</section>
+
+</div>
+<div id="hud"><span id="count">01 / 24</span> · Page Down</div>
+<script>
+const deck = document.getElementById("deck");
+const slides = [...document.querySelectorAll(".slide")];
+const count = document.getElementById("count");
+function nearest() {
+  const y = deck.scrollTop;
+  let best = 0;
+  slides.forEach((slide, i) => {
+    if (Math.abs(slide.offsetTop - y) < Math.abs(slides[best].offsetTop - y)) best = i;
+  });
+  return best;
+}
+function show(i) {
+  const n = Math.max(0, Math.min(slides.length - 1, i));
+  slides[n].scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+}
+function paint() {
+  count.textContent = String(nearest() + 1).padStart(2, "0") + " / " + String(slides.length).padStart(2, "0");
+}
+document.addEventListener("keydown", (event) => {
+  const next = ["PageDown", "ArrowDown", "ArrowRight", " "];
+  const prev = ["PageUp", "ArrowUp", "ArrowLeft"];
+  if (next.includes(event.key)) { event.preventDefault(); show(nearest() + 1); }
+  else if (prev.includes(event.key)) { event.preventDefault(); show(nearest() - 1); }
+  else if (event.key === "Home") { event.preventDefault(); show(0); }
+  else if (event.key === "End") { event.preventDefault(); show(slides.length - 1); }
+});
+deck.addEventListener("scroll", () => requestAnimationFrame(paint), { passive: true });
+paint();
+</script>
+</body>
+</html>
