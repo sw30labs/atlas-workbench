@@ -66,11 +66,11 @@ dev = ["pytest==9.1.1", "ruff==0.17.1"]
 # installs a converter that refuses every type the dashboard offers — and the
 # failure message points back at this extra, which is a loop. Keep this list in
 # step with MARKITDOWN_EXTENSIONS in workbench_atlas/ingest_artifacts.py.
-ingest = ["markitdown[docx,pdf,pptx,xlsx]"]
+ingest = ["markitdown[docx,pdf,pptx,xlsx]==0.1.9"]
 # Kept as an alias so existing install lines (`.[ontology]`) keep working;
 # these dependencies are now part of the base install.
 ontology = ["rdflib==7.6.0", "pyshacl==0.40.1", "owlrl==7.6.2"]
-singularity = ["neo4j>=5.0"]
+singularity = ["neo4j==6.4.1"]
 
 [tool.setuptools.packages.find]
 where = ["."]
